@@ -35,8 +35,9 @@ export function BusinessInfo({ business, deal }: BusinessInfoProps) {
   }
 
   return (
-    <Card variant="glass" padding="lg">
-      <div className="space-y-4">
+    <>
+      <Card variant="glass" padding="lg">
+        <div className="space-y-4">
         {/* Business Name & Verified Badge */}
         <div className="flex items-start justify-between gap-3">
           <h3 className="text-xl font-semibold text-text-primary">
@@ -138,7 +139,8 @@ export function BusinessInfo({ business, deal }: BusinessInfoProps) {
             Claim This Deal
           </Button>
         )}
-      </div>
+        </div>
+      </Card>
 
       <ClaimDealModal
         isOpen={isClaimModalOpen}
@@ -147,6 +149,6 @@ export function BusinessInfo({ business, deal }: BusinessInfoProps) {
         businessId={business.id}
         dealTitle={deal.title}
       />
-    </Card>
+    </>
   )
 }
