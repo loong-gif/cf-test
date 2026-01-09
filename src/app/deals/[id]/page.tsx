@@ -1,17 +1,16 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import {
   ArrowLeft,
   Clock,
   Info,
   MapPin,
   Star,
-  Tag,
 } from '@phosphor-icons/react/dist/ssr'
 import { getAnonymousDealById } from '@/lib/mock-data'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { BlurredImage } from '@/components/patterns/blurredImage'
 import { PricingBreakdown } from '@/components/features/pricingBreakdown'
 import { ClaimCTA } from '@/components/features/claimCTA'
 import type { TreatmentCategory } from '@/types'
@@ -55,22 +54,15 @@ export default async function DealDetailPage({ params }: DealDetailPageProps) {
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Image */}
             <div className="relative aspect-video bg-bg-tertiary rounded-2xl overflow-hidden">
-              {deal.imageUrl ? (
-                <Image
-                  src={deal.imageUrl}
-                  alt={deal.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 66vw"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Tag size={64} weight="light" className="text-text-muted" />
-                </div>
-              )}
+              {/* Blurred Image with Lock Overlay */}
+              <BlurredImage
+                src={deal.imageUrl}
+                alt={deal.title}
+                sizes="(max-width: 1024px) 100vw, 66vw"
+              />
 
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+              {/* Badges (above blur) */}
+              <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
                 <Badge variant="default" size="md">
                   {categoryLabels[deal.category]}
                 </Badge>
@@ -81,9 +73,9 @@ export default async function DealDetailPage({ params }: DealDetailPageProps) {
                 )}
               </div>
 
-              {/* Sponsored Indicator */}
+              {/* Sponsored Indicator (above blur) */}
               {deal.isSponsored && (
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 z-10">
                   <span className="text-xs text-text-muted bg-bg-primary/80 backdrop-blur-sm px-2 py-1 rounded">
                     Sponsored
                   </span>
