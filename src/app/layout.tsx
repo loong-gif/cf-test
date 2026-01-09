@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import { AuthProvider } from '@/lib/context/authContext'
+import { ClaimsProvider } from '@/lib/context/claimsContext'
 import { LocationProvider } from '@/lib/context/locationContext'
 import { GlobalHeader } from '@/components/layout/globalHeader'
 import './globals.css'
@@ -25,8 +26,10 @@ export default function RootLayout({
       <body className={`${manrope.variable} font-sans antialiased`}>
         <LocationProvider>
           <AuthProvider>
-            <GlobalHeader />
-            {children}
+            <ClaimsProvider>
+              <GlobalHeader />
+              {children}
+            </ClaimsProvider>
           </AuthProvider>
         </LocationProvider>
       </body>
