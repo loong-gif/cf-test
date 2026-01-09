@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-09)
 
 **Core value:** Deal discovery UX that makes finding and comparing medspa pricing effortless
-**Current focus:** Phase 3.1 — Image Blur (Complete)
+**Current focus:** Phase 4 — Consumer Auth (In Progress)
 
 ## Current Position
 
-Phase: 3.1 of 10 (Image Blur) - Complete
-Plan: 1 of 1 in current phase (Complete)
-Status: Ready for Phase 4
-Last activity: 2026-01-09 — Completed 03.1-01-PLAN.md (Image blur)
+Phase: 4 of 10 (Consumer Auth)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-09 — Completed 04-01-PLAN.md (Auth context and sign-up form)
 
-Progress: █████████████████████████████████████ 37%
+Progress: ███████████████████████████████████████ 39%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: 6 min
-- Total execution time: 1.1 hours
+- Total execution time: 1.15 hours
 
 **By Phase:**
 
@@ -31,9 +31,10 @@ Progress: ███████████████████████�
 | 2. Location Discovery | 2/2 | 18 min | 9 min |
 | 3. Deal Browsing | 4/4 | 20 min | 5 min |
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
+| 4. Consumer Auth | 1/4 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (7 min), 03-03 (4 min), 03-04 (6 min), 03.1-01 (4 min)
+- Last 5 plans: 03-03 (4 min), 03-04 (6 min), 03.1-01 (4 min), 04-01 (3 min)
 - Trend: Consistent
 
 ## Accumulated Context
@@ -66,6 +67,9 @@ Recent decisions affecting current work:
 | 03.1-01 | BlurredImage in patterns/ layer | Reusable, business-agnostic blur overlay |
 | 03.1-01 | blur-xl + scale-110 for blur | Heavy blur with scale prevents edge artifacts |
 | 03.1-01 | Glassmorphic lock container | Premium feel matching design system |
+| 04-01 | localStorage stores userId only | Security, prevents stale user data |
+| 04-01 | Dynamic users array for mock signups | Track session sign-ups without mutating fixtures |
+| 04-01 | signIn finds by email only | Mock auth, no password validation needed |
 
 ### Deferred Issues
 
@@ -78,5 +82,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-09
-Stopped at: Completed Phase 3.1 (03.1-01-PLAN.md)
+Stopped at: Completed 04-01-PLAN.md (Auth context and sign-up form)
 Resume file: None

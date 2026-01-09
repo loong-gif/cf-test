@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Location Discovery** - Location-first browsing with auto-detect and manual override ✓
 - [x] **Phase 3: Deal Browsing** - Anonymous deal cards, filters, and comparison experience ✓
 - [x] **Phase 3.1: Image Blur** - INSERTED: Heavy blur + lock icon on deal images for anonymous users ✓
-- [ ] **Phase 4: Consumer Auth** - Account creation with email/SMS verification UI, business reveal
+- [ ] **Phase 4: Consumer Auth** - Account creation with email/SMS verification UI, business reveal (In progress)
 - [ ] **Phase 5: Consumer Dashboard** - Favorites, claims, status tracking, deal alerts, profile
 - [ ] **Phase 6: Business Onboarding** - Claim existing profile and create new business flows
 - [ ] **Phase 7: Business Dashboard** - Deal management, lead inbox, messaging, analytics
@@ -77,10 +77,10 @@ Plans:
 **Depends on**: Phase 3
 **Research**: Likely (auth patterns, verification UI flows)
 **Research topics**: Supabase Auth UI patterns, SMS verification mock flows, session handling
-**Plans**: TBD
+**Status**: In progress
 
 Plans:
-- [ ] 04-01: Sign up / sign in forms with email + password
+- [x] 04-01: Sign up / sign in forms with email + password ✓
 - [ ] 04-02: Email verification UI flow (mock)
 - [ ] 04-03: SMS verification UI flow (mock phone number entry + code input)
 - [ ] 04-04: Business reveal on verification — show business details, claim CTA
@@ -171,7 +171,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 2. Location Discovery | 2/2 | Complete | 2026-01-09 |
 | 3. Deal Browsing | 4/4 | Complete | 2026-01-09 |
 | 3.1 Image Blur | 1/1 | Complete | 2026-01-09 |
-| 4. Consumer Auth | 0/4 | Not started | - |
+| 4. Consumer Auth | 1/4 | In progress | - |
 | 5. Consumer Dashboard | 0/5 | Not started | - |
 | 6. Business Onboarding | 0/3 | Not started | - |
 | 7. Business Dashboard | 0/7 | Not started | - |
