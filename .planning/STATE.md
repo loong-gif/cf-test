@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-09)
 ## Current Position
 
 Phase: 4 of 10 (Consumer Auth)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-09 — Completed 04-01-PLAN.md (Auth context and sign-up form)
+Last activity: 2026-01-09 — Completed 04-02-PLAN.md (Sign-in form and auth modal)
 
-Progress: ███████████████████████████████████████ 39%
+Progress: ████████████████████████████████████████ 43%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 6 min
-- Total execution time: 1.15 hours
+- Total plans completed: 12
+- Average duration: 5.7 min
+- Total execution time: 1.2 hours
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: ███████████████████████�
 | 2. Location Discovery | 2/2 | 18 min | 9 min |
 | 3. Deal Browsing | 4/4 | 20 min | 5 min |
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
-| 4. Consumer Auth | 1/4 | 3 min | 3 min |
+| 4. Consumer Auth | 2/4 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-03 (4 min), 03-04 (6 min), 03.1-01 (4 min), 04-01 (3 min)
+- Last 5 plans: 03-04 (6 min), 03.1-01 (4 min), 04-01 (3 min), 04-02 (3 min)
 - Trend: Consistent
 
 ## Accumulated Context
@@ -70,6 +70,9 @@ Recent decisions affecting current work:
 | 04-01 | localStorage stores userId only | Security, prevents stale user data |
 | 04-01 | Dynamic users array for mock signups | Track session sign-ups without mutating fixtures |
 | 04-01 | signIn finds by email only | Mock auth, no password validation needed |
+| 04-02 | Forgot password inline toast | MVP approach, no actual email flow |
+| 04-02 | AuthModal resets view on open | useEffect syncs currentView with initialView |
+| 04-02 | ClaimCTA self-contained auth | Removed callback props, handles modal internally |
 
 ### Deferred Issues
 
@@ -82,5 +85,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-09
-Stopped at: Completed 04-01-PLAN.md (Auth context and sign-up form)
+Stopped at: Completed 04-02-PLAN.md (Sign-in form and auth modal)
 Resume file: None
