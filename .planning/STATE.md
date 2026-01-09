@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-09)
 ## Current Position
 
 Phase: 5 of 10 (Consumer Dashboard)
-Plan: 3 of 5 in current phase
+Plan: 4 of 5 in current phase
 Status: In progress
-Last activity: 2026-01-09 — Completed 05-03-PLAN.md (Claim deal flow)
+Last activity: 2026-01-09 — Completed 05-04-PLAN.md (Claim status tracking)
 
-Progress: ███████████████████████████████████████████░░░░░░░░░░░░░░░░ 44%
+Progress: █████████████████████████████████████████████░░░░░░░░░░░░░░ 46%
 
 ## Performance Metrics
 
@@ -32,11 +32,11 @@ Progress: ███████████████████████�
 | 3. Deal Browsing | 4/4 | 20 min | 5 min |
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
 | 4. Consumer Auth | 5/5 | 55 min | 11 min |
-| 5. Consumer Dashboard | 3/5 | 52 min | 17 min |
+| 5. Consumer Dashboard | 4/5 | 62 min | 16 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (25 min), 05-02 (12 min), 04-05 (25 min), 05-03 (15 min)
-- Trend: Steady progress through dashboard features
+- Last 5 plans: 05-02 (12 min), 04-05 (25 min), 05-03 (15 min), 05-04 (10 min)
+- Trend: Rapid dashboard feature completion
 
 ## Accumulated Context
 
@@ -94,6 +94,9 @@ Recent decisions affecting current work:
 | 05-03 | Claims in localStorage, not Consumer type | UI-only build, no mock data mutations needed |
 | 05-03 | 7-day claim expiration | Built into createClaim method for auto-expire logic |
 | 05-03 | ClaimDealModal outside Card wrapper | Fragment wrapper ensures proper overlay positioning |
+| 05-04 | ClaimStatusBadge uses Badge variants | Maps status to success/warning/error/info/default |
+| 05-04 | Merge localStorage + mock claims | Dedupe by ID, prioritize localStorage as newer |
+| 05-04 | Filter tabs with counts | Dynamic count badges for All, Active, Completed, Cancelled |
 
 ### Deferred Issues
 
@@ -106,5 +109,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-09
-Stopped at: Completed 05-03-PLAN.md (Claim deal flow) - 3/5 plans in Phase 5
+Stopped at: Completed 05-04-PLAN.md (Claim status tracking) - 4/5 plans in Phase 5
 Resume file: None
