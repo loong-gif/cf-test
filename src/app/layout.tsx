@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
+import { LocationProvider } from '@/lib/context/locationContext'
 import './globals.css'
 
 const manrope = Manrope({
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable} font-sans antialiased`}>
-        {children}
+        <LocationProvider>{children}</LocationProvider>
       </body>
     </html>
   )
