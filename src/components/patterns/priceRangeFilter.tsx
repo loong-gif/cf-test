@@ -41,10 +41,10 @@ export function PriceRangeFilter({
   }
 
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-text-secondary">
+    <fieldset className="space-y-2">
+      <legend className="text-sm font-medium text-text-secondary">
         Price Range
-      </label>
+      </legend>
       <div className="flex items-center gap-2">
         {/* Min Price Input */}
         <div className="relative flex-1">
@@ -52,12 +52,14 @@ export function PriceRangeFilter({
             size={18}
             weight="light"
             className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+            aria-hidden="true"
           />
           <input
             type="number"
             value={min}
             onChange={(e) => handleMinChange(e.target.value)}
             placeholder="Min"
+            aria-label="Minimum price"
             min={0}
             className="
               w-full pl-8 pr-3 py-2.5
@@ -73,7 +75,9 @@ export function PriceRangeFilter({
           />
         </div>
 
-        <span className="text-text-muted">—</span>
+        <span className="text-text-muted" aria-hidden="true">
+          —
+        </span>
 
         {/* Max Price Input */}
         <div className="relative flex-1">
@@ -81,12 +85,14 @@ export function PriceRangeFilter({
             size={18}
             weight="light"
             className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+            aria-hidden="true"
           />
           <input
             type="number"
             value={max}
             onChange={(e) => handleMaxChange(e.target.value)}
             placeholder="Max"
+            aria-label="Maximum price"
             min={0}
             className="
               w-full pl-8 pr-3 py-2.5
@@ -102,6 +108,6 @@ export function PriceRangeFilter({
           />
         </div>
       </div>
-    </div>
+    </fieldset>
   )
 }

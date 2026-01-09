@@ -3,18 +3,51 @@
 import { MapPin } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
-import { CategoryFilter } from '@/components/patterns/categoryFilter'
 import { DealsGrid } from '@/components/features/dealsGrid'
+import { FilterPanel } from '@/components/features/filterPanel'
+import { CategoryFilter } from '@/components/patterns/categoryFilter'
 import { useLocation } from '@/lib/context/locationContext'
-import { filterDeals, getActiveDeals } from '@/lib/mock-data'
+import {
+  type DealFilters,
+  filterDeals,
+  getActiveDeals,
+  type SortOption,
+  sortDeals,
+} from '@/lib/mock-data'
 import type { TreatmentCategory } from '@/types'
 
 export default function DealsPage() {
   const router = useRouter()
   const { state: locationState } = useLocation()
-  const [selectedCategory, setSelectedCategory] = useState<TreatmentCategory | 'all'>('all')
+  const [selectedCategory, setSelectedCategory] = useState<
+    TreatmentCategory | 'all'
+  >('all')
+  const [filters, setFilters] = useState<DealFilters>({})
+  const [sortBy, setSortBy] = useState<SortOption>('popular')
 
-  // Filter deals by category and location
+  // Calculate active filter count (price filters only for now)
+  const activeFilterCount = useMemo(() => {
+    let count = 0
+    if (filters.minPrice !== undefined) count++
+    if (filters.maxPrice !== undefined) count++
+    return count
+  }, [filters.minPrice, filters.maxPrice])
+
+  // Handlers for FilterPanel
+  const handleFiltersChange = (newFilters: DealFilters) => {
+    setFilters(newFilters)
+  }
+
+  const handleSortChange = (newSort: SortOption) => {
+    setSortBy(newSort)
+  }
+
+  const handleReset = () => {
+    setFilters({})
+    setSortBy('popular')
+  }
+
+  // Filter deals by category, location, price, and apply sorting
   const filteredDeals = useMemo(() => {
     // Start with all active deals
     let deals = getActiveDeals()
@@ -33,8 +66,21 @@ export default function DealsPage() {
       })
     }
 
+    // Apply price filters
+    if (filters.minPrice !== undefined) {
+      const minPrice = filters.minPrice
+      deals = deals.filter((d) => d.dealPrice >= minPrice)
+    }
+    if (filters.maxPrice !== undefined) {
+      const maxPrice = filters.maxPrice
+      deals = deals.filter((d) => d.dealPrice <= maxPrice)
+    }
+
+    // Apply sorting
+    deals = sortDeals(deals, sortBy)
+
     return deals
-  }, [selectedCategory, locationState.current.city])
+  }, [selectedCategory, locationState.current.city, filters, sortBy])
 
   const handleDealClick = (dealId: string) => {
     router.push(`/deals/${dealId}`)
@@ -66,11 +112,20 @@ export default function DealsPage() {
           />
         </div>
 
+        {/* Filter Panel */}
+        <div className="mb-6">
+          <FilterPanel
+            filters={filters}
+            sortBy={sortBy}
+            onFiltersChange={handleFiltersChange}
+            onSortChange={handleSortChange}
+            onReset={handleReset}
+            activeFilterCount={activeFilterCount}
+          />
+        </div>
+
         {/* Deals Grid */}
-        <DealsGrid
-          deals={filteredDeals}
-          onDealClick={handleDealClick}
-        />
+        <DealsGrid deals={filteredDeals} onDealClick={handleDealClick} />
       </div>
     </main>
   )

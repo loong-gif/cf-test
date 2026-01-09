@@ -98,7 +98,7 @@ export function SortSelector({ value, onChange }: SortSelectorProps) {
             overflow-hidden
           "
           role="listbox"
-          aria-activedescendant={`sort-option-${value}`}
+          aria-label="Sort options"
         >
           {sortOptions.map((option) => {
             const Icon = option.icon
