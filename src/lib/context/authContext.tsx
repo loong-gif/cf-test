@@ -21,6 +21,14 @@ interface AuthState {
   error: string | null
 }
 
+interface ProfileUpdates {
+  firstName?: string
+  lastName?: string
+  phone?: string
+  locationCity?: string
+  locationState?: string
+}
+
 interface AuthContextValue {
   state: AuthState
   signUp: (
@@ -33,6 +41,8 @@ interface AuthContextValue {
   signOut: () => void
   updateVerificationStatus: (status: VerificationStatus) => void
   verifyPhone: (phone: string) => void
+  updateProfile: (updates: ProfileUpdates) => void
+  updateAlertPreferences: (alertsEmail: boolean, alertsSms: boolean) => void
   savedDeals: string[]
   saveDeal: (dealId: string) => void
   unsaveDeal: (dealId: string) => void
@@ -339,6 +349,76 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
   }, [])
 
+  const updateProfile = useCallback((updates: ProfileUpdates) => {
+    setState((prev) => {
+      if (!prev.user) return prev
+
+      const now = new Date().toISOString()
+
+      // Only allow specific fields to be updated
+      const allowedUpdates: Partial<Consumer> = {}
+      if (updates.firstName !== undefined)
+        allowedUpdates.firstName = updates.firstName
+      if (updates.lastName !== undefined)
+        allowedUpdates.lastName = updates.lastName
+      if (updates.phone !== undefined) allowedUpdates.phone = updates.phone
+      if (updates.locationCity !== undefined)
+        allowedUpdates.locationCity = updates.locationCity
+      if (updates.locationState !== undefined)
+        allowedUpdates.locationState = updates.locationState
+
+      const updatedUser: Consumer = {
+        ...prev.user,
+        ...allowedUpdates,
+        updatedAt: now,
+      }
+
+      // Update in dynamic users if needed
+      const dynamicIndex = dynamicUsers.findIndex(
+        (u) => u.id === updatedUser.id,
+      )
+      if (dynamicIndex !== -1) {
+        dynamicUsers[dynamicIndex] = updatedUser
+      }
+
+      return {
+        ...prev,
+        user: updatedUser,
+      }
+    })
+  }, [])
+
+  const updateAlertPreferences = useCallback(
+    (alertsEmail: boolean, alertsSms: boolean) => {
+      setState((prev) => {
+        if (!prev.user) return prev
+
+        const now = new Date().toISOString()
+
+        const updatedUser: Consumer = {
+          ...prev.user,
+          alertsEmail,
+          alertsSms,
+          updatedAt: now,
+        }
+
+        // Update in dynamic users if needed
+        const dynamicIndex = dynamicUsers.findIndex(
+          (u) => u.id === updatedUser.id,
+        )
+        if (dynamicIndex !== -1) {
+          dynamicUsers[dynamicIndex] = updatedUser
+        }
+
+        return {
+          ...prev,
+          user: updatedUser,
+        }
+      })
+    },
+    [],
+  )
+
   const saveDeal = useCallback((dealId: string) => {
     setSavedDeals((prev) => {
       if (prev.includes(dealId)) return prev
@@ -369,6 +449,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signOut,
       updateVerificationStatus,
       verifyPhone,
+      updateProfile,
+      updateAlertPreferences,
       savedDeals,
       saveDeal,
       unsaveDeal,
@@ -381,6 +463,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signOut,
       updateVerificationStatus,
       verifyPhone,
+      updateProfile,
+      updateAlertPreferences,
       savedDeals,
       saveDeal,
       unsaveDeal,
