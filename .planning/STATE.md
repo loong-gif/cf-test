@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-09)
 ## Current Position
 
 Phase: 5 of 10 (Consumer Dashboard)
-Plan: 1 of 5 in current phase
+Plan: 2 of 5 in current phase
 Status: In progress
-Last activity: 2026-01-09 — Completed 05-01-PLAN.md (Dashboard shell)
+Last activity: 2026-01-09 — Completed 05-02-PLAN.md (Saved deals / favorites)
 
-Progress: ████████████████████████████████████████████████████ 52%
+Progress: █████████████████████████████████████████████████████████ 57%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 7.4 min
-- Total execution time: 1.9 hours
+- Total plans completed: 16
+- Average duration: 7.7 min
+- Total execution time: 2.0 hours
 
 **By Phase:**
 
@@ -32,11 +32,11 @@ Progress: ███████████████████████�
 | 3. Deal Browsing | 4/4 | 20 min | 5 min |
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
 | 4. Consumer Auth | 4/4 | 30 min | 8 min |
-| 5. Consumer Dashboard | 1/5 | 25 min | 25 min |
+| 5. Consumer Dashboard | 2/5 | 37 min | 19 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (3 min), 04-03 (16 min), 04-04 (8 min), 05-01 (25 min)
-- Trend: 05-01 higher due to UX issue fixes during checkpoint
+- Last 5 plans: 04-03 (16 min), 04-04 (8 min), 05-01 (25 min), 05-02 (12 min)
+- Trend: 05-02 faster, straightforward CRUD implementation
 
 ## Accumulated Context
 
@@ -85,6 +85,9 @@ Recent decisions affecting current work:
 | 05-01 | Global header in root layout | Auth-aware navigation, hidden on dashboard routes |
 | 05-01 | Modal items-start positioning | Prevents tall content cutoff at top of viewport |
 | 05-01 | Location selection navigates to /deals | Closes modal and routes to deals page automatically |
+| 05-02 | savedDeals in localStorage, not Consumer type | Simpler for UI-only build, no mock data mutations |
+| 05-02 | SaveButton in patterns/ layer | Reusable, business-agnostic heart toggle |
+| 05-02 | stopPropagation on SaveButton click | Prevents card navigation when clicking heart |
 
 ### Deferred Issues
 
@@ -97,5 +100,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-09
-Stopped at: Completed 05-01-PLAN.md (Dashboard shell) - Phase 5 in progress
+Stopped at: Completed 05-02-PLAN.md (Saved deals / favorites) - Phase 5 in progress
 Resume file: None

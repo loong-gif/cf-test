@@ -93,7 +93,7 @@ Plans:
 
 Plans:
 - [x] 05-01: Dashboard shell with sidebar navigation and home page ✓
-- [ ] 05-02: Saved deals / favorites list
+- [x] 05-02: Saved deals / favorites list ✓
 - [ ] 05-03: Claim deal flow — preferred time request form
 - [ ] 05-04: Claim status tracking (Pending → Contacted → Booked → Completed)
 - [ ] 05-05: User profile and settings page
@@ -172,7 +172,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 3. Deal Browsing | 4/4 | Complete | 2026-01-09 |
 | 3.1 Image Blur | 1/1 | Complete | 2026-01-09 |
 | 4. Consumer Auth | 4/4 | Complete | 2026-01-09 |
-| 5. Consumer Dashboard | 1/5 | In progress | - |
+| 5. Consumer Dashboard | 2/5 | In progress | - |
 | 6. Business Onboarding | 0/3 | Not started | - |
 | 7. Business Dashboard | 0/7 | Not started | - |
 | 8. Admin Core | 0/4 | Not started | - |
