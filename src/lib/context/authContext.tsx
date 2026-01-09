@@ -31,6 +31,7 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => void
   updateVerificationStatus: (status: VerificationStatus) => void
+  verifyPhone: (phone: string) => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -271,6 +272,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  const verifyPhone = useCallback((phone: string) => {
+    setState((prev) => {
+      if (!prev.user) return prev
+
+      const now = new Date().toISOString()
+
+      // Determine new verification status based on current status
+      let newStatus: VerificationStatus
+      if (prev.user.verificationStatus === 'email_verified') {
+        newStatus = 'fully_verified'
+      } else if (prev.user.verificationStatus === 'unverified') {
+        newStatus = 'phone_verified'
+      } else {
+        // Already fully_verified or phone_verified, keep as is
+        newStatus = prev.user.verificationStatus
+      }
+
+      const updatedUser: Consumer = {
+        ...prev.user,
+        phone,
+        phoneVerifiedAt: now,
+        verificationStatus: newStatus,
+        updatedAt: now,
+      }
+
+      // Update in dynamic users if needed
+      const dynamicIndex = dynamicUsers.findIndex(
+        (u) => u.id === updatedUser.id,
+      )
+      if (dynamicIndex !== -1) {
+        dynamicUsers[dynamicIndex] = updatedUser
+      }
+
+      // Persist to localStorage (userId is already stored, user data is in state)
+      saveUserId(updatedUser.id)
+
+      return {
+        ...prev,
+        user: updatedUser,
+      }
+    })
+  }, [])
+
   const value = useMemo<AuthContextValue>(
     () => ({
       state,
@@ -278,8 +322,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signIn,
       signOut,
       updateVerificationStatus,
+      verifyPhone,
     }),
-    [state, signUp, signIn, signOut, updateVerificationStatus],
+    [state, signUp, signIn, signOut, updateVerificationStatus, verifyPhone],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
