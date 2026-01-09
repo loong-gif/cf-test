@@ -37,7 +37,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01: Project setup with Next.js 16, TypeScript, Tailwind v4, Phosphor icons ✓
-- [ ] 01-02: Glassmorphic design system — tokens, base components (Button, Card, Input, etc.)
+- [x] 01-02: Glassmorphic design system — tokens, base components (Button, Card, Input, etc.) ✓
 - [ ] 01-03: Mock data layer — types, fixtures structured for Supabase schema
 
 ### Phase 2: Location Discovery
@@ -157,7 +157,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/3 | In progress | - |
+| 1. Foundation | 2/3 | In progress | - |
 | 2. Location Discovery | 0/2 | Not started | - |
 | 3. Deal Browsing | 0/4 | Not started | - |
 | 4. Consumer Auth | 0/4 | Not started | - |

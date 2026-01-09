@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-01-09)
 ## Current Position
 
 Phase: 1 of 10 (Foundation)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-01-09 — Completed 01-01-PLAN.md
+Last activity: 2026-01-09 — Completed 01-02-PLAN.md
 
-Progress: █░░░░░░░░░ 3%
+Progress: ██░░░░░░░░ 6%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 9 min
-- Total execution time: 0.15 hours
+- Total plans completed: 2
+- Average duration: 6 min
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1. Foundation | 1/3 | 9 min | 9 min |
+| 1. Foundation | 2/3 | 12 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (9 min)
-- Trend: —
+- Last 5 plans: 01-01 (9 min), 01-02 (3 min)
+- Trend: Accelerating
 
 ## Accumulated Context
 
@@ -44,6 +44,8 @@ Recent decisions affecting current work:
 |-------|----------|-----------|
 | 01-01 | Biome over ESLint | Faster unified tooling, native TypeScript support |
 | 01-01 | Tailwind CSS linting disabled | Required for v4 @theme directive compatibility |
+| 01-02 | CSS-first tokens | All values in :root variables, TS exports reference them |
+| 01-02 | @theme inline for Tailwind v4 | Enables bg-brand-primary, text-text-secondary utilities |
 
 ### Deferred Issues
 
@@ -55,6 +57,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-09T13:00:45Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-01-09T13:09:08Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
