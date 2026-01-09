@@ -12,6 +12,7 @@ import { consumers } from '@/lib/mock-data/consumers'
 import type { Consumer, VerificationStatus } from '@/types'
 
 const STORAGE_KEY = 'costfinders_auth'
+const SAVED_DEALS_KEY = 'costfinders_saved_deals'
 
 interface AuthState {
   user: Consumer | null
@@ -32,6 +33,10 @@ interface AuthContextValue {
   signOut: () => void
   updateVerificationStatus: (status: VerificationStatus) => void
   verifyPhone: (phone: string) => void
+  savedDeals: string[]
+  saveDeal: (dealId: string) => void
+  unsaveDeal: (dealId: string) => void
+  isDealSaved: (dealId: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -68,6 +73,22 @@ function clearStoredAuth() {
   localStorage.removeItem(STORAGE_KEY)
 }
 
+function loadSavedDeals(): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const stored = localStorage.getItem(SAVED_DEALS_KEY)
+    if (!stored) return []
+    return JSON.parse(stored) as string[]
+  } catch {
+    return []
+  }
+}
+
+function saveSavedDeals(deals: string[]) {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(SAVED_DEALS_KEY, JSON.stringify(deals))
+}
+
 // Track dynamically created users (mock sign-ups during session)
 let dynamicUsers: Consumer[] = []
 
@@ -88,6 +109,7 @@ function findUserById(userId: string): Consumer | undefined {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>(getInitialState)
+  const [savedDeals, setSavedDeals] = useState<string[]>([])
 
   // Load stored user on mount
   useEffect(() => {
@@ -101,6 +123,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isLoading: false,
           error: null,
         })
+        // Load saved deals for authenticated user
+        setSavedDeals(loadSavedDeals())
         return
       }
     }
@@ -315,6 +339,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
   }, [])
 
+  const saveDeal = useCallback((dealId: string) => {
+    setSavedDeals((prev) => {
+      if (prev.includes(dealId)) return prev
+      const updated = [...prev, dealId]
+      saveSavedDeals(updated)
+      return updated
+    })
+  }, [])
+
+  const unsaveDeal = useCallback((dealId: string) => {
+    setSavedDeals((prev) => {
+      const updated = prev.filter((id) => id !== dealId)
+      saveSavedDeals(updated)
+      return updated
+    })
+  }, [])
+
+  const isDealSaved = useCallback(
+    (dealId: string) => savedDeals.includes(dealId),
+    [savedDeals],
+  )
+
   const value = useMemo<AuthContextValue>(
     () => ({
       state,
@@ -323,8 +369,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signOut,
       updateVerificationStatus,
       verifyPhone,
+      savedDeals,
+      saveDeal,
+      unsaveDeal,
+      isDealSaved,
     }),
-    [state, signUp, signIn, signOut, updateVerificationStatus, verifyPhone],
+    [
+      state,
+      signUp,
+      signIn,
+      signOut,
+      updateVerificationStatus,
+      verifyPhone,
+      savedDeals,
+      saveDeal,
+      unsaveDeal,
+      isDealSaved,
+    ],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
