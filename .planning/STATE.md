@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-09)
 ## Current Position
 
 Phase: 4 of 10 (Consumer Auth)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-09 — Completed 04-02-PLAN.md (Sign-in form and auth modal)
+Last activity: 2026-01-09 — Completed 04-03-PLAN.md (Email verification UI)
 
-Progress: ████████████████████████████████████████ 43%
+Progress: ██████████████████████████████████████████████ 46%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 5.7 min
-- Total execution time: 1.2 hours
+- Total plans completed: 13
+- Average duration: 6.8 min
+- Total execution time: 1.5 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: ███████████████████████�
 | 2. Location Discovery | 2/2 | 18 min | 9 min |
 | 3. Deal Browsing | 4/4 | 20 min | 5 min |
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
-| 4. Consumer Auth | 2/4 | 6 min | 3 min |
+| 4. Consumer Auth | 3/4 | 22 min | 7 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-04 (6 min), 03.1-01 (4 min), 04-01 (3 min), 04-02 (3 min)
-- Trend: Consistent
+- Last 5 plans: 03.1-01 (4 min), 04-01 (3 min), 04-02 (3 min), 04-03 (16 min)
+- Trend: Consistent (04-03 longer due to checkpoint verification)
 
 ## Accumulated Context
 
@@ -73,6 +73,9 @@ Recent decisions affecting current work:
 | 04-02 | Forgot password inline toast | MVP approach, no actual email flow |
 | 04-02 | AuthModal resets view on open | useEffect syncs currentView with initialView |
 | 04-02 | ClaimCTA self-contained auth | Removed callback props, handles modal internally |
+| 04-03 | Mock verification any 6 digits | No real email sending for MVP, accepts any code |
+| 04-03 | Two-view EmailVerification | Check-email screen + manual code entry toggle |
+| 04-03 | SignUpForm passes email to onSuccess | Required for verification flow to know which email |
 
 ### Deferred Issues
 
@@ -85,5 +88,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-09
-Stopped at: Completed 04-02-PLAN.md (Sign-in form and auth modal)
+Stopped at: Completed 04-03-PLAN.md (Email verification UI)
 Resume file: None
