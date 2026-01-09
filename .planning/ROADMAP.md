@@ -59,7 +59,7 @@ Plans:
 Plans:
 - [x] 03-01: Deal card component — anonymous display, pricing visible, business hidden ✓
 - [x] 03-02: Browse page with grid/list views, treatment type filters ✓
-- [ ] 03-03: Advanced filters — price range, location radius, sort options
+- [x] 03-03: Advanced filters — price range, location radius, sort options ✓
 - [ ] 03-04: Deal detail view — full pricing breakdown, treatment info, claim CTA
 
 ### Phase 4: Consumer Auth
@@ -159,7 +159,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-01-09 |
 | 2. Location Discovery | 2/2 | Complete | 2026-01-09 |
-| 3. Deal Browsing | 2/4 | In progress | - |
+| 3. Deal Browsing | 3/4 | In progress | - |
 | 4. Consumer Auth | 0/4 | Not started | - |
 | 5. Consumer Dashboard | 0/5 | Not started | - |
 | 6. Business Onboarding | 0/3 | Not started | - |
