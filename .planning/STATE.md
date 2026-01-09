@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-09)
 
 **Core value:** Deal discovery UX that makes finding and comparing medspa pricing effortless
-**Current focus:** Phase 4 — Consumer Auth (In Progress)
+**Current focus:** Phase 5 — Consumer Dashboard (Next)
 
 ## Current Position
 
 Phase: 4 of 10 (Consumer Auth)
-Plan: 3 of 4 in current phase
-Status: In progress
-Last activity: 2026-01-09 — Completed 04-03-PLAN.md (Email verification UI)
+Plan: 4 of 4 in current phase
+Status: Phase complete
+Last activity: 2026-01-09 — Completed 04-04-PLAN.md (Phone verification UI)
 
-Progress: ██████████████████████████████████████████████ 46%
+Progress: ██████████████████████████████████████████████████ 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 6.8 min
-- Total execution time: 1.5 hours
+- Total plans completed: 14
+- Average duration: 6.6 min
+- Total execution time: 1.6 hours
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: ███████████████████████�
 | 2. Location Discovery | 2/2 | 18 min | 9 min |
 | 3. Deal Browsing | 4/4 | 20 min | 5 min |
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
-| 4. Consumer Auth | 3/4 | 22 min | 7 min |
+| 4. Consumer Auth | 4/4 | 30 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 03.1-01 (4 min), 04-01 (3 min), 04-02 (3 min), 04-03 (16 min)
-- Trend: Consistent (04-03 longer due to checkpoint verification)
+- Last 5 plans: 04-01 (3 min), 04-02 (3 min), 04-03 (16 min), 04-04 (8 min)
+- Trend: Consistent
 
 ## Accumulated Context
 
@@ -76,6 +76,10 @@ Recent decisions affecting current work:
 | 04-03 | Mock verification any 6 digits | No real email sending for MVP, accepts any code |
 | 04-03 | Two-view EmailVerification | Check-email screen + manual code entry toggle |
 | 04-03 | SignUpForm passes email to onSuccess | Required for verification flow to know which email |
+| 04-04 | Mock SMS verification any 6 digits | No real SMS for MVP, accepts any code |
+| 04-04 | Phone validation 10+ digits | Basic phone number validation |
+| 04-04 | Skip phone verification option | MVP flexibility, users can verify later |
+| 04-04 | Status transitions in verifyPhone | email_verified -> fully_verified, unverified -> phone_verified |
 
 ### Deferred Issues
 
@@ -88,5 +92,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-09
-Stopped at: Completed 04-03-PLAN.md (Email verification UI)
+Stopped at: Completed 04-04-PLAN.md (Phone verification UI) - Phase 4 complete
 Resume file: None
