@@ -38,6 +38,41 @@ export function getUnclaimedBusinesses(): Business[] {
 }
 
 /**
+ * Create a new business listing
+ * Returns the new Business object
+ */
+export function createBusiness(
+  data: Omit<
+    Business,
+    'id' | 'slug' | 'createdAt' | 'updatedAt' | 'rating' | 'reviewCount' | 'isVerified' | 'tier' | 'status'
+  >
+): Business {
+  const now = new Date().toISOString()
+  const slug = data.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+
+  const newBusiness: Business = {
+    ...data,
+    id: `biz-${Date.now()}`,
+    slug: `${slug}-${data.city.toLowerCase()}`,
+    tier: 'free',
+    status: 'active',
+    rating: 0,
+    reviewCount: 0,
+    isVerified: false,
+    createdAt: now,
+    updatedAt: now,
+  }
+
+  // Add to dynamic businesses
+  getDynamicBusinesses().push(newBusiness)
+
+  return newBusiness
+}
+
+/**
  * Claim a business for an owner
  * Updates tier, claimedBy, claimedAt, and isVerified
  */
