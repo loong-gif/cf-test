@@ -9,6 +9,14 @@ export {
   addBusinessResponse,
   getClaimByIdDynamic,
 } from './consumers'
+export {
+  getMessagesForClaim,
+  sendMessage,
+  getLastMessageForClaim,
+  getUnreadCountForClaim,
+  markMessagesAsRead,
+  getClaimIdsWithMessages,
+} from './messages'
 export { deals, toAnonymousDeal, getDealById as getDealByIdDynamic, getDealsForBusiness } from './deals'
 export { cities, locationAreas } from './locations'
 
