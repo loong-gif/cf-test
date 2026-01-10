@@ -274,6 +274,17 @@ export const deals: Deal[] = [
   },
 ]
 
+// Track dynamically created/modified deals (changes during session)
+let dynamicDeals: Deal[] = []
+
+// Initialize dynamic array on first access
+function getDynamicDeals(): Deal[] {
+  if (dynamicDeals.length === 0) {
+    dynamicDeals = [...deals]
+  }
+  return dynamicDeals
+}
+
 // Helper to convert Deal to AnonymousDeal (hides business details)
 export function toAnonymousDeal(deal: Deal): AnonymousDeal {
   const business = businesses.find((b) => b.id === deal.businessId)
@@ -287,4 +298,96 @@ export function toAnonymousDeal(deal: Deal): AnonymousDeal {
     businessReviewCount: business.reviewCount,
     businessTier: business.tier,
   }
+}
+
+/**
+ * Get all deals for a specific business
+ */
+export function getDealsForBusiness(businessId: string): Deal[] {
+  return getDynamicDeals().filter((d) => d.businessId === businessId)
+}
+
+/**
+ * Get a single deal by ID
+ */
+export function getDealById(dealId: string): Deal | undefined {
+  return getDynamicDeals().find((d) => d.id === dealId)
+}
+
+/**
+ * Toggle deal active status (pause/activate)
+ */
+export function toggleDealStatus(dealId: string): Deal | null {
+  const allDeals = getDynamicDeals()
+  const index = allDeals.findIndex((d) => d.id === dealId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedDeal: Deal = {
+    ...allDeals[index],
+    isActive: !allDeals[index].isActive,
+    updatedAt: now,
+  }
+
+  dynamicDeals[index] = updatedDeal
+  return updatedDeal
+}
+
+/**
+ * Delete a deal by ID
+ */
+export function deleteDeal(dealId: string): boolean {
+  const allDeals = getDynamicDeals()
+  const index = allDeals.findIndex((d) => d.id === dealId)
+
+  if (index === -1) return false
+
+  dynamicDeals.splice(index, 1)
+  return true
+}
+
+/**
+ * Create a new deal
+ */
+export function createDeal(
+  data: Omit<Deal, 'id' | 'createdAt' | 'updatedAt' | 'claimCount' | 'viewCount' | 'isSponsored'>
+): Deal {
+  const now = new Date().toISOString()
+
+  const newDeal: Deal = {
+    ...data,
+    id: `deal-${Date.now()}`,
+    claimCount: 0,
+    viewCount: 0,
+    isSponsored: false,
+    createdAt: now,
+    updatedAt: now,
+  }
+
+  getDynamicDeals().push(newDeal)
+  return newDeal
+}
+
+/**
+ * Update an existing deal
+ */
+export function updateDeal(
+  dealId: string,
+  data: Partial<Omit<Deal, 'id' | 'createdAt' | 'claimCount' | 'viewCount' | 'isSponsored'>>
+): Deal | null {
+  const allDeals = getDynamicDeals()
+  const index = allDeals.findIndex((d) => d.id === dealId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedDeal: Deal = {
+    ...allDeals[index],
+    ...data,
+    updatedAt: now,
+  }
+
+  dynamicDeals[index] = updatedDeal
+  return updatedDeal
 }
