@@ -22,8 +22,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3.1: Image Blur** - INSERTED: Heavy blur + lock icon on deal images for anonymous users ✓
 - [x] **Phase 4: Consumer Auth** - Account creation with email/SMS verification UI, business reveal ✓
 - [x] **Phase 5: Consumer Dashboard** - Favorites, claims, status tracking, deal alerts, profile ✓
-- [ ] **Phase 6: Business Onboarding** - Claim existing profile and create new business flows (Next)
-- [ ] **Phase 7: Business Dashboard** - Deal management, lead inbox, messaging, analytics
+- [x] **Phase 6: Business Onboarding** - Claim existing profile and create new business flows ✓
+- [ ] **Phase 7: Business Dashboard** - Deal management, lead inbox, messaging, analytics (Next)
 - [ ] **Phase 8: Admin Core** - Deal moderation, user management, content management
 - [ ] **Phase 9: Admin Platform** - Reporting, metrics, data management tools
 - [ ] **Phase 10: Monetization UI** - Tiers, subscription billing, sponsored placements, pricing settings
@@ -103,12 +103,12 @@ Plans:
 **Goal**: Business claim existing profile or create new business flows
 **Depends on**: Phase 1
 **Research**: Unlikely (form patterns, verification UI)
-**Status**: In progress
+**Status**: Complete
 
 Plans:
 - [x] 06-01: Business auth context, search modal, entry page ✓
 - [x] 06-02: Claim existing business flow ✓
-- [ ] 06-03: Create new business flow + verification UI
+- [x] 06-03: Create new business flow + verification UI ✓
 
 ### Phase 7: Business Dashboard
 **Goal**: Business portal — deal management, leads, messaging, analytics, profile editing
@@ -174,7 +174,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 3.1 Image Blur | 1/1 | Complete | 2026-01-09 |
 | 4. Consumer Auth | 5/5 | Complete | 2026-01-09 |
 | 5. Consumer Dashboard | 5/5 | Complete | 2026-01-09 |
-| 6. Business Onboarding | 2/3 | In progress | - |
+| 6. Business Onboarding | 3/3 | Complete | 2026-01-10 |
 | 7. Business Dashboard | 0/7 | Not started | - |
 | 8. Admin Core | 0/4 | Not started | - |
 | 9. Admin Platform | 0/2 | Not started | - |

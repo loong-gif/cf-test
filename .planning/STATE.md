@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-09)
 
 **Core value:** Deal discovery UX that makes finding and comparing medspa pricing effortless
-**Current focus:** Phase 6 — Business Onboarding
+**Current focus:** Phase 7 — Business Dashboard
 
 ## Current Position
 
-Phase: 6 of 10 (Business Onboarding)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-10 — Completed 06-02-PLAN.md (Claim Existing Business Flow)
+Phase: 6 of 10 (Business Onboarding) — COMPLETE
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-01-10 — Completed 06-03-PLAN.md (Create New Business Flow)
 
-Progress: ██████████████████████████████████████████████████████████░░░ 58%
+Progress: █████████████████████████████████████████████████████████████░ 61%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
-- Average duration: 8.0 min
-- Total execution time: 2.7 hours
+- Total plans completed: 21
+- Average duration: 7.9 min
+- Total execution time: 2.8 hours
 
 **By Phase:**
 
@@ -33,11 +33,11 @@ Progress: ███████████████████████�
 | 3.1 Image Blur | 1/1 | 4 min | 4 min |
 | 4. Consumer Auth | 5/5 | 55 min | 11 min |
 | 5. Consumer Dashboard | 5/5 | 67 min | 13 min |
-| 6. Business Onboarding | 2/3 | 11 min | 5.5 min |
+| 6. Business Onboarding | 3/3 | 17 min | 5.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-04 (10 min), 05-05 (5 min), 06-01 (5 min), 06-02 (6 min)
-- Trend: Phase 6 progressing - claim flow complete
+- Last 5 plans: 05-05 (5 min), 06-01 (5 min), 06-02 (6 min), 06-03 (6 min)
+- Trend: Phase 6 complete - business onboarding flows ready
 
 ## Accumulated Context
 
@@ -110,6 +110,9 @@ Recent decisions affecting current work:
 | 06-02 | Verification method choice | Email or phone verification options |
 | 06-02 | Mock verification any 6 digits | Consistent with Phase 04 pattern |
 | 06-02 | Dynamic businesses array | Session mutations without fixture changes |
+| 06-03 | Auto-approve new business listings | No manual review for MVP |
+| 06-03 | Inline success state | Single page flow vs separate success page |
+| 06-03 | Prefill email from authenticated owner | Better UX for form completion |
 
 ### Deferred Issues
 
@@ -122,5 +125,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-10
-Stopped at: Completed 06-02-PLAN.md (Claim Existing Business Flow)
+Stopped at: Completed 06-03-PLAN.md (Create New Business Flow) - Phase 6 complete
 Resume file: None
