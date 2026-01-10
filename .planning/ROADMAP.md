@@ -118,7 +118,7 @@ Plans:
 
 Plans:
 - [x] 07-01: Business dashboard shell with navigation ✓
-- [ ] 07-02: Deal management — create, edit, pause deals
+- [x] 07-02: Deal management — create, edit, pause deals ✓
 - [ ] 07-03: Lead inbox with claim details
 - [ ] 07-04: In-platform messaging with leads
 - [ ] 07-05: Performance analytics dashboard
@@ -175,7 +175,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 4. Consumer Auth | 5/5 | Complete | 2026-01-09 |
 | 5. Consumer Dashboard | 5/5 | Complete | 2026-01-09 |
 | 6. Business Onboarding | 3/3 | Complete | 2026-01-10 |
-| 7. Business Dashboard | 1/7 | In progress | - |
+| 7. Business Dashboard | 2/7 | In progress | - |
 | 8. Admin Core | 0/4 | Not started | - |
 | 9. Admin Platform | 0/2 | Not started | - |
 | 10. Monetization UI | 0/5 | Not started | - |
