@@ -97,6 +97,30 @@ export function claimBusiness(businessId: string, ownerId: string): Business | n
   return updatedBusiness
 }
 
+/**
+ * Update a business with partial data
+ * Returns the updated business or null if not found
+ */
+export function updateBusiness(
+  businessId: string,
+  updates: Partial<Omit<Business, 'id' | 'slug' | 'createdAt' | 'tier' | 'status' | 'rating' | 'reviewCount' | 'isVerified' | 'verifiedAt' | 'claimedBy' | 'claimedAt'>>
+): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    ...updates,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}
+
 export const businesses: Business[] = [
   // Unclaimed businesses (scraped data)
   {
