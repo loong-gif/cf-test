@@ -23,7 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Consumer Auth** - Account creation with email/SMS verification UI, business reveal ✓
 - [x] **Phase 5: Consumer Dashboard** - Favorites, claims, status tracking, deal alerts, profile ✓
 - [x] **Phase 6: Business Onboarding** - Claim existing profile and create new business flows ✓
-- [ ] **Phase 7: Business Dashboard** - Deal management, lead inbox, messaging, analytics (In progress)
+- [x] **Phase 7: Business Dashboard** - Deal management, lead inbox, messaging, analytics, profile, settings ✓
 - [ ] **Phase 8: Admin Core** - Deal moderation, user management, content management
 - [ ] **Phase 9: Admin Platform** - Reporting, metrics, data management tools
 - [ ] **Phase 10: Monetization UI** - Tiers, subscription billing, sponsored placements, pricing settings
@@ -114,16 +114,14 @@ Plans:
 **Goal**: Business portal — deal management, leads, messaging, analytics, profile editing
 **Depends on**: Phase 6
 **Research**: Unlikely (dashboard patterns, messaging UI)
-**Status**: In progress (4/7 plans)
+**Status**: Complete
 
 Plans:
 - [x] 07-01: Business dashboard shell with navigation ✓
 - [x] 07-02: Deal management — create, edit, pause deals ✓
 - [x] 07-03: Lead inbox with claim details ✓
 - [x] 07-04: In-platform messaging + analytics dashboard ✓
-- [ ] 07-05: Business profile editing
-- [ ] 07-06: Scheduling integrations placeholder ("Coming Soon" UI)
-- [ ] 07-07: Notifications and alerts settings
+- [x] 07-05: Business profile editing + settings + integrations placeholder ✓
 
 ### Phase 8: Admin Core
 **Goal**: Admin moderation and management tools
@@ -175,7 +173,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 4. Consumer Auth | 5/5 | Complete | 2026-01-09 |
 | 5. Consumer Dashboard | 5/5 | Complete | 2026-01-09 |
 | 6. Business Onboarding | 3/3 | Complete | 2026-01-10 |
-| 7. Business Dashboard | 3/7 | In progress | - |
+| 7. Business Dashboard | 5/5 | Complete | 2026-01-10 |
 | 8. Admin Core | 0/4 | Not started | - |
 | 9. Admin Platform | 0/2 | Not started | - |
 | 10. Monetization UI | 0/5 | Not started | - |
