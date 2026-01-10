@@ -16,6 +16,8 @@ export {
   getUnreadCountForClaim,
   markMessagesAsRead,
   getClaimIdsWithMessages,
+  getConversationsForBusiness,
+  type ConversationSummary,
 } from './messages'
 export { deals, toAnonymousDeal, getDealById as getDealByIdDynamic, getDealsForBusiness } from './deals'
 export { cities, locationAreas } from './locations'

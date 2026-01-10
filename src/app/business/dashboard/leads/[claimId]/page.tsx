@@ -38,5 +38,5 @@ export default function LeadDetailPage({ params }: LeadDetailPageProps) {
     notFound()
   }
 
-  return <LeadDetail claim={claim} />
+  return <LeadDetail claim={claim} businessId={businessId} />
 }

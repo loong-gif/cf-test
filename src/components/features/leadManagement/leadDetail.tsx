@@ -26,9 +26,11 @@ import {
   updateClaimStatus,
   addBusinessResponse,
 } from '@/lib/mock-data'
+import { MessageThread } from '@/components/features/messaging/messageThread'
 
 interface LeadDetailProps {
   claim: Claim
+  businessId: string
   onClaimUpdate?: (claim: Claim) => void
 }
 
@@ -70,7 +72,7 @@ function getMockContactInfo(consumerId: string) {
   }
 }
 
-export function LeadDetail({ claim: initialClaim, onClaimUpdate }: LeadDetailProps) {
+export function LeadDetail({ claim: initialClaim, businessId, onClaimUpdate }: LeadDetailProps) {
   const [claim, setClaim] = useState(initialClaim)
   const [businessNotes, setBusinessNotes] = useState(claim.businessResponse || '')
   const [isSaving, setIsSaving] = useState(false)
@@ -267,6 +269,15 @@ export function LeadDetail({ claim: initialClaim, onClaimUpdate }: LeadDetailPro
               </div>
             </div>
           </Card>
+
+          {/* Messaging - only show if not pending */}
+          {claim.status !== 'pending' && (
+            <MessageThread
+              claimId={claim.id}
+              currentUserId={businessId}
+              currentUserType="business"
+            />
+          )}
         </div>
 
         {/* Sidebar */}

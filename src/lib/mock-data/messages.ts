@@ -1,4 +1,6 @@
-import type { Message } from '@/types'
+import type { Message, Claim } from '@/types'
+import { getClaimsForBusiness } from './consumers'
+import { getDealById } from './deals'
 
 // Seeded mock messages (2-3 conversations)
 const initialMessages: Message[] = [
@@ -207,4 +209,45 @@ export function getClaimIdsWithMessages(): string[] {
     claimIds.add(message.claimId)
   }
   return Array.from(claimIds)
+}
+
+export interface ConversationSummary {
+  claim: Claim
+  dealTitle: string
+  lastMessage: Message
+  unreadCount: number
+}
+
+/**
+ * Get all conversations for a business (claims that have messages)
+ */
+export function getConversationsForBusiness(
+  businessId: string
+): ConversationSummary[] {
+  const businessClaims = getClaimsForBusiness(businessId)
+  const claimIdsWithMessages = getClaimIdsWithMessages()
+
+  const conversations: ConversationSummary[] = []
+
+  for (const claim of businessClaims) {
+    if (claimIdsWithMessages.includes(claim.id)) {
+      const lastMessage = getLastMessageForClaim(claim.id)
+      if (lastMessage) {
+        const deal = getDealById(claim.dealId)
+        conversations.push({
+          claim,
+          dealTitle: deal?.title ?? 'Unknown Deal',
+          lastMessage,
+          unreadCount: getUnreadCountForClaim(claim.id),
+        })
+      }
+    }
+  }
+
+  // Sort by most recent message
+  return conversations.sort(
+    (a, b) =>
+      new Date(b.lastMessage.createdAt).getTime() -
+      new Date(a.lastMessage.createdAt).getTime()
+  )
 }
