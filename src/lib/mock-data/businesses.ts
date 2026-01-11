@@ -1,4 +1,4 @@
-import type { Business } from '@/types'
+import type { Business, BusinessStatus, BusinessTier } from '@/types'
 
 // Track dynamically claimed businesses (changes during session)
 let dynamicBusinesses: Business[] = []
@@ -281,3 +281,56 @@ export const businesses: Business[] = [
     updatedAt: '2024-03-10T10:00:00Z',
   },
 ]
+
+/**
+ * Get all businesses
+ */
+export function getAllBusinesses(): Business[] {
+  return getDynamicBusinesses()
+}
+
+/**
+ * Update business status
+ */
+export function updateBusinessStatus(
+  businessId: string,
+  status: BusinessStatus
+): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    status,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}
+
+/**
+ * Update business tier
+ */
+export function updateBusinessTier(
+  businessId: string,
+  tier: BusinessTier
+): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    tier,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}
