@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-09)
 ## Current Position
 
 Phase: 8 of 10 (Admin Core)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-11 — Completed 08-01-PLAN.md (Admin Dashboard Shell)
+Last activity: 2026-01-11 — Completed 08-02-PLAN.md (Admin Home & Deal Moderation)
 
-Progress: ██████████████████████████████████████████████████████████████████████████████ 78%
+Progress: ████████████████████████████████████████████████████████████████████████████████ 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
-- Average duration: 7.8 min
-- Total execution time: 3.3 hours
+- Total plans completed: 26
+- Average duration: 7.7 min
+- Total execution time: 3.4 hours
 
 **By Phase:**
 
@@ -35,11 +35,11 @@ Progress: ███████████████████████�
 | 5. Consumer Dashboard | 5/5 | 67 min | 13 min |
 | 6. Business Onboarding | 3/3 | 17 min | 5.7 min |
 | 7. Business Dashboard | 5/5 | 76 min | 15 min |
-| 8. Admin Core | 1/4 | 8 min | 8 min |
+| 8. Admin Core | 2/4 | 14 min | 7 min |
 
 **Recent Trend:**
-- Last 5 plans: 07-03 (45 min), 07-04 (5 min), 07-05 (5 min), 08-01 (8 min)
-- Trend: Phase 8 started - admin dashboard shell with auth context and sidebar
+- Last 5 plans: 07-04 (5 min), 07-05 (5 min), 08-01 (8 min), 08-02 (6 min)
+- Trend: Admin dashboard home and deal moderation complete
 
 ## Accumulated Context
 
@@ -124,6 +124,9 @@ Recent decisions affecting current work:
 | 07-05 | Code icon for webhook | Webhook icon not in Phosphor, Code semantically fits |
 | 07-05 | Coming Soon badge pattern | Disabled buttons + badge for future features |
 | 07-05 | Settings hub navigation | Cards linking to sub-pages (Profile, Integrations, Account) |
+| 08-02 | MetricCard highlight variant | For action-needed states like pending moderation count |
+| 08-02 | Inline mock data for preview | Simpler than filtering deals.ts for moderation queue |
+| 08-02 | Request Changes expandable textarea | Inline notes input before submitting moderation action |
 
 ### Deferred Issues
 
@@ -136,5 +139,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-11
-Stopped at: Completed 08-01-PLAN.md (Admin Dashboard Shell)
+Stopped at: Completed 08-02-PLAN.md (Admin Home & Deal Moderation)
 Resume file: None

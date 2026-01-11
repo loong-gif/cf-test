@@ -131,7 +131,7 @@ Plans:
 
 Plans:
 - [x] 08-01: Admin dashboard shell with role-based navigation
-- [ ] 08-02: Deal moderation (approve, reject, request changes)
+- [x] 08-02: Deal moderation (approve, reject, request changes) ✓
 - [ ] 08-03: User management (consumers and businesses)
 - [ ] 08-04: Content management (categories, locations, treatments)
 
@@ -174,6 +174,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 5. Consumer Dashboard | 5/5 | Complete | 2026-01-09 |
 | 6. Business Onboarding | 3/3 | Complete | 2026-01-10 |
 | 7. Business Dashboard | 5/5 | Complete | 2026-01-10 |
-| 8. Admin Core | 1/4 | In progress | - |
+| 8. Admin Core | 2/4 | In progress | - |
 | 9. Admin Platform | 0/2 | Not started | - |
 | 10. Monetization UI | 0/5 | Not started | - |
