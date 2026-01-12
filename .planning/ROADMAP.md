@@ -71,10 +71,10 @@ Plans:
 **Depends on**: Phase 16
 **Research**: Likely (UX writing best practices, brand voice frameworks)
 **Research topics**: UX writing guidelines, voice and tone frameworks, microcopy best practices
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 17-01: TBD
+- [x] 17-01: Voice & tone definition (VOICE.md, TONE.md, WRITING-RULES.md)
 
 #### Phase 18: Error Messaging System
 
@@ -269,7 +269,7 @@ Phases execute in numeric order: 1 → ... → 23 → 24 → 25 → 26 → 27 �
 | 14. Module Polish | v1.1 | 6/6 | Complete | 2026-01-12 |
 | 15. Admin Polish & QA | v1.1 | 2/2 | Complete | 2026-01-12 |
 | 16. Messaging Audit | v1.2 | 3/3 | Complete | 2026-01-12 |
-| 17. Voice & Tone Definition | v1.2 | 0/? | Not started | - |
+| 17. Voice & Tone Definition | v1.2 | 1/1 | Complete | 2026-01-12 |
 | 18. Error Messaging System | v1.2 | 0/? | Not started | - |
 | 19. Success & Confirmation States | v1.2 | 0/? | Not started | - |
 | 20. Empty States & Placeholders | v1.2 | 0/? | Not started | - |
