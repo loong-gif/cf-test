@@ -172,4 +172,422 @@ Every empty state should answer: *Why is this empty? What can I do about it?*
 
 ---
 
+## 4. Empty State Templates by Context
+
+### 4.1 Consumer Module Empty States
+
+#### Saved Deals (Favorites)
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No saved deals yet |
+| **Description** | Deals you save will appear here. Browse our collection to find something you love. |
+| **CTA** | Browse deals |
+| **Icon** | Heart or Bookmark |
+| **Category** | First-time empty |
+
+---
+
+#### Claims/Bookings
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No claims yet |
+| **Description** | When you claim a deal, it will show up here so you can track it. |
+| **CTA** | Browse deals |
+| **Icon** | Ticket or Receipt |
+| **Category** | First-time empty |
+
+---
+
+#### Notifications
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No notifications |
+| **Description** | You're all caught up. |
+| **CTA** | None |
+| **Icon** | Bell |
+| **Category** | First-time empty |
+
+---
+
+#### Deal Search Results
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No deals found |
+| **Description** | Try adjusting your search or browse all deals in your area. |
+| **CTA** | Clear search |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Filtered Deal Results
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No deals match your filters |
+| **Description** | Try removing some filters to see more results. |
+| **CTA** | Clear filters |
+| **Icon** | Funnel |
+| **Category** | Filter empty |
+
+---
+
+#### Location No Deals
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No deals in this area yet |
+| **Description** | We're expanding to new locations. Check back soon or try a nearby city. |
+| **CTA** | Change location |
+| **Icon** | MapPin |
+| **Category** | First-time empty |
+
+---
+
+#### Treatment Category Empty
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No {treatment} deals available |
+| **Description** | There are no {treatment} deals in your area right now. Browse other treatments or check back later. |
+| **CTA** | Browse all deals |
+| **Icon** | Sparkle |
+| **Category** | Search empty |
+
+---
+
+### 4.2 Business Module Empty States
+
+#### Deals List
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No deals yet |
+| **Description** | Create your first deal to start attracting customers. |
+| **CTA** | Create deal |
+| **Icon** | Plus or Tag |
+| **Category** | First-time empty |
+
+---
+
+#### Leads Inbox
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No leads yet |
+| **Description** | When customers claim your deals, they'll appear here. |
+| **CTA** | None |
+| **Icon** | Users or Inbox |
+| **Category** | First-time empty |
+
+---
+
+#### Messages/Conversations
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No conversations yet |
+| **Description** | Conversations with leads will appear here. |
+| **CTA** | None |
+| **Icon** | ChatCircle |
+| **Category** | First-time empty |
+
+---
+
+#### Message Search
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No conversations found |
+| **Description** | No conversations match your search. Try different keywords. |
+| **CTA** | Clear search |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Lead Search
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No leads found |
+| **Description** | No leads match your search criteria. |
+| **CTA** | Clear search |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Analytics Dashboard
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No data yet |
+| **Description** | Analytics will populate as customers interact with your deals. |
+| **CTA** | None |
+| **Icon** | ChartLine |
+| **Category** | First-time empty |
+
+---
+
+#### Analytics Date Range
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No data for this period |
+| **Description** | Try selecting a different date range. |
+| **CTA** | Change dates |
+| **Icon** | Calendar |
+| **Category** | Filter empty |
+
+---
+
+#### Expired Deals
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No expired deals |
+| **Description** | Deals that have passed their end date will appear here. |
+| **CTA** | None |
+| **Icon** | Clock |
+| **Category** | First-time empty |
+
+---
+
+### 4.3 Admin Module Empty States
+
+#### Deals Moderation Queue
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No deals pending review |
+| **Description** | All caught up. Check back later. |
+| **CTA** | None |
+| **Icon** | CheckCircle |
+| **Category** | First-time empty |
+
+---
+
+#### User Management Search
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No users found |
+| **Description** | Adjust your search or filters. |
+| **CTA** | Clear filters |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Business Management Search
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No businesses found |
+| **Description** | No businesses match the current criteria. |
+| **CTA** | Clear filters |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Treatment Management
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No treatments found |
+| **Description** | No treatments match your search. |
+| **CTA** | Clear search |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Location Management
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No cities found |
+| **Description** | No cities match your search criteria. |
+| **CTA** | Clear search |
+| **Icon** | MagnifyingGlass |
+| **Category** | Search empty |
+
+---
+
+#### Reports Empty Period
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No data for selected period |
+| **Description** | Try selecting a different date range. |
+| **CTA** | Change dates |
+| **Icon** | ChartBar |
+| **Category** | Filter empty |
+
+---
+
+#### Flagged Content Queue
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No flagged content |
+| **Description** | No items require attention. |
+| **CTA** | None |
+| **Icon** | Flag |
+| **Category** | First-time empty |
+
+---
+
+#### Audit Log Search
+
+| Component | Content |
+|-----------|---------|
+| **Title** | No activity found |
+| **Description** | No activity matches your filters. |
+| **CTA** | Clear filters |
+| **Icon** | ClockCounterClockwise |
+| **Category** | Filter empty |
+
+---
+
+### 4.4 Shared/Cross-Module Empty States
+
+#### Error Loading Data
+
+| Component | Content |
+|-----------|---------|
+| **Title** | Couldn't load {items} |
+| **Description** | Something went wrong. Please try again. |
+| **CTA** | Try again |
+| **Icon** | WarningCircle |
+| **Category** | Error empty |
+
+---
+
+#### Offline State
+
+| Component | Content |
+|-----------|---------|
+| **Title** | You're offline |
+| **Description** | Check your connection and try again. |
+| **CTA** | Retry |
+| **Icon** | WifiSlash |
+| **Category** | Error empty |
+
+---
+
+#### Permission Denied
+
+| Component | Content |
+|-----------|---------|
+| **Title** | Access restricted |
+| **Description** | You don't have permission to view this content. |
+| **CTA** | Go back |
+| **Icon** | Lock |
+| **Category** | Permission empty |
+
+---
+
+#### Premium Feature Locked
+
+| Component | Content |
+|-----------|---------|
+| **Title** | Premium feature |
+| **Description** | Upgrade to Premium to access this feature. |
+| **CTA** | View plans |
+| **Icon** | Crown |
+| **Category** | Permission empty |
+
+---
+
+#### Verification Required
+
+| Component | Content |
+|-----------|---------|
+| **Title** | Verification required |
+| **Description** | Verify your business to access this feature. |
+| **CTA** | Start verification |
+| **Icon** | ShieldCheck |
+| **Category** | Permission empty |
+
+---
+
+## 5. Placeholder Text Patterns
+
+### 5.1 Input Placeholders
+
+| Input Type | Pattern | Example |
+|------------|---------|---------|
+| Search | "Search {noun}..." | "Search deals..." |
+| Email | "{name}@example.com" | "you@example.com" |
+| Phone | "(555) 555-5555" | "(555) 555-5555" |
+| URL | "https://{domain}.com" | "https://yourbusiness.com" |
+| Text area | "Describe your {item}..." | "Describe your deal..." |
+| Standard text | "Enter {item}" | "Enter your name" |
+| Password | "Enter password" | "Enter password" |
+| Price | "$0.00" | "$0.00" |
+| Percentage | "0%" | "0%" |
+
+---
+
+### 5.2 Search Placeholders by Context
+
+| Context | Placeholder |
+|---------|-------------|
+| Deal search | "Search deals..." |
+| Business search | "Search businesses..." |
+| User search | "Search users..." |
+| Lead search | "Search leads..." |
+| Message search | "Search conversations..." |
+| Treatment search | "Search treatments..." |
+| Location search | "Search cities..." |
+| General | "Search..." |
+
+---
+
+### 5.3 Loading State Text
+
+| Context | Text |
+|---------|------|
+| Standard loading | "Loading..." |
+| Deals loading | "Loading deals..." |
+| Data loading | "Loading data..." |
+| Search in progress | "Searching..." |
+| Submitting | "Submitting..." |
+| Saving | "Saving..." |
+| Processing | "Processing..." |
+| Uploading | "Uploading..." |
+
+---
+
+### 5.4 Coming Soon Placeholders
+
+| Context | Text |
+|---------|------|
+| Feature unavailable | "{Feature} coming soon" |
+| Integration pending | "Connect {service} — Coming soon" |
+| Beta feature | "{Feature} — In beta" |
+| Maintenance | "Temporarily unavailable" |
+
+---
+
+### 5.5 Default Values
+
+| Field Type | Default Display |
+|------------|-----------------|
+| No image | Placeholder icon or initials |
+| No name | "Unknown" or "—" |
+| No date | "—" |
+| No price | "$—" |
+| No rating | "No reviews yet" |
+| No count | "0" |
+
+---
+
 *Based on Phase 17 Voice & Tone Definition and Phase 16 Messaging Audit findings. Empty state patterns support future i18n extraction.*
