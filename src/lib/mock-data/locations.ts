@@ -1,6 +1,7 @@
 import type { City, LocationArea } from '@/types'
 
-export const cities: City[] = [
+// Mutable cities array for CRUD operations
+let citiesData: City[] = [
   // Texas cities
   {
     id: 'city-austin',
@@ -67,7 +68,8 @@ export const cities: City[] = [
   },
 ]
 
-export const locationAreas: LocationArea[] = [
+// Mutable location areas array for CRUD operations
+let locationAreasData: LocationArea[] = [
   // Austin areas
   {
     id: 'area-austin-downtown',
@@ -76,6 +78,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 30.2672,
     longitude: -97.7431,
     radiusMiles: 3,
+    isActive: true,
   },
   {
     id: 'area-austin-north',
@@ -84,6 +87,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 30.3672,
     longitude: -97.7431,
     radiusMiles: 5,
+    isActive: true,
   },
   {
     id: 'area-austin-south',
@@ -92,6 +96,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 30.2072,
     longitude: -97.7631,
     radiusMiles: 5,
+    isActive: true,
   },
   // Dallas areas
   {
@@ -101,6 +106,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 32.8067,
     longitude: -96.807,
     radiusMiles: 3,
+    isActive: true,
   },
   {
     id: 'area-dallas-downtown',
@@ -109,6 +115,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 32.7767,
     longitude: -96.797,
     radiusMiles: 3,
+    isActive: true,
   },
   // Houston areas
   {
@@ -118,6 +125,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 29.8004,
     longitude: -95.3998,
     radiusMiles: 3,
+    isActive: true,
   },
   {
     id: 'area-houston-galleria',
@@ -126,6 +134,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 29.7383,
     longitude: -95.4616,
     radiusMiles: 4,
+    isActive: true,
   },
   // Los Angeles areas
   {
@@ -135,6 +144,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 34.0736,
     longitude: -118.4004,
     radiusMiles: 3,
+    isActive: true,
   },
   {
     id: 'area-la-santa-monica',
@@ -143,6 +153,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 34.0195,
     longitude: -118.4912,
     radiusMiles: 4,
+    isActive: true,
   },
   {
     id: 'area-la-west-hollywood',
@@ -151,6 +162,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 34.0901,
     longitude: -118.3617,
     radiusMiles: 3,
+    isActive: true,
   },
   // New York areas
   {
@@ -160,6 +172,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 40.7831,
     longitude: -73.9712,
     radiusMiles: 5,
+    isActive: true,
   },
   {
     id: 'area-ny-upper-east-side',
@@ -168,6 +181,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 40.7736,
     longitude: -73.9566,
     radiusMiles: 2,
+    isActive: true,
   },
   {
     id: 'area-ny-soho',
@@ -176,6 +190,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 40.7233,
     longitude: -74.003,
     radiusMiles: 2,
+    isActive: true,
   },
   // Miami areas
   {
@@ -185,6 +200,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 25.7826,
     longitude: -80.1341,
     radiusMiles: 3,
+    isActive: true,
   },
   {
     id: 'area-miami-brickell',
@@ -193,6 +209,7 @@ export const locationAreas: LocationArea[] = [
     latitude: 25.7617,
     longitude: -80.1918,
     radiusMiles: 2,
+    isActive: true,
   },
   {
     id: 'area-miami-coral-gables',
@@ -201,5 +218,135 @@ export const locationAreas: LocationArea[] = [
     latitude: 25.7215,
     longitude: -80.2684,
     radiusMiles: 4,
+    isActive: true,
   },
 ]
+
+// Export getters for backward compatibility (returns copies)
+export const cities: City[] = citiesData
+export const locationAreas: LocationArea[] = locationAreasData
+
+// City CRUD helpers
+export function getCities(): City[] {
+  return [...citiesData]
+}
+
+export function getCityById(id: string): City | undefined {
+  return citiesData.find((city) => city.id === id)
+}
+
+export function toggleCityStatus(id: string): City | undefined {
+  const index = citiesData.findIndex((city) => city.id === id)
+  if (index === -1) return undefined
+
+  citiesData[index] = {
+    ...citiesData[index],
+    isActive: !citiesData[index].isActive,
+  }
+  return citiesData[index]
+}
+
+export function addCity(
+  data: Omit<City, 'id'>
+): City {
+  const newCity: City = {
+    ...data,
+    id: `city-${Date.now()}`,
+  }
+  citiesData = [...citiesData, newCity]
+  return newCity
+}
+
+export function updateCity(
+  id: string,
+  data: Partial<Omit<City, 'id'>>
+): City | undefined {
+  const index = citiesData.findIndex((city) => city.id === id)
+  if (index === -1) return undefined
+
+  citiesData[index] = { ...citiesData[index], ...data }
+  return citiesData[index]
+}
+
+// Area CRUD helpers
+export function getAreas(): LocationArea[] {
+  return [...locationAreasData]
+}
+
+export function getAreasForCity(cityId: string): LocationArea[] {
+  return locationAreasData.filter((area) => area.cityId === cityId)
+}
+
+export function getAreaById(id: string): LocationArea | undefined {
+  return locationAreasData.find((area) => area.id === id)
+}
+
+export function toggleAreaStatus(id: string): LocationArea | undefined {
+  const index = locationAreasData.findIndex((area) => area.id === id)
+  if (index === -1) return undefined
+
+  locationAreasData[index] = {
+    ...locationAreasData[index],
+    isActive: locationAreasData[index].isActive === false ? true : false,
+  }
+  return locationAreasData[index]
+}
+
+export function addArea(
+  data: Omit<LocationArea, 'id'>
+): LocationArea {
+  const newArea: LocationArea = {
+    ...data,
+    id: `area-${Date.now()}`,
+    isActive: data.isActive ?? true,
+  }
+  locationAreasData = [...locationAreasData, newArea]
+  return newArea
+}
+
+export function updateArea(
+  id: string,
+  data: Partial<Omit<LocationArea, 'id'>>
+): LocationArea | undefined {
+  const index = locationAreasData.findIndex((area) => area.id === id)
+  if (index === -1) return undefined
+
+  locationAreasData[index] = { ...locationAreasData[index], ...data }
+  return locationAreasData[index]
+}
+
+// Stats helpers
+export function getLocationStats() {
+  const totalCities = citiesData.length
+  const activeCities = citiesData.filter((c) => c.isActive).length
+  const totalAreas = locationAreasData.length
+  const activeAreas = locationAreasData.filter((a) => a.isActive !== false).length
+
+  return { totalCities, activeCities, totalAreas, activeAreas }
+}
+
+// Mock business counts by city (simulated data)
+export function getBusinessCountForCity(cityId: string): number {
+  const counts: Record<string, number> = {
+    'city-austin': 12,
+    'city-dallas': 8,
+    'city-houston': 15,
+    'city-los-angeles': 22,
+    'city-new-york': 18,
+    'city-miami': 10,
+  }
+  return counts[cityId] || 0
+}
+
+// Mock deal counts by city (simulated data)
+export function getDealCountForCity(cityId: string): number {
+  const counts: Record<string, number> = {
+    'city-austin': 24,
+    'city-dallas': 16,
+    'city-houston': 31,
+    'city-los-angeles': 45,
+    'city-new-york': 38,
+    'city-miami': 22,
+  }
+  return counts[cityId] || 0
+}

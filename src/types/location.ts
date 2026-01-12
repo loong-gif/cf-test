@@ -16,6 +16,7 @@ export interface LocationArea {
   latitude: number
   longitude: number
   radiusMiles: number
+  isActive?: boolean // Defaults to true if not specified
 }
 
 export interface UserLocation {
