@@ -154,7 +154,7 @@ Plans:
 
 Plans:
 - [x] 10-01: Business tier system UI (Unclaimed → Free → Paid) ✓
-- [ ] 10-02: Subscription billing UI (Stripe-ready checkout, payment method management)
+- [x] 10-02: Subscription billing UI (Stripe-ready checkout, payment method management) ✓
 - [ ] 10-03: Sponsored placements configuration
 - [ ] 10-04: Per-lead pricing settings
 - [ ] 10-05: Admin overrides for monetization settings
@@ -176,4 +176,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 7. Business Dashboard | 5/5 | Complete | 2026-01-10 |
 | 8. Admin Core | 4/4 | Complete | 2026-01-12 |
 | 9. Admin Platform | 2/2 | Complete | 2026-01-12 |
-| 10. Monetization UI | 1/5 | In progress | - |
+| 10. Monetization UI | 2/5 | In progress | - |
