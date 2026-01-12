@@ -12,6 +12,7 @@ import {
   Eye,
   Users,
   Tag,
+  Rocket,
 } from '@phosphor-icons/react'
 import type { Deal, TreatmentCategory } from '@/types'
 import { Card } from '@/components/ui/card'
@@ -19,7 +20,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Modal } from '@/components/ui/modal'
+import { SponsoredDealConfig } from '@/components/features/sponsoredDealConfig'
 import { getDealsForBusiness, toggleDealStatus, deleteDeal } from '@/lib/mock-data/deals'
+import {
+  getActiveBoosts,
+  isDealEligibleForSponsorship,
+  createBoost,
+  getActiveBoostForDeal,
+} from '@/lib/mock-data/sponsorship'
 
 type FilterTab = 'all' | 'active' | 'paused'
 
@@ -41,6 +49,8 @@ export function DealList({ businessId }: DealListProps) {
   const [activeTab, setActiveTab] = useState<FilterTab>('all')
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [dealToDelete, setDealToDelete] = useState<Deal | null>(null)
+  const [boostModalOpen, setBoostModalOpen] = useState(false)
+  const [dealToBoost, setDealToBoost] = useState<Deal | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
   // Get deals for this business
@@ -81,6 +91,11 @@ export function DealList({ businessId }: DealListProps) {
     }
   }, [allDeals])
 
+  // Count sponsored deals
+  const sponsoredCount = useMemo(() => {
+    return getActiveBoosts(businessId).length
+  }, [businessId, refreshKey])
+
   const handleToggleStatus = (deal: Deal) => {
     toggleDealStatus(deal.id)
     setRefreshKey((k) => k + 1)
@@ -100,6 +115,20 @@ export function DealList({ businessId }: DealListProps) {
     }
   }
 
+  const handleBoostClick = (deal: Deal) => {
+    setDealToBoost(deal)
+    setBoostModalOpen(true)
+  }
+
+  const handleBoostSelect = (boostOptionId: string) => {
+    if (dealToBoost) {
+      createBoost(dealToBoost.id, boostOptionId)
+      setBoostModalOpen(false)
+      setDealToBoost(null)
+      setRefreshKey((k) => k + 1)
+    }
+  }
+
   const formatPrice = (price: number, unit: string) => {
     return `$${price.toFixed(price % 1 === 0 ? 0 : 2)} ${unit}`
   }
@@ -114,12 +143,25 @@ export function DealList({ businessId }: DealListProps) {
             Manage your special offers and promotions
           </p>
         </div>
-        <Link href="/business/dashboard/deals/new">
-          <Button>
-            <Plus size={20} weight="bold" />
-            Create Deal
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/business/dashboard/deals/sponsored">
+            <Button variant="secondary">
+              <Rocket size={18} weight="fill" className="text-brand-primary" />
+              Sponsored
+              {sponsoredCount > 0 && (
+                <Badge variant="brand" size="sm" className="ml-1">
+                  {sponsoredCount}
+                </Badge>
+              )}
+            </Button>
+          </Link>
+          <Link href="/business/dashboard/deals/new">
+            <Button>
+              <Plus size={20} weight="bold" />
+              Create Deal
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Filters and Search */}
@@ -231,11 +273,19 @@ export function DealList({ businessId }: DealListProps) {
                           <p className="font-medium text-text-primary truncate">
                             {deal.title}
                           </p>
-                          {deal.isFeatured && (
-                            <Badge variant="brand" size="sm">
-                              Featured
-                            </Badge>
-                          )}
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                            {deal.isFeatured && (
+                              <Badge variant="brand" size="sm">
+                                Featured
+                              </Badge>
+                            )}
+                            {getActiveBoostForDeal(deal.id) && (
+                              <Badge variant="info" size="sm">
+                                <Rocket size={10} weight="fill" className="mr-0.5" />
+                                Boosted
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -286,6 +336,18 @@ export function DealList({ businessId }: DealListProps) {
                     {/* Actions */}
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
+                        {/* Boost Action - only for eligible deals */}
+                        {isDealEligibleForSponsorship(deal) && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleBoostClick(deal)}
+                            title="Boost this deal"
+                            className="text-brand-primary hover:text-brand-secondary hover:bg-brand-primary/10"
+                          >
+                            <Rocket size={18} weight="light" />
+                          </Button>
+                        )}
                         <Link href={`/business/dashboard/deals/${deal.id}/edit`}>
                           <Button variant="ghost" size="sm">
                             <PencilSimple size={18} weight="light" />
@@ -354,6 +416,28 @@ export function DealList({ businessId }: DealListProps) {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* Boost Configuration Modal */}
+      <Modal
+        isOpen={boostModalOpen}
+        onClose={() => {
+          setBoostModalOpen(false)
+          setDealToBoost(null)
+        }}
+        title="Boost Your Deal"
+        size="lg"
+      >
+        {dealToBoost && (
+          <SponsoredDealConfig
+            deal={dealToBoost}
+            onBoostSelect={handleBoostSelect}
+            onCancel={() => {
+              setBoostModalOpen(false)
+              setDealToBoost(null)
+            }}
+          />
+        )}
       </Modal>
     </div>
   )
