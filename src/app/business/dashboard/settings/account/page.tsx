@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import { CaretLeft, Crown, CheckCircle, CreditCard, Receipt, Warning } from '@phosphor-icons/react'
+import { Crown, CheckCircle, CreditCard, Receipt, Warning } from '@phosphor-icons/react'
 import { useBusinessAuth } from '@/lib/context/businessAuthContext'
 import { getBusinessById } from '@/lib/mock-data/businesses'
 import { getInvoices, getPaymentMethods } from '@/lib/mock-data/billing'
@@ -99,23 +98,6 @@ export default function AccountSettingsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Back Link */}
-      <Link
-        href="/business/dashboard/settings"
-        className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
-      >
-        <CaretLeft size={18} weight="light" />
-        <span>Back to Settings</span>
-      </Link>
-
-      {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Account & Billing</h1>
-        <p className="text-text-secondary mt-1">
-          Manage your subscription plan and billing settings
-        </p>
-      </div>
-
       {/* Upgrade Success Message */}
       {showUpgradeSuccess && (
         <div className="flex items-center gap-3 p-4 bg-green-500/10 rounded-xl border border-green-500/20">

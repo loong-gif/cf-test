@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import {
-  Gear,
   CurrencyDollar,
   ChartLine,
   CreditCard,
@@ -91,21 +90,6 @@ export default function MonetizationSettingsPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center">
-            <Gear size={20} weight="fill" className="text-brand-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-text-primary">Monetization Settings</h1>
-            <p className="text-text-secondary">
-              Configure platform pricing, tiers, and fee structure
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* Section 1: Subscription Tiers */}
       <Card variant="glass" padding="lg">
         <CardHeader className="mb-6">

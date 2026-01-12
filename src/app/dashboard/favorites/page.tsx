@@ -21,25 +21,7 @@ export default function FavoritesPage() {
   }, [savedDeals])
 
   return (
-    <div>
-      {/* Page Header */}
-      <div className="mb-8">
-        <nav className="mb-2">
-          <Link
-            href="/dashboard"
-            className="text-sm text-text-tertiary hover:text-text-secondary transition-colors"
-          >
-            Dashboard
-          </Link>
-          <span className="mx-2 text-text-tertiary">/</span>
-          <span className="text-sm text-text-primary">Favorites</span>
-        </nav>
-        <h1 className="text-2xl font-bold text-text-primary">Saved Deals</h1>
-        <p className="text-text-secondary mt-1">
-          Deals you&apos;ve saved for later
-        </p>
-      </div>
-
+    <div className="space-y-6">
       {/* Content */}
       {deals.length === 0 ? (
         /* Empty State */

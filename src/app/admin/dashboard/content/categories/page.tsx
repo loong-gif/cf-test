@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import Link from 'next/link'
 import {
-  CaretLeft,
   Plus,
   DotsSixVertical,
   PencilSimple,
@@ -131,24 +129,8 @@ export default function CategoriesManagementPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <Link href="/admin/dashboard/content">
-            <Button variant="ghost" size="sm" className="gap-1">
-              <CaretLeft size={18} />
-              Back
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-text-primary">
-              Treatment Categories
-            </h1>
-            <p className="text-text-secondary mt-1">
-              Manage treatment categories for the platform
-            </p>
-          </div>
-        </div>
+      {/* Actions */}
+      <div className="flex justify-end">
         <Button
           variant="primary"
           size="sm"

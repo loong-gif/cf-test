@@ -89,14 +89,6 @@ export default function MessagesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Messages</h1>
-        <p className="text-text-secondary mt-1">
-          Conversations with your customers
-        </p>
-      </div>
-
       {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Search */}

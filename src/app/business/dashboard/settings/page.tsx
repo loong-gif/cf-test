@@ -28,13 +28,6 @@ const settingsLinks = [
 export default function SettingsPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Settings</h1>
-        <p className="text-text-secondary mt-1">
-          Manage your business settings and integrations
-        </p>
-      </div>
-
       <div className="grid gap-4">
         {settingsLinks.map((link) => {
           const Icon = link.icon

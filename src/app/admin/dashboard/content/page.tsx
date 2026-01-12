@@ -34,13 +34,6 @@ const contentLinks = [
 export default function ContentManagementPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Content Management</h1>
-        <p className="text-text-secondary mt-1">
-          Manage platform content taxonomy and configuration
-        </p>
-      </div>
-
       {/* Stats Overview */}
       <div className="grid grid-cols-3 gap-4">
         <Card variant="glass" padding="md">

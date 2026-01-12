@@ -15,16 +15,5 @@ export default function BusinessProfilePage() {
     )
   }
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Business Profile</h1>
-        <p className="text-text-secondary mt-1">
-          Update your business information visible to customers
-        </p>
-      </div>
-
-      <BusinessProfileForm businessId={businessId} />
-    </div>
-  )
+  return <BusinessProfileForm businessId={businessId} />
 }

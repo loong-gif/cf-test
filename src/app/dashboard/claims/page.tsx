@@ -96,9 +96,6 @@ export default function ClaimsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <h1 className="text-2xl font-bold text-text-primary">My Claims</h1>
-
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2">
         {filterTabs.map((tab) => {
