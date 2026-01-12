@@ -9,6 +9,7 @@ import {
   Buildings,
   FolderSimple,
   ChartBar,
+  Database,
   Gear,
   SignOut,
 } from '@phosphor-icons/react'
@@ -28,6 +29,7 @@ const navItems: NavItem[] = [
   { href: '/admin/dashboard/businesses', label: 'Businesses', icon: Buildings },
   { href: '/admin/dashboard/content', label: 'Content', icon: FolderSimple },
   { href: '/admin/dashboard/reports', label: 'Reports', icon: ChartBar },
+  { href: '/admin/dashboard/data', label: 'Data', icon: Database },
   { href: '/admin/dashboard/settings', label: 'Settings', icon: Gear },
 ]
 
