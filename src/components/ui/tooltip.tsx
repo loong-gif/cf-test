@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 interface TooltipProps {
   content: string
@@ -17,8 +18,14 @@ export function Tooltip({
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [position, setPosition] = useState({ top: 0, left: 0 })
+  const [mounted, setMounted] = useState(false)
   const triggerRef = useRef<HTMLDivElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Ensure we only render portal on client
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const calculatePosition = () => {
     if (!triggerRef.current) return
@@ -88,6 +95,30 @@ export function Tooltip({
     }
   }
 
+  const tooltipContent = isVisible && mounted ? (
+    <div
+      className={`
+        fixed z-[9999]
+        px-3 py-1.5
+        bg-bg-secondary/95 backdrop-blur-md
+        border border-glass-border
+        rounded-lg
+        text-sm text-text-primary
+        shadow-lg
+        whitespace-nowrap
+        pointer-events-none
+        animate-in fade-in zoom-in-95 duration-150
+      `}
+      style={{
+        top: position.top,
+        left: position.left,
+        transform: getTransformOrigin(),
+      }}
+    >
+      {content}
+    </div>
+  ) : null
+
   return (
     <div
       ref={triggerRef}
@@ -96,29 +127,7 @@ export function Tooltip({
       className="inline-flex"
     >
       {children}
-      {isVisible && (
-        <div
-          className={`
-            fixed z-[60]
-            px-3 py-1.5
-            bg-bg-secondary/95 backdrop-blur-md
-            border border-glass-border
-            rounded-lg
-            text-sm text-text-primary
-            shadow-lg
-            whitespace-nowrap
-            pointer-events-none
-            animate-in fade-in zoom-in-95 duration-150
-          `}
-          style={{
-            top: position.top,
-            left: position.left,
-            transform: getTransformOrigin(),
-          }}
-        >
-          {content}
-        </div>
-      )}
+      {mounted && tooltipContent && createPortal(tooltipContent, document.body)}
     </div>
   )
 }
