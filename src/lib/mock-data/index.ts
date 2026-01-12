@@ -2,6 +2,7 @@
 
 export { admins } from './admins'
 export { businesses } from './businesses'
+export { businessOwners, findBusinessOwnerByEmail, findBusinessOwnerById } from './businessOwners'
 export {
   claims,
   consumers,

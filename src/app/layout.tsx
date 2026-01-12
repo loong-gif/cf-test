@@ -15,7 +15,7 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || 'https://costfinders.com'
+    process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai'
   ),
   title: {
     default: 'CostFinders - Compare MedSpa Prices',

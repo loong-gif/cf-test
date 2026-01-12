@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 // Site-wide configuration
 export const SITE_CONFIG = {
   name: 'CostFinders',
-  url: 'https://costfinders.com',
+  url: 'https://www.costfinders.ai',
   description: 'Find and compare medspa deals, treatments, and pricing near you. Discover the best aesthetic treatment prices from verified providers.',
   social: {
     twitter: '@costfinders',

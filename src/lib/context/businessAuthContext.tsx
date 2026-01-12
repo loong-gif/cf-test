@@ -13,6 +13,7 @@ import type {
   BusinessOwner,
   BusinessVerificationStatus,
 } from '@/types'
+import { businessOwners } from '@/lib/mock-data/businessOwners'
 
 const STORAGE_KEY = 'costfinders_business_auth'
 
@@ -77,11 +78,19 @@ let dynamicOwners: BusinessOwner[] = []
 
 function findOwnerByEmail(email: string): BusinessOwner | undefined {
   const normalizedEmail = email.toLowerCase()
-  return dynamicOwners.find((o) => o.email.toLowerCase() === normalizedEmail)
+  // Check pre-seeded owners first, then dynamic ones
+  return (
+    businessOwners.find((o) => o.email.toLowerCase() === normalizedEmail) ||
+    dynamicOwners.find((o) => o.email.toLowerCase() === normalizedEmail)
+  )
 }
 
 function findOwnerById(ownerId: string): BusinessOwner | undefined {
-  return dynamicOwners.find((o) => o.id === ownerId)
+  // Check pre-seeded owners first, then dynamic ones
+  return (
+    businessOwners.find((o) => o.id === ownerId) ||
+    dynamicOwners.find((o) => o.id === ownerId)
+  )
 }
 
 export function BusinessAuthProvider({
