@@ -138,9 +138,9 @@ function getStatusIcon(status: string) {
     case 'success':
       return <CheckCircle size={16} weight="fill" className="text-emerald-400" />
     case 'warning':
-      return <Warning size={16} weight="fill" className="text-amber-400" />
+      return <Warning size={16} weight="fill" className="text-warning-text" />
     case 'failed':
-      return <XCircle size={16} weight="fill" className="text-red-400" />
+      return <XCircle size={16} weight="fill" className="text-error-text" />
     default:
       return <Clock size={16} weight="fill" className="text-text-tertiary" />
   }
