@@ -242,7 +242,7 @@ export function CreateBusinessForm({
                 htmlFor="state"
                 className="block text-sm font-medium text-text-secondary mb-1.5"
               >
-                State <span className="text-red-400">*</span>
+                State <span className="text-error-text">*</span>
               </label>
               <select
                 id="state"
@@ -260,7 +260,7 @@ export function CreateBusinessForm({
                   disabled:opacity-50 disabled:cursor-not-allowed
                   ${
                     errors.state
-                      ? 'border-red-500/50 focus:border-red-500'
+                      ? 'border-error/50 focus:border-error'
                       : 'border-glass-border hover:border-glass-border-hover focus:border-brand-primary/50'
                   }
                 `}
@@ -273,7 +273,7 @@ export function CreateBusinessForm({
                 ))}
               </select>
               {errors.state && (
-                <p className="mt-1.5 text-xs text-red-400">{errors.state}</p>
+                <p className="mt-1.5 text-xs text-error-text">{errors.state}</p>
               )}
             </div>
           </div>
