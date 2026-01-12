@@ -101,10 +101,10 @@ export function BusinessInfo({ business, deal }: BusinessInfoProps) {
         {/* Claim Button or Already Claimed State */}
         {existingClaim ? (
           <div className="mt-2 space-y-3">
-            <div className="p-3 bg-green-500/10 rounded-xl">
+            <div className="p-3 bg-success/10 rounded-xl">
               <div className="flex items-center gap-2">
-                <CheckCircle size={20} weight="fill" className="text-green-500" />
-                <span className="text-sm font-medium text-green-500">
+                <CheckCircle size={20} weight="fill" className="text-success-text" />
+                <span className="text-sm font-medium text-success-text">
                   Deal Claimed
                 </span>
               </div>

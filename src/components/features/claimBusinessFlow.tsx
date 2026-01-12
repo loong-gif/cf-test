@@ -308,7 +308,7 @@ export function ClaimBusinessFlow({
           )}
 
           {state.error && (
-            <p className="text-sm text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">
+            <p className="text-sm text-error-text bg-error/10 px-3 py-2 rounded-lg">
               {state.error}
             </p>
           )}
@@ -487,8 +487,8 @@ export function ClaimBusinessFlow({
     <div className="space-y-6 text-center">
       {/* Success icon */}
       <div className="flex justify-center">
-        <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center">
-          <CheckCircle size={48} weight="fill" className="text-green-400" />
+        <div className="w-20 h-20 rounded-full bg-success/20 flex items-center justify-center">
+          <CheckCircle size={48} weight="fill" className="text-success-text" />
         </div>
       </div>
 
