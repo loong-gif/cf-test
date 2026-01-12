@@ -265,3 +265,11 @@ Smooth, intentional animations that support the glassmorphic, 3D aesthetic. Anim
 4. **Iterate Based on Use**: This guide establishes the foundation. Adjust based on how users actually interact with the product.
 
 5. **Whitespace is Strategic**: Empty space is not wasted space. It guides the eye and reduces cognitive load.
+
+---
+
+## Related Documentation
+
+This guide focuses on **visual design** (colors, typography, layout, animations). For **copy and messaging**, see:
+
+- **[Messaging Style Guide](./MESSAGING-STYLE-GUIDE.md)** — Voice, tone, error messages, success states, form copy, notifications

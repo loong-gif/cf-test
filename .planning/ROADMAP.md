@@ -8,8 +8,8 @@ Build the complete CostFinders UI — a price transparency and lead generation p
 
 - ✅ [v1.0 MVP](milestones/v1.0-ROADMAP.md) (Phases 1-10) — SHIPPED 2026-01-11
 - ✅ [v1.1 UI Consistency & Polish](milestones/v1.1-ROADMAP.md) (Phases 11-15) — SHIPPED 2026-01-12
-- 🚧 **v1.2 Messaging Style Guide** — Phases 16-23 (in progress)
-- 📋 **v1.3 Location SEO Clusters** — Phases 24-33 (planned)
+- ✅ **v1.2 Messaging Style Guide** — Phases 16-23 — SHIPPED 2026-01-12
+- 🚧 **v1.3 Location SEO Clusters** — Phases 24-33 (in progress)
 
 ## Completed Milestones
 
@@ -135,7 +135,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 23-01: TBD
+- [x] 23-01: Unified messaging style guide (docs/MESSAGING-STYLE-GUIDE.md)
 
 ### 📋 v1.3 Location SEO Clusters (Planned)
 
@@ -275,7 +275,7 @@ Phases execute in numeric order: 1 → ... → 23 → 24 → 25 → 26 → 27 �
 | 20. Empty States & Placeholders | v1.2 | 1/1 | Complete | 2026-01-12 |
 | 21. Form Validation Copy | v1.2 | 1/1 | Complete | 2026-01-12 |
 | 22. Notification Templates | v1.2 | 1/1 | Complete | 2026-01-12 |
-| 23. Documentation & Guidelines | v1.2 | 0/? | Not started | - |
+| 23. Documentation & Guidelines | v1.2 | 1/1 | Complete | 2026-01-12 |
 | 24. SEO Foundation | v1.3 | 3/3 | Complete | 2026-01-12 |
 | 25. State Pages | v1.3 | 1/1 | Complete | 2026-01-12 |
 | 26. City Pages | v1.3 | 0/? | Not started | - |
