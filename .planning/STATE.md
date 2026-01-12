@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-09)
 
 **Core value:** Deal discovery UX that makes finding and comparing medspa pricing effortless
-**Current focus:** Phase 8 — Admin Core
+**Current focus:** Phase 9 — Admin Platform
 
 ## Current Position
 
 Phase: 8 of 10 (Admin Core)
-Plan: 3 of 4 in current phase
-Status: In progress
-Last activity: 2026-01-11 — Completed 08-03-PLAN.md (User & Business Management)
+Plan: 4 of 4 in current phase
+Status: Phase complete
+Last activity: 2026-01-12 — Completed 08-04-PLAN.md (Content Management)
 
-Progress: █████████████████████████████████████████████████████████████████████████████████ 81%
+Progress: █████████████████████████████████████████████████████████████████████████████████████ 84%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
+- Total plans completed: 27
 - Average duration: 7.7 min
-- Total execution time: 3.4 hours
+- Total execution time: 3.5 hours
 
 **By Phase:**
 
@@ -35,11 +35,11 @@ Progress: ███████████████████████�
 | 5. Consumer Dashboard | 5/5 | 67 min | 13 min |
 | 6. Business Onboarding | 3/3 | 17 min | 5.7 min |
 | 7. Business Dashboard | 5/5 | 76 min | 15 min |
-| 8. Admin Core | 3/4 | 20 min | 6.7 min |
+| 8. Admin Core | 4/4 | 27 min | 6.8 min |
 
 **Recent Trend:**
-- Last 5 plans: 07-05 (5 min), 08-01 (8 min), 08-02 (6 min), 08-03 (6 min)
-- Trend: Admin user management complete
+- Last 5 plans: 08-01 (8 min), 08-02 (6 min), 08-03 (6 min), 08-04 (7 min)
+- Trend: Phase 8 Admin Core complete
 
 ## Accumulated Context
 
@@ -130,6 +130,10 @@ Recent decisions affecting current work:
 | 08-03 | ConsumerStatus type added | Enables user suspension (active | suspended) |
 | 08-03 | Business tier change nested dropdown | Cleaner than modal for tier upgrades |
 | 08-03 | Responsive admin tables | Desktop table, mobile card list pattern |
+| 08-04 | Category icons as string names | Phosphor icon name for dynamic rendering |
+| 08-04 | LocationArea.isActive optional | Backward compatible field addition |
+| 08-04 | Two-column layout for locations | Cities left, areas right for hierarchy |
+| 08-04 | Category filter tabs with counts | Quick overview of treatments per category |
 
 ### Deferred Issues
 
@@ -141,6 +145,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-11
-Stopped at: Completed 08-03-PLAN.md (User & Business Management)
+Last session: 2026-01-12
+Stopped at: Completed 08-04-PLAN.md (Content Management) - Phase 8 complete
 Resume file: None

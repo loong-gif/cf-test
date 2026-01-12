@@ -24,7 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Consumer Dashboard** - Favorites, claims, status tracking, deal alerts, profile ✓
 - [x] **Phase 6: Business Onboarding** - Claim existing profile and create new business flows ✓
 - [x] **Phase 7: Business Dashboard** - Deal management, lead inbox, messaging, analytics, profile, settings ✓
-- [ ] **Phase 8: Admin Core** - Deal moderation, user management, content management
+- [x] **Phase 8: Admin Core** - Deal moderation, user management, content management ✓
 - [ ] **Phase 9: Admin Platform** - Reporting, metrics, data management tools
 - [ ] **Phase 10: Monetization UI** - Tiers, subscription billing, sponsored placements, pricing settings
 
@@ -127,13 +127,13 @@ Plans:
 **Goal**: Admin moderation and management tools
 **Depends on**: Phase 5, Phase 7
 **Research**: Unlikely (admin dashboard patterns)
-**Status**: In progress
+**Status**: Complete
 
 Plans:
-- [x] 08-01: Admin dashboard shell with role-based navigation
+- [x] 08-01: Admin dashboard shell with role-based navigation ✓
 - [x] 08-02: Deal moderation (approve, reject, request changes) ✓
 - [x] 08-03: User management (consumers and businesses) ✓
-- [ ] 08-04: Content management (categories, locations, treatments)
+- [x] 08-04: Content management (categories, locations, treatments) ✓
 
 ### Phase 9: Admin Platform
 **Goal**: Platform reporting, metrics, and data management
@@ -174,6 +174,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 5. Consumer Dashboard | 5/5 | Complete | 2026-01-09 |
 | 6. Business Onboarding | 3/3 | Complete | 2026-01-10 |
 | 7. Business Dashboard | 5/5 | Complete | 2026-01-10 |
-| 8. Admin Core | 3/4 | In progress | - |
+| 8. Admin Core | 4/4 | Complete | 2026-01-12 |
 | 9. Admin Platform | 0/2 | Not started | - |
 | 10. Monetization UI | 0/5 | Not started | - |
