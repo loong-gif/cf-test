@@ -33,6 +33,17 @@ export {
   getCategoryStats,
   type Category,
 } from './categories'
+export {
+  getTreatments,
+  getTreatmentsByCategory,
+  getTreatmentById,
+  createTreatment,
+  updateTreatment,
+  toggleTreatmentStatus,
+  deleteTreatment,
+  getTreatmentStats,
+  type Treatment,
+} from './treatments'
 
 // Query utilities
 export {

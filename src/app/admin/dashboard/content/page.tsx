@@ -5,6 +5,7 @@ import { Tag, MapPin, FirstAidKit, CaretRight } from '@phosphor-icons/react'
 import { Card } from '@/components/ui/card'
 import { getCategories } from '@/lib/mock-data/categories'
 import { cities, locationAreas } from '@/lib/mock-data/locations'
+import { getTreatments } from '@/lib/mock-data/treatments'
 
 const contentLinks = [
   {
@@ -26,7 +27,7 @@ const contentLinks = [
     description: 'Manage treatment types',
     href: '/admin/dashboard/content/treatments',
     icon: FirstAidKit,
-    getCount: () => 15, // Will be dynamic once treatments mock data exists
+    getCount: () => getTreatments().length,
   },
 ]
 
