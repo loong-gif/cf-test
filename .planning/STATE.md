@@ -117,6 +117,7 @@ None.
 | 18. Error Messaging System | 1/1 | 11 min | 11 min |
 | 19. Success & Confirmation States | 1/1 | 12 min | 12 min |
 | 20. Empty States & Placeholders | 1/1 | 8 min | 8 min |
+| 21. Form Validation Copy | 1/1 | 15 min | 15 min |
 
 ## Session Continuity
 
