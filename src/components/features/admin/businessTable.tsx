@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Link from 'next/link'
 import {
   DotsThreeVertical,
   Eye,
@@ -10,6 +11,7 @@ import {
   Star,
   ArrowUp,
   ArrowDown,
+  CurrencyDollar,
 } from '@phosphor-icons/react'
 import type { Business, BusinessStatus, BusinessTier } from '@/types'
 import { Badge } from '@/components/ui/badge'
@@ -111,6 +113,15 @@ function ActionsDropdown({
             <Eye size={18} className="text-text-secondary" />
             View Details
           </button>
+
+          <Link
+            href={`/admin/dashboard/monetization/business/${business.id}`}
+            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-text-primary hover:bg-glass-bg-hover transition-colors text-left"
+            onClick={() => setIsOpen(false)}
+          >
+            <CurrencyDollar size={18} className="text-text-secondary" />
+            Manage Billing
+          </Link>
 
           {/* Tier submenu */}
           <div className="relative">
