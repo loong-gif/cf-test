@@ -78,7 +78,7 @@ Plans:
 **Plans**: 6 plans
 
 Plans:
-- [ ] 14-01: Migrate auth & form components to semantic tokens
+- [x] 14-01: Migrate auth & form components to semantic tokens
 - [ ] 14-02: Migrate consumer deal components to semantic tokens
 - [ ] 14-03: Migrate business onboarding components to semantic tokens
 - [ ] 14-04: Migrate monetization & payment components to semantic tokens
@@ -90,10 +90,11 @@ Plans:
 **Goal**: Apply unified system to admin tools, comprehensive cross-module QA
 **Depends on**: Phase 14
 **Research**: Unlikely (internal patterns)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 15-01: TBD
+- [ ] 15-01: Migrate admin dashboard pages to semantic tokens
+- [ ] 15-02: Migrate admin components + comprehensive cross-module QA
 
 ## Progress
 
@@ -116,5 +117,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 11. Design System Audit | v1.1 | 3/3 | Complete | 2026-01-12 |
 | 12. Shared Components | v1.1 | 2/2 | Complete | 2026-01-12 |
 | 13. Navigation Overhaul | v1.1 | 2/2 | Complete | 2026-01-12 |
-| 14. Module Polish | v1.1 | 0/6 | Not started | - |
-| 15. Admin Polish & QA | v1.1 | 0/? | Not started | - |
+| 14. Module Polish | v1.1 | 1/6 | In progress | - |
+| 15. Admin Polish & QA | v1.1 | 0/2 | Not started | - |
