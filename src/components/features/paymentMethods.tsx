@@ -150,7 +150,7 @@ export function PaymentMethods({
                     variant="ghost"
                     size="sm"
                     onClick={() => setDeleteConfirmId(method.id)}
-                    className="text-text-secondary hover:text-red-400"
+                    className="text-text-secondary hover:text-error-text"
                     title="Remove"
                     disabled={method.isDefault && paymentMethods.length === 1}
                   >

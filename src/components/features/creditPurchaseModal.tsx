@@ -82,7 +82,7 @@ export function CreditPurchaseModal({
                 <span className="text-text-primary">{selectedPackage.credits} credits</span>
               </div>
               {selectedPackage.savingsPercent > 0 && (
-                <div className="flex justify-between text-green-400">
+                <div className="flex justify-between text-success-text">
                   <span>Savings</span>
                   <span>{selectedPackage.savingsPercent}% off</span>
                 </div>
@@ -130,7 +130,7 @@ export function CreditPurchaseModal({
 
           {/* Secure Payment Notice */}
           <div className="flex items-center justify-center gap-2 text-xs text-text-tertiary">
-            <Lock size={14} weight="fill" className="text-green-400" />
+            <Lock size={14} weight="fill" className="text-success-text" />
             <span>Secure checkout powered by Stripe</span>
           </div>
         </div>
@@ -148,8 +148,8 @@ export function CreditPurchaseModal({
 
       {state === 'success' && newCredits && (
         <div className="py-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4">
-            <Check size={32} weight="bold" className="text-green-400" />
+          <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+            <Check size={32} weight="bold" className="text-success-text" />
           </div>
           <h3 className="text-lg font-semibold text-text-primary mb-2">Purchase Complete!</h3>
           <p className="text-sm text-text-secondary mb-6">

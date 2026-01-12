@@ -161,10 +161,10 @@ export function BillingHistory({ invoices, onDownload }: BillingHistoryProps) {
 
       {/* Failed Payment Notice */}
       {invoices.some((inv) => inv.status === 'failed') && (
-        <div className="mt-4 p-3 bg-red-500/10 rounded-xl border border-red-500/20 flex items-start gap-3">
-          <Warning size={18} weight="fill" className="text-red-400 flex-shrink-0 mt-0.5" />
+        <div className="mt-4 p-3 bg-error/10 rounded-xl border border-error/20 flex items-start gap-3">
+          <Warning size={18} weight="fill" className="text-error-text flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-red-400">Payment failed</p>
+            <p className="text-sm font-medium text-error-text">Payment failed</p>
             <p className="text-xs text-text-secondary mt-0.5">
               One or more payments failed. Please update your payment method to avoid service interruption.
             </p>
