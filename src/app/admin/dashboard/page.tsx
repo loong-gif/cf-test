@@ -60,13 +60,13 @@ function MetricCard({ icon: Icon, value, label, highlight }: MetricCardProps) {
       <div className="flex items-start justify-between">
         <div
           className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-            highlight ? 'bg-amber-500/10' : 'bg-brand-primary/10'
+            highlight ? 'bg-warning/10' : 'bg-brand-primary/10'
           }`}
         >
           <Icon
             size={24}
             weight="fill"
-            className={highlight ? 'text-amber-400' : 'text-brand-primary'}
+            className={highlight ? 'text-warning-text' : 'text-brand-primary'}
           />
         </div>
         {highlight && (
@@ -206,8 +206,8 @@ export default function AdminDashboardPage() {
                 className="flex items-center justify-between p-4 hover:bg-glass-bg-hover transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                    <FileText size={20} weight="fill" className="text-amber-400" />
+                  <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+                    <FileText size={20} weight="fill" className="text-warning-text" />
                   </div>
                   <div>
                     <p className="font-medium text-text-primary">{deal.title}</p>
