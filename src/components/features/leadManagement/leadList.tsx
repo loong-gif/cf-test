@@ -9,12 +9,14 @@ import {
   Calendar,
   Users,
   Tag,
+  Coins,
+  CurrencyDollar,
 } from '@phosphor-icons/react'
 import type { Claim, ClaimStatus } from '@/types'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { ClaimStatusBadge } from '@/components/patterns/claimStatusBadge'
-import { getClaimsForBusiness, getDealByIdDynamic as getDealById } from '@/lib/mock-data'
+import { getClaimsForBusiness, getDealByIdDynamic as getDealById, getBusinessCredits } from '@/lib/mock-data'
 
 type FilterTab = 'all' | 'pending' | 'active' | 'completed' | 'cancelled'
 
@@ -70,6 +72,9 @@ export function LeadList({ businessId }: LeadListProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState<FilterTab>('all')
 
+  // Get current credits
+  const credits = getBusinessCredits()
+
   // Get claims for this business
   const allClaims = useMemo(() => {
     return getClaimsForBusiness(businessId).sort(
@@ -118,11 +123,30 @@ export function LeadList({ businessId }: LeadListProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary">Leads</h1>
-        <p className="text-text-secondary mt-1">
-          Manage customer inquiries and bookings
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-text-primary">Leads</h1>
+          <p className="text-text-secondary mt-1">
+            Manage customer inquiries and bookings
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          {/* Credits Indicator */}
+          <div className="flex items-center gap-2 px-3 py-2 bg-glass-bg border border-glass-border rounded-xl">
+            <Coins size={18} weight="fill" className={credits.available < 5 ? 'text-amber-400' : 'text-brand-primary'} />
+            <span className="text-sm font-medium text-text-primary">
+              {credits.available} Credits
+            </span>
+          </div>
+          {/* View Pricing Link */}
+          <Link
+            href="/business/dashboard/leads/pricing"
+            className="flex items-center gap-2 px-3 py-2 bg-glass-bg border border-glass-border rounded-xl text-sm font-medium text-text-secondary hover:text-text-primary hover:border-glass-border-hover transition-colors"
+          >
+            <CurrencyDollar size={18} weight="light" />
+            <span>View Pricing</span>
+          </Link>
+        </div>
       </div>
 
       {/* Filters and Search */}
