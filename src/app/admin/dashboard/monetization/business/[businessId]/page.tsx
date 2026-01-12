@@ -39,8 +39,8 @@ export default function BusinessBillingPage({ params }: PageProps) {
   if (!business) {
     return (
       <Card variant="glass" padding="lg" className="text-center py-12">
-          <div className="w-16 h-16 mx-auto rounded-full bg-red-500/10 flex items-center justify-center mb-4">
-            <Storefront size={32} className="text-red-400" />
+          <div className="w-16 h-16 mx-auto rounded-full bg-error/10 flex items-center justify-center mb-4">
+            <Storefront size={32} className="text-error-text" />
           </div>
           <h2 className="text-xl font-semibold text-text-primary mb-2">
             Business Not Found
@@ -102,8 +102,8 @@ export default function BusinessBillingPage({ params }: PageProps) {
 
         <Card variant="glass" padding="md">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-              <CurrencyDollar size={20} weight="fill" className="text-green-400" />
+            <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
+              <CurrencyDollar size={20} weight="fill" className="text-success-text" />
             </div>
             <div>
               <p className="text-sm text-text-secondary">Credits Available</p>

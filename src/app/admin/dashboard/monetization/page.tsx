@@ -141,7 +141,7 @@ export default function MonetizationSettingsPage() {
                 .filter((f) => f.freeIncluded)
                 .map((feature) => (
                   <div key={feature.id} className="flex items-center gap-2 text-sm">
-                    <CheckCircle size={16} weight="fill" className="text-green-400" />
+                    <CheckCircle size={16} weight="fill" className="text-success-text" />
                     <span className="text-text-secondary">{feature.name}</span>
                   </div>
                 ))}
@@ -198,8 +198,8 @@ export default function MonetizationSettingsPage() {
         <CardHeader className="mb-6">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-                <CurrencyDollar size={20} weight="fill" className="text-green-400" />
+              <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center">
+                <CurrencyDollar size={20} weight="fill" className="text-success-text" />
               </div>
               <div>
                 <CardTitle>Lead Pricing</CardTitle>
@@ -430,8 +430,8 @@ export default function MonetizationSettingsPage() {
         <CardHeader className="mb-6">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                <ChartLine size={20} weight="fill" className="text-amber-400" />
+              <div className="w-10 h-10 rounded-xl bg-warning/10 flex items-center justify-center">
+                <ChartLine size={20} weight="fill" className="text-warning-text" />
               </div>
               <div>
                 <CardTitle>Platform Fees</CardTitle>
@@ -515,20 +515,20 @@ export default function MonetizationSettingsPage() {
                 <span className="text-text-secondary">
                   Transaction Fee ({transactionFee.toFixed(1)}%)
                 </span>
-                <span className="text-red-400">
+                <span className="text-error-text">
                   -${(examplePrice * (transactionFee / 100)).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-text-secondary">Platform Fee ({platformFee.toFixed(1)}%)</span>
-                <span className="text-red-400">
+                <span className="text-error-text">
                   -${(examplePrice * (platformFee / 100)).toFixed(2)}
                 </span>
               </div>
               <div className="pt-3 border-t border-glass-border">
                 <div className="flex justify-between items-center">
                   <span className="text-text-primary font-medium">Net Revenue</span>
-                  <span className="text-green-400 font-bold text-lg">
+                  <span className="text-success-text font-bold text-lg">
                     $
                     {(
                       examplePrice -
