@@ -56,7 +56,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 12-01: TBD
+- [x] 12-01: Create shared navigation components (BaseSidebar, AuthenticatedDashboardLayout)
 
 #### Phase 13: Navigation Overhaul
 
@@ -107,7 +107,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 3.1 → 4 → 5 → 6 → 7 �
 | 9. Admin Platform | v1.0 | 2/2 | Complete | 2026-01-12 |
 | 10. Monetization UI | v1.0 | 5/5 | Complete | 2026-01-12 |
 | 11. Design System Audit | v1.1 | 3/3 | Complete | 2026-01-12 |
-| 12. Shared Components | v1.1 | 0/? | Not started | - |
+| 12. Shared Components | v1.1 | 1/? | In progress | - |
 | 13. Navigation Overhaul | v1.1 | 0/? | Not started | - |
 | 14. Module Polish | v1.1 | 0/? | Not started | - |
 | 15. Admin Polish & QA | v1.1 | 0/? | Not started | - |
