@@ -13,8 +13,10 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
     "next": "16.1.1",
+    "next-seo": "^7.0.1",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "schema-dts": "^1.1.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.11",
