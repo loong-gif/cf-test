@@ -32,13 +32,13 @@ function MetricCard({ icon: Icon, value, label, highlight }: MetricCardProps) {
     <Card variant="glass" padding="md" className="flex items-center gap-4">
       <div
         className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-          highlight ? 'bg-amber-500/10' : 'bg-brand-primary/10'
+          highlight ? 'bg-warning/10' : 'bg-brand-primary/10'
         }`}
       >
         <Icon
           size={24}
           weight="fill"
-          className={highlight ? 'text-amber-400' : 'text-brand-primary'}
+          className={highlight ? 'text-warning-text' : 'text-brand-primary'}
         />
       </div>
       <div>
@@ -162,7 +162,7 @@ export default function UsersManagementPage() {
 
       {/* Feedback message */}
       {feedbackMessage && (
-        <div className="bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-3 rounded-xl text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-300">
+        <div className="bg-success/10 border border-success/20 text-success-text px-4 py-3 rounded-xl text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-300">
           {feedbackMessage}
         </div>
       )}

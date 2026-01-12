@@ -41,7 +41,7 @@ function MetricCard({ icon: Icon, value, label, trend }: MetricCardProps) {
         {trend && (
           <div
             className={`flex items-center gap-1 text-sm font-medium ${
-              trend.positive ? 'text-green-400' : 'text-red-400'
+              trend.positive ? 'text-success-text' : 'text-error-text'
             }`}
           >
             {trend.positive ? <TrendUp size={16} weight="bold" /> : <TrendDown size={16} weight="bold" />}
@@ -245,7 +245,7 @@ export default function AdminReportsPage() {
                     <td className="px-4 py-3 text-right">
                       <span
                         className={`inline-flex items-center gap-1 text-sm font-medium ${
-                          row.positive ? 'text-green-400' : 'text-red-400'
+                          row.positive ? 'text-success-text' : 'text-error-text'
                         }`}
                       >
                         {row.positive ? <ArrowUp size={14} weight="bold" /> : <TrendDown size={14} weight="bold" />}
