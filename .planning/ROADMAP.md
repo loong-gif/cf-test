@@ -145,12 +145,13 @@ Plans:
 
 **Goal**: Meta tags, structured data schemas, sitemap infrastructure
 **Depends on**: Phase 23 (or can run in parallel)
-**Research**: Likely (Next.js App Router SEO patterns, JSON-LD schemas)
-**Research topics**: Next.js metadata API, JSON-LD structured data for local business, Open Graph optimization
-**Plans**: TBD
+**Research**: Complete (24-RESEARCH.md)
+**Plans**: 3 plans
 
 Plans:
-- [ ] 24-01: TBD
+- [ ] 24-01: Foundation setup (dependencies, root metadata, robots.ts)
+- [ ] 24-02: Sitemap & SEO utilities (sitemap.ts, lib/seo/)
+- [ ] 24-03: Structured data components (JSON-LD schema components)
 
 #### Phase 25: State Pages
 
