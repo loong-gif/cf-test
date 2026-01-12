@@ -13,8 +13,35 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
-  title: 'CostFinders',
-  description: 'Find and compare medspa pricing in your area',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || 'https://costfinders.com'
+  ),
+  title: {
+    default: 'CostFinders - Compare MedSpa Prices',
+    template: '%s | CostFinders',
+  },
+  description:
+    'Find and compare the best medspa deals near you. Save 20-70% on Botox, fillers, facials, and laser treatments.',
+  applicationName: 'CostFinders',
+  generator: 'Next.js',
+  keywords: [
+    'medspa deals',
+    'botox prices',
+    'medspa comparison',
+    'aesthetic treatments',
+    'filler prices',
+    'laser treatments',
+    'medspa near me',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'CostFinders',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({
