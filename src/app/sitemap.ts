@@ -1,6 +1,8 @@
 import type { MetadataRoute } from 'next'
 import { getStates } from '@/lib/mock-data/states'
 import { getAllCitiesWithState } from '@/lib/mock-data/cities'
+import { getAllNeighborhoodsWithCityAndState } from '@/lib/mock-data/neighborhoods'
+import { getAllProvidersWithCityAndState } from '@/lib/mock-data/providers'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai'
@@ -41,7 +43,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   )
 
-  // Note: Neighborhood pages will be added in Phase 27 when neighborhood routes are implemented
+  // Dynamic neighborhood pages
+  const neighborhoodsWithContext = getAllNeighborhoodsWithCityAndState()
+  const neighborhoodPages: MetadataRoute.Sitemap = neighborhoodsWithContext.map(
+    ({ stateSlug, citySlug, neighborhoodSlug }) => ({
+      url: `${baseUrl}/${stateSlug}/${citySlug}/${neighborhoodSlug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    })
+  )
 
-  return [...staticPages, ...statePages, ...cityPages]
+  // Dynamic provider pages
+  const providersWithContext = getAllProvidersWithCityAndState()
+  const providerPages: MetadataRoute.Sitemap = providersWithContext.map(
+    ({ business, stateSlug, citySlug }) => ({
+      url: `${baseUrl}/${stateSlug}/${citySlug}/provider/${business.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.5,
+    })
+  )
+
+  return [...staticPages, ...statePages, ...cityPages, ...neighborhoodPages, ...providerPages]
 }
