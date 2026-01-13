@@ -13,8 +13,8 @@ import { notFound } from 'next/navigation'
 import { BreadcrumbSchema } from '@/components/seo'
 import { DealCard } from '@/components/features/dealCard'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
-import { getStateBySlug } from '@/lib/mock-data/states'
-import { getCityBySlug, slugifyCity } from '@/lib/mock-data/cities'
+import { getStateBySlug, slugifyCity } from '@/lib/mock-data/states'
+import { getCityBySlug } from '@/lib/mock-data/cities'
 import {
   getProviderBySlug,
   getDealsForProvider,

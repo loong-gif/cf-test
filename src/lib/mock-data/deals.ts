@@ -559,3 +559,12 @@ export function updateDealModeration(
 export function getAllDeals(): Deal[] {
   return getDynamicDeals()
 }
+
+/**
+ * Get all active deals for a specific category
+ */
+export function getDealsForCategory(categorySlug: string): Deal[] {
+  return getDynamicDeals().filter(
+    (d) => d.category === categorySlug && d.isActive
+  )
+}

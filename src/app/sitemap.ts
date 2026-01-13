@@ -3,6 +3,7 @@ import { getStates } from '@/lib/mock-data/states'
 import { getAllCitiesWithState } from '@/lib/mock-data/cities'
 import { getAllNeighborhoodsWithCityAndState } from '@/lib/mock-data/neighborhoods'
 import { getAllProvidersWithCityAndState } from '@/lib/mock-data/providers'
+import { getAllCategorySlugs } from '@/lib/mock-data/categories'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai'
@@ -65,5 +66,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   )
 
-  return [...staticPages, ...statePages, ...cityPages, ...neighborhoodPages, ...providerPages]
+  // Dynamic category/treatment pages
+  const categorySlugs = getAllCategorySlugs()
+  const categoryPages: MetadataRoute.Sitemap = categorySlugs.map((slug) => ({
+    url: `${baseUrl}/treatments/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }))
+
+  return [
+    ...staticPages,
+    ...statePages,
+    ...cityPages,
+    ...neighborhoodPages,
+    ...providerPages,
+    ...categoryPages,
+  ]
 }

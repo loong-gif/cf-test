@@ -198,10 +198,10 @@ Plans:
 **Goal**: Treatment-type pages (Botox, Fillers, etc.) by location
 **Depends on**: Phase 28
 **Research**: Unlikely (internal patterns)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 29-01: TBD
+- [x] 29-01: Service category landing pages (route, metadata, deal listings, sitemap update)
 
 #### Phase 30: Dynamic Sitemap
 
@@ -281,7 +281,7 @@ Phases execute in numeric order: 1 → ... → 23 → 24 → 25 → 26 → 27 �
 | 26. City Pages | v1.3 | 1/1 | Complete | 2026-01-12 |
 | 27. Neighborhood Pages | v1.3 | 1/1 | Complete | 2026-01-12 |
 | 28. Provider Pages | v1.3 | 1/1 | Complete | 2026-01-13 |
-| 29. Service Category Pages | v1.3 | 0/? | Not started | - |
+| 29. Service Category Pages | v1.3 | 1/1 | Complete | 2026-01-13 |
 | 30. Dynamic Sitemap | v1.3 | 0/? | Not started | - |
 | 31. Internal Linking | v1.3 | 0/? | Not started | - |
 | 32. Content Optimization | v1.3 | 0/? | Not started | - |

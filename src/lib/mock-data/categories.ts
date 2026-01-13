@@ -136,3 +136,27 @@ export function getCategoryStats() {
   const totalDeals = categories.reduce((sum, c) => sum + c.dealCount, 0)
   return { total, active, totalDeals }
 }
+
+// SEO/SSG helpers
+
+/**
+ * Get all category slugs for static params generation
+ */
+export function getAllCategorySlugs(): string[] {
+  return categories.filter((c) => c.isActive).map((c) => c.slug)
+}
+
+/**
+ * Get category with computed stats (deal count, business count)
+ */
+export function getCategoryWithStats(slug: string): (Category & { businessCount: number }) | undefined {
+  const category = categories.find((c) => c.slug === slug && c.isActive)
+  if (!category) return undefined
+
+  // Import deals dynamically to avoid circular deps
+  // For now, use the static dealCount and estimate businessCount
+  return {
+    ...category,
+    businessCount: Math.ceil(category.dealCount / 2), // Rough estimate: ~2 deals per business
+  }
+}
