@@ -1,8 +1,8 @@
 import type { Business } from '@/types'
 import type { AnonymousDeal } from '@/types/deal'
 import { businesses, getBusinessById } from './businesses'
-import { getStateBySlug, SUPPORTED_STATES } from './states'
-import { getCityBySlug, slugifyCity } from './cities'
+import { getStateBySlug, slugifyCity, SUPPORTED_STATES } from './states'
+import { getCityBySlug } from './cities'
 import { deals, toAnonymousDeal } from './deals'
 
 /**
