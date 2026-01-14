@@ -7,6 +7,7 @@ interface BlurredImageProps {
   fill?: boolean
   sizes?: string
   className?: string
+  priority?: boolean
 }
 
 export function BlurredImage({
@@ -15,6 +16,7 @@ export function BlurredImage({
   fill = true,
   sizes,
   className = '',
+  priority = false,
 }: BlurredImageProps) {
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
@@ -25,6 +27,8 @@ export function BlurredImage({
           alt={alt}
           fill={fill}
           sizes={sizes}
+          priority={priority}
+          loading={priority ? 'eager' : 'lazy'}
           className="object-cover blur-xl scale-110"
         />
       ) : (
