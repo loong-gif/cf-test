@@ -136,6 +136,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-14
-Stopped at: Planned Phase 31 (Internal Linking) - 2 plans created
-Resume file: `.planning/phases/31-internal-linking/31-01-PLAN.md`
-Next: Execute 31-01 (Breadcrumb component & integration)
+Stopped at: Planned Phase 32 (Content Optimization) - 1 plan created
+Resume file: `.planning/phases/32-content-optimization/32-01-PLAN.md`
+Next: Execute 31-01 (Breadcrumb component & integration) then 32-01
