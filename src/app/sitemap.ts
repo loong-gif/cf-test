@@ -4,6 +4,7 @@ import { getAllCitiesWithState } from '@/lib/mock-data/cities'
 import { getAllNeighborhoodsWithCityAndState } from '@/lib/mock-data/neighborhoods'
 import { getAllProvidersWithCityAndState } from '@/lib/mock-data/providers'
 import { getAllCategorySlugs } from '@/lib/mock-data/categories'
+import { getAllDealIds } from '@/lib/mock-data/deals'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai'
@@ -75,6 +76,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
+  // Dynamic deal detail pages
+  const dealData = getAllDealIds()
+  const dealPages: MetadataRoute.Sitemap = dealData.map(({ id, updatedAt }) => ({
+    url: `${baseUrl}/deals/${id}`,
+    lastModified: new Date(updatedAt),
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  }))
+
   return [
     ...staticPages,
     ...statePages,
@@ -82,5 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...neighborhoodPages,
     ...providerPages,
     ...categoryPages,
+    ...dealPages,
   ]
 }

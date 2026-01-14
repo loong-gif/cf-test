@@ -568,3 +568,13 @@ export function getDealsForCategory(categorySlug: string): Deal[] {
     (d) => d.category === categorySlug && d.isActive
   )
 }
+
+/**
+ * Get all deal IDs with their updatedAt timestamps for sitemap generation
+ * Only returns active, approved deals
+ */
+export function getAllDealIds(): Array<{ id: string; updatedAt: string }> {
+  return getDynamicDeals()
+    .filter((d) => d.isActive && (!d.moderationStatus || d.moderationStatus === 'approved'))
+    .map((d) => ({ id: d.id, updatedAt: d.updatedAt }))
+}
