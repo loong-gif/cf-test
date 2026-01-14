@@ -10,6 +10,7 @@ Build the complete CostFinders UI — a price transparency and lead generation p
 - ✅ [v1.1 UI Consistency & Polish](milestones/v1.1-ROADMAP.md) (Phases 11-15) — SHIPPED 2026-01-12
 - ✅ **v1.2 Messaging Style Guide** — Phases 16-23 — SHIPPED 2026-01-12
 - ✅ **v1.3 Location SEO Clusters** — Phases 24-33 — SHIPPED 2026-01-14
+- 🚧 **v1.4 Mobile Polish** — Phases 34-41 (in progress)
 
 ## Completed Milestones
 
@@ -49,207 +50,130 @@ See [v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md) for full details.
 
 </details>
 
-### 🚧 v1.2 Messaging Style Guide (In Progress)
+<details>
+<summary>v1.2 Messaging Style Guide (Phases 16-23) — SHIPPED 2026-01-12</summary>
 
-**Milestone Goal:** Establish consistent voice, tone, and messaging patterns across the entire CostFinders platform
+- [x] Phase 16: Messaging Audit (3/3 plans) — completed 2026-01-12
+- [x] Phase 17: Voice & Tone Definition (1/1 plan) — completed 2026-01-12
+- [x] Phase 18: Error Messaging System (1/1 plan) — completed 2026-01-12
+- [x] Phase 19: Success & Confirmation States (1/1 plan) — completed 2026-01-12
+- [x] Phase 20: Empty States & Placeholders (1/1 plan) — completed 2026-01-12
+- [x] Phase 21: Form Validation Copy (1/1 plan) — completed 2026-01-12
+- [x] Phase 22: Notification Templates (1/1 plan) — completed 2026-01-12
+- [x] Phase 23: Documentation & Guidelines (1/1 plan) — completed 2026-01-12
 
-#### Phase 16: Messaging Audit
+**Total:** 8 phases, 10 plans
 
-**Goal**: Review all existing copy across consumer, business, admin modules
+</details>
+
+<details>
+<summary>v1.3 Location SEO Clusters (Phases 24-33) — SHIPPED 2026-01-14</summary>
+
+- [x] Phase 24: SEO Foundation (3/3 plans) — completed 2026-01-12
+- [x] Phase 25: State Pages (1/1 plan) — completed 2026-01-12
+- [x] Phase 26: City Pages (1/1 plan) — completed 2026-01-12
+- [x] Phase 27: Neighborhood Pages (1/1 plan) — completed 2026-01-12
+- [x] Phase 28: Provider Pages (1/1 plan) — completed 2026-01-13
+- [x] Phase 29: Service Category Pages (1/1 plan) — completed 2026-01-13
+- [x] Phase 30: Dynamic Sitemap (1/1 plan) — completed 2026-01-14
+- [x] Phase 31: Internal Linking (2/2 plans) — completed 2026-01-14
+- [x] Phase 32: Content Optimization (1/1 plan) — completed 2026-01-14
+- [x] Phase 33: Performance & Core Web Vitals (1/1 plan) — completed 2026-01-14
+
+**Total:** 10 phases, 13 plans
+
+</details>
+
+### 🚧 v1.4 Mobile Polish (In Progress)
+
+**Milestone Goal:** Enhance mobile experience to achieve native-feeling interactions on small screens — touch gestures, mobile-optimized components, form refinements, and bottom sheet patterns.
+
+#### Phase 34: Mobile Form Optimization
+
+**Goal**: Fix form layouts to stack properly on mobile, improve input spacing
 **Depends on**: Previous milestone complete
-**Research**: Unlikely (internal review)
-**Plans**: 3 plans
-
-Plans:
-- [x] 16-01: Consumer module messaging audit (public + dashboard)
-- [x] 16-02: Business module messaging audit (onboarding + dashboard)
-- [x] 16-03: Admin module audit + consolidated findings
-
-#### Phase 17: Voice & Tone Definition
-
-**Goal**: Establish brand voice guidelines and writing principles
-**Depends on**: Phase 16
-**Research**: Likely (UX writing best practices, brand voice frameworks)
-**Research topics**: UX writing guidelines, voice and tone frameworks, microcopy best practices
-**Plans**: 1 plan
-
-Plans:
-- [x] 17-01: Voice & tone definition (VOICE.md, TONE.md, WRITING-RULES.md)
-
-#### Phase 18: Error Messaging System
-
-**Goal**: Standardize error message patterns and copy
-**Depends on**: Phase 17
-**Research**: Likely (error message UX patterns)
-**Research topics**: Error message UX, friendly error copy patterns, recovery messaging
-**Plans**: 1 plan
-
-Plans:
-- [x] 18-01: Error messaging system (ERROR-MESSAGES.md)
-
-#### Phase 19: Success & Confirmation States
-
-**Goal**: Positive feedback and confirmation messaging
-**Depends on**: Phase 18
-**Research**: Unlikely (applying established voice)
-**Plans**: 1 plan
-
-Plans:
-- [x] 19-01: Success & confirmation messaging system (SUCCESS-MESSAGES.md)
-
-#### Phase 20: Empty States & Placeholders
-
-**Goal**: Handle no-data scenarios consistently
-**Depends on**: Phase 19
-**Research**: Unlikely (applying established patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 20-01: Empty states & placeholders guide (EMPTY-STATES.md)
-
-#### Phase 21: Form Validation Copy
-
-**Goal**: Input validation messages and inline feedback
-**Depends on**: Phase 20
-**Research**: Unlikely (applying established patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 21-01: Form validation copy guide (FORM-VALIDATION.md)
-
-#### Phase 22: Notification Templates
-
-**Goal**: Email, SMS, in-app notification copy patterns
-**Depends on**: Phase 21
-**Research**: Unlikely (applying established patterns)
+**Research**: Unlikely (internal patterns)
 **Plans**: TBD
 
 Plans:
-- [x] 22-01: Notification templates (NOTIFICATIONS.md)
+- [ ] 34-01: TBD (run /gsd:plan-phase 34 to break down)
 
-#### Phase 23: Documentation & Guidelines
+#### Phase 35: Mobile Table Alternatives
 
-**Goal**: Create the messaging style guide document
-**Depends on**: Phase 22
-**Research**: Unlikely (compilation of established patterns)
+**Goal**: Add card-based mobile variants for tables missing them
+**Depends on**: Phase 34
+**Research**: Unlikely (existing BillingHistory pattern)
 **Plans**: TBD
 
 Plans:
-- [x] 23-01: Unified messaging style guide (docs/MESSAGING-STYLE-GUIDE.md)
+- [ ] 35-01: TBD
 
-### 📋 v1.3 Location SEO Clusters (Planned)
+#### Phase 36: Bottom Sheet Component
 
-**Milestone Goal:** Create SEO-optimized location-based page hierarchy for organic search visibility — state → city → neighborhood pages with structured data, sitemaps, and optimized content.
-
-#### Phase 24: SEO Foundation
-
-**Goal**: Meta tags, structured data schemas, sitemap infrastructure
-**Depends on**: Phase 23 (or can run in parallel)
-**Research**: Complete (24-RESEARCH.md)
-**Plans**: 3 plans
-
-Plans:
-- [x] 24-01: Foundation setup (dependencies, root metadata, robots.ts)
-- [x] 24-02: Sitemap & SEO utilities (sitemap.ts, lib/seo/)
-- [x] 24-03: Structured data components (JSON-LD schema components)
-
-#### Phase 25: State Pages
-
-**Goal**: State-level landing pages with city listings and aggregated deals
-**Depends on**: Phase 24
-**Research**: Unlikely (internal patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 25-01: State landing pages (route, metadata, city listings, sitemap update)
-
-#### Phase 26: City Pages
-
-**Goal**: City-level pages with neighborhood breakdown and featured deals
-**Depends on**: Phase 25
-**Research**: Unlikely (internal patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 26-01: City landing pages (route, metadata, neighborhood listings, sitemap update)
-
-#### Phase 27: Neighborhood Pages
-
-**Goal**: Neighborhood-level pages with all providers and deals
-**Depends on**: Phase 26
-**Research**: Unlikely (internal patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 27-01: Neighborhood landing pages (route, metadata, deal listings, sitemap update)
-
-#### Phase 28: Provider Pages
-
-**Goal**: Individual medspa provider pages with SEO-friendly URLs
-**Depends on**: Phase 27
-**Research**: Unlikely (internal patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 28-01: Provider landing pages (route, metadata, business profile, deal listings)
-
-#### Phase 29: Service Category Pages
-
-**Goal**: Treatment-type pages (Botox, Fillers, etc.) by location
-**Depends on**: Phase 28
-**Research**: Unlikely (internal patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 29-01: Service category landing pages (route, metadata, deal listings, sitemap update)
-
-#### Phase 30: Dynamic Sitemap
-
-**Goal**: Programmatic sitemap generation for all location pages
-**Depends on**: Phase 29
-**Research**: Likely (Next.js sitemap generation, Google Search Console)
-**Research topics**: Next.js sitemap.ts, sitemap index files, robots.txt configuration
+**Goal**: Create reusable bottom sheet for mobile menus and forms
+**Depends on**: Phase 35
+**Research**: Likely (Radix primitives, mobile patterns)
+**Research topics**: Bottom sheet patterns, Radix Dialog mobile variant, gesture dismissal
 **Plans**: TBD
 
 Plans:
-- [x] 30-01: Dynamic sitemap with deal pages, category-state combos, SITEMAP_CONFIG
+- [ ] 36-01: TBD
 
-#### Phase 31: Internal Linking
+#### Phase 37: Modal Mobile Optimization
 
-**Goal**: Breadcrumbs, related links, cross-page navigation
-**Depends on**: Phase 30
+**Goal**: Full-screen and bottom-anchored modals on mobile
+**Depends on**: Phase 36
 **Research**: Unlikely (internal patterns)
-**Plans**: 2 plans
-
-Plans:
-- [x] 31-01: Breadcrumb navigation component & integration (5 SEO pages)
-- [x] 31-02: RelatedLinks component & cross-page navigation
-
-#### Phase 32: Content Optimization
-
-**Goal**: Page titles, descriptions, heading hierarchy, content blocks
-**Depends on**: Phase 31
-**Research**: Unlikely (internal patterns)
-**Plans**: 1 plan
-
-Plans:
-- [x] 32-01: Enhanced metadata helpers, FAQ component, FAQ integration (State + Category pages)
-
-#### Phase 33: Performance & Core Web Vitals
-
-**Goal**: Image optimization, lazy loading, LCP/CLS optimization
-**Depends on**: Phase 32
-**Research**: Likely (Core Web Vitals, Next.js Image optimization)
-**Research topics**: Core Web Vitals thresholds, Next.js Image component, font loading optimization
 **Plans**: TBD
 
 Plans:
-- [x] 33-01: Font optimization, image priority loading, skeleton components
+- [ ] 37-01: TBD
+
+#### Phase 38: Touch Gesture Foundation
+
+**Goal**: Add swipe gestures for key interactions
+**Depends on**: Phase 37
+**Research**: Likely (gesture libraries, touch events)
+**Research topics**: React gesture libraries, touch event handling, swipe detection
+**Plans**: TBD
+
+Plans:
+- [ ] 38-01: TBD
+
+#### Phase 39: Mobile Navigation Enhancements
+
+**Goal**: Improve mobile navigation UX and breadcrumb handling
+**Depends on**: Phase 38
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 39-01: TBD
+
+#### Phase 40: Touch Target & Spacing Audit
+
+**Goal**: Ensure all interactive elements meet mobile touch guidelines
+**Depends on**: Phase 39
+**Research**: Unlikely (audit work)
+**Plans**: TBD
+
+Plans:
+- [ ] 40-01: TBD
+
+#### Phase 41: Mobile QA & Polish
+
+**Goal**: Cross-device testing and final refinements
+**Depends on**: Phase 40
+**Research**: Unlikely (testing)
+**Plans**: TBD
+
+Plans:
+- [ ] 41-01: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → ... → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 30 → 31 → 32 → 33
+Phases execute in numeric order: 1 → ... → 33 → 34 → 35 → 36 → 37 → 38 → 39 → 40 → 41
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -287,3 +211,11 @@ Phases execute in numeric order: 1 → ... → 23 → 24 → 25 → 26 → 27 �
 | 31. Internal Linking | v1.3 | 2/2 | Complete | 2026-01-14 |
 | 32. Content Optimization | v1.3 | 1/1 | Complete | 2026-01-14 |
 | 33. Performance & CWV | v1.3 | 1/1 | Complete | 2026-01-14 |
+| 34. Mobile Form Optimization | v1.4 | 0/? | Not started | - |
+| 35. Mobile Table Alternatives | v1.4 | 0/? | Not started | - |
+| 36. Bottom Sheet Component | v1.4 | 0/? | Not started | - |
+| 37. Modal Mobile Optimization | v1.4 | 0/? | Not started | - |
+| 38. Touch Gesture Foundation | v1.4 | 0/? | Not started | - |
+| 39. Mobile Navigation Enhancements | v1.4 | 0/? | Not started | - |
+| 40. Touch Target & Spacing Audit | v1.4 | 0/? | Not started | - |
+| 41. Mobile QA & Polish | v1.4 | 0/? | Not started | - |
