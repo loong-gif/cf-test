@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { BreadcrumbSchema } from '@/components/seo'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { RelatedLinks, type RelatedLink } from '@/components/ui/relatedLinks'
 import { DealCard } from '@/components/features/dealCard'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
 import {
@@ -11,6 +12,7 @@ import {
   getCategoryWithStats,
 } from '@/lib/mock-data/categories'
 import { getDealsForCategory, toAnonymousDeal } from '@/lib/mock-data/deals'
+import { getStates } from '@/lib/mock-data/states'
 import {
   Syringe,
   Drop,
@@ -90,6 +92,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const CategoryIcon = categoryIcons[category.icon] || (
     <Tag size={24} weight="fill" className="text-brand-primary" />
   )
+
+  // Build state links for related locations section
+  const states = getStates()
+  const stateLinks: RelatedLink[] = states.map((s) => ({
+    label: `${category.name} in ${s.name}`,
+    href: `/${s.slug}`,
+    description: `Browse ${category.name.toLowerCase()} deals in ${s.name}`,
+  }))
 
   // Build breadcrumb items
   const breadcrumbItems = [
@@ -188,6 +198,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </Link>
               </div>
             )}
+          </section>
+
+          {/* Browse by Location */}
+          <section className="mt-12">
+            <RelatedLinks
+              title={`Find ${category.name} by Location`}
+              links={stateLinks}
+            />
           </section>
 
           {/* Back Navigation */}
