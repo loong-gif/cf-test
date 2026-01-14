@@ -35,7 +35,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled:opacity-50 disabled:cursor-not-allowed
             ${
               error
-                ? 'border-red-500/50 focus:border-red-500'
+                ? 'border-error/50 focus:border-error'
                 : 'border-glass-border hover:border-glass-border-hover focus:border-brand-primary/50'
             }
             ${className}
@@ -45,10 +45,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {hint && !error && (
           <p className="mt-1.5 text-xs text-text-tertiary">{hint}</p>
         )}
-        {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
+        {error && <p className="mt-1.5 text-xs text-error-text">{error}</p>}
       </div>
     )
-  }
+  },
 )
 
 Input.displayName = 'Input'

@@ -90,7 +90,7 @@ export function useGeolocation(options: UseGeolocationOptions = {}) {
           enableHighAccuracy: mergedOptions.enableHighAccuracy,
           timeout: mergedOptions.timeout,
           maximumAge: mergedOptions.maximumAge,
-        }
+        },
       )
     })
   }, [

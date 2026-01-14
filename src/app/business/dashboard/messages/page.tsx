@@ -1,0 +1,254 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import {
+  ChatCircle,
+  MagnifyingGlass,
+  User,
+  Tag,
+  EnvelopeSimple,
+} from '@phosphor-icons/react'
+import { useBusinessAuth } from '@/lib/context/businessAuthContext'
+import { getConversationsForBusiness, type ConversationSummary } from '@/lib/mock-data'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+
+type FilterTab = 'all' | 'unread'
+
+function formatMessageTime(dateString: string): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffHours < 1) return 'Just now'
+  if (diffHours < 24) {
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    })
+  }
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) {
+    return date.toLocaleDateString('en-US', { weekday: 'short' })
+  }
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+function getCustomerDisplay(consumerId: string): string {
+  const num = consumerId.replace(/\D/g, '')
+  return `Customer #${num || consumerId.slice(-3)}`
+}
+
+function truncateMessage(message: string, maxLength: number = 60): string {
+  if (message.length <= maxLength) return message
+  return `${message.slice(0, maxLength)}...`
+}
+
+export default function MessagesPage() {
+  const { state } = useBusinessAuth()
+  const businessId = state.owner?.businessId
+  const [activeTab, setActiveTab] = useState<FilterTab>('all')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  if (!businessId) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-text-secondary">No business linked to your account.</p>
+      </div>
+    )
+  }
+
+  const allConversations = getConversationsForBusiness(businessId)
+
+  // Filter by tab
+  let filteredConversations = allConversations
+  if (activeTab === 'unread') {
+    filteredConversations = allConversations.filter((c) => c.unreadCount > 0)
+  }
+
+  // Filter by search
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase()
+    filteredConversations = filteredConversations.filter(
+      (c) =>
+        c.dealTitle.toLowerCase().includes(query) ||
+        getCustomerDisplay(c.claim.consumerId).toLowerCase().includes(query)
+    )
+  }
+
+  const unreadCount = allConversations.filter((c) => c.unreadCount > 0).length
+
+  const tabs: { id: FilterTab; label: string; count?: number }[] = [
+    { id: 'all', label: 'All', count: allConversations.length },
+    { id: 'unread', label: 'Unread', count: unreadCount },
+  ]
+
+  return (
+    <div className="space-y-6">
+      {/* Search & Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Search */}
+        <div className="relative flex-1 max-w-md">
+          <MagnifyingGlass
+            size={20}
+            weight="regular"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+          />
+          <input
+            type="text"
+            placeholder="Search conversations..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 bg-glass-bg border border-glass-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-brand-primary/50 focus:ring-2 focus:ring-brand-primary/20 transition-all"
+          />
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="flex gap-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              type="button"
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === tab.id
+                  ? 'bg-brand-primary text-white'
+                  : 'bg-glass-bg border border-glass-border text-text-secondary hover:bg-bg-tertiary'
+              }`}
+            >
+              {tab.label}
+              {tab.count !== undefined && tab.count > 0 && (
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs ${
+                    activeTab === tab.id
+                      ? 'bg-white/20 text-white'
+                      : 'bg-bg-tertiary text-text-muted'
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Conversations List */}
+      {filteredConversations.length === 0 ? (
+        <Card variant="glass" padding="lg">
+          <div className="text-center py-12">
+            <div className="w-16 h-16 rounded-full bg-glass-bg mx-auto mb-4 flex items-center justify-center">
+              <EnvelopeSimple size={32} weight="light" className="text-text-muted" />
+            </div>
+            <h3 className="text-lg font-semibold text-text-primary mb-2">
+              {searchQuery
+                ? 'No conversations found'
+                : activeTab === 'unread'
+                  ? 'No unread messages'
+                  : 'No conversations yet'}
+            </h3>
+            <p className="text-text-secondary text-sm">
+              {searchQuery
+                ? 'Try adjusting your search terms'
+                : activeTab === 'unread'
+                  ? "You're all caught up!"
+                  : 'Conversations will appear here when customers message you'}
+            </p>
+          </div>
+        </Card>
+      ) : (
+        <Card variant="glass" padding="none" className="divide-y divide-glass-border">
+          {filteredConversations.map((conversation) => (
+            <ConversationRow
+              key={conversation.claim.id}
+              conversation={conversation}
+            />
+          ))}
+        </Card>
+      )}
+    </div>
+  )
+}
+
+function ConversationRow({ conversation }: { conversation: ConversationSummary }) {
+  const { claim, dealTitle, lastMessage, unreadCount } = conversation
+  const hasUnread = unreadCount > 0
+
+  return (
+    <Link
+      href={`/business/dashboard/leads/${claim.id}`}
+      className="block hover:bg-bg-tertiary/50 transition-colors"
+    >
+      <div className="p-4 flex items-center gap-4">
+        {/* Avatar */}
+        <div className="relative flex-shrink-0">
+          <div className="w-12 h-12 rounded-full bg-brand-primary/10 flex items-center justify-center">
+            <User size={24} weight="fill" className="text-brand-primary" />
+          </div>
+          {hasUnread && (
+            <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-brand-primary text-white text-xs font-semibold flex items-center justify-center">
+              {unreadCount}
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span
+              className={`font-medium truncate ${hasUnread ? 'text-text-primary' : 'text-text-secondary'}`}
+            >
+              {getCustomerDisplay(claim.consumerId)}
+            </span>
+            <span className="text-xs text-text-muted flex-shrink-0">
+              {formatMessageTime(lastMessage.createdAt)}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 mb-1.5">
+            <Tag size={14} weight="fill" className="text-text-muted flex-shrink-0" />
+            <span className="text-sm text-text-muted truncate">{dealTitle}</span>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <ChatCircle
+              size={14}
+              weight={hasUnread ? 'fill' : 'regular'}
+              className={`flex-shrink-0 mt-0.5 ${hasUnread ? 'text-brand-primary' : 'text-text-muted'}`}
+            />
+            <p
+              className={`text-sm truncate ${hasUnread ? 'text-text-primary font-medium' : 'text-text-muted'}`}
+            >
+              {lastMessage.senderType === 'business' && (
+                <span className="text-text-muted">You: </span>
+              )}
+              {truncateMessage(lastMessage.content)}
+            </p>
+          </div>
+        </div>
+
+        {/* Status Badge */}
+        <div className="flex-shrink-0">
+          <Badge
+            variant={
+              claim.status === 'completed'
+                ? 'success'
+                : claim.status === 'cancelled'
+                  ? 'error'
+                  : claim.status === 'booked'
+                    ? 'info'
+                    : 'default'
+            }
+            size="sm"
+          >
+            {claim.status.charAt(0).toUpperCase() + claim.status.slice(1)}
+          </Badge>
+        </div>
+      </div>
+    </Link>
+  )
+}

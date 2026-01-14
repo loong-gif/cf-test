@@ -1,0 +1,19 @@
+'use client'
+
+import { useBusinessAuth } from '@/lib/context/businessAuthContext'
+import { LeadList } from '@/components/features/leadManagement/leadList'
+
+export default function LeadsPage() {
+  const { state } = useBusinessAuth()
+  const businessId = state.owner?.businessId
+
+  if (!businessId) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-text-secondary">No business linked to your account.</p>
+      </div>
+    )
+  }
+
+  return <LeadList businessId={businessId} />
+}

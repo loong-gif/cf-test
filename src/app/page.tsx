@@ -1,11 +1,9 @@
-import { MagnifyingGlass } from '@phosphor-icons/react/dist/ssr'
+import { Card } from '@/components/ui/card'
 import {
-  getActiveDeals,
   getActiveCities,
+  getActiveDeals,
   getFeaturedDeals,
 } from '@/lib/mock-data'
-import { LocationDisplay } from '@/components/layout/locationDisplay'
-import { Card } from '@/components/ui/card'
 import { LocationTestSection } from './locationTestSection'
 
 export default function Home() {
@@ -14,20 +12,7 @@ export default function Home() {
   const featuredDeals = getFeaturedDeals()
 
   return (
-    <main className="min-h-screen">
-      {/* Header Area with Location */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-bg-primary/80 backdrop-blur-md border-b border-glass-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MagnifyingGlass size={24} weight="bold" className="text-brand-primary" />
-            <span className="font-semibold text-text-primary">CostFinders</span>
-          </div>
-          <LocationDisplay />
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen pt-20 pb-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-12">
@@ -56,18 +41,26 @@ export default function Home() {
             </h2>
             <ul className="space-y-2 text-sm text-text-secondary">
               <li>
-                Active deals: <strong className="text-text-primary">{activeDeals.length}</strong>
+                Active deals:{' '}
+                <strong className="text-text-primary">
+                  {activeDeals.length}
+                </strong>
               </li>
               <li>
-                Active cities: <strong className="text-text-primary">{activeCities.length}</strong>
+                Active cities:{' '}
+                <strong className="text-text-primary">
+                  {activeCities.length}
+                </strong>
               </li>
               <li>
-                Featured deals: <strong className="text-text-primary">{featuredDeals.length}</strong>
+                Featured deals:{' '}
+                <strong className="text-text-primary">
+                  {featuredDeals.length}
+                </strong>
               </li>
             </ul>
           </Card>
         </div>
-      </div>
     </main>
   )
 }

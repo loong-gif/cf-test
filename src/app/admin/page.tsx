@@ -1,0 +1,130 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { ShieldCheck } from '@phosphor-icons/react'
+import { AdminAuthProvider, useAdminAuth } from '@/lib/context/adminAuthContext'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+
+function AdminLoginContent() {
+  const router = useRouter()
+  const { state, signIn } = useAdminAuth()
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (!state.isLoading && state.isAuthenticated) {
+      router.push('/admin/dashboard')
+    }
+  }, [state.isLoading, state.isAuthenticated, router])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      await signIn(email, '')
+      router.push('/admin/dashboard')
+    } catch {
+      // Error is set in context state
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Show loading while checking initial auth state
+  if (state.isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <svg className="animate-spin h-8 w-8 text-brand-primary" viewBox="0 0 24 24">
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
+          </svg>
+          <p className="text-text-secondary">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Don't render form if already authenticated (redirect in progress)
+  if (state.isAuthenticated) {
+    return null
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        {/* Login Card */}
+        <div className="bg-glass-bg backdrop-blur-xl border border-glass-border rounded-2xl p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-primary/20 mb-4">
+              <ShieldCheck size={32} weight="fill" className="text-brand-primary" />
+            </div>
+            <h1 className="text-2xl font-bold text-text-primary">
+              Admin Portal
+            </h1>
+            <p className="text-text-secondary mt-2">
+              Sign in to access the admin dashboard
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="Email Address"
+              type="email"
+              placeholder="admin@costfinders.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={state.error || undefined}
+              required
+              autoComplete="email"
+              autoFocus
+            />
+
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full"
+              isLoading={isSubmitting}
+              disabled={!email || isSubmitting}
+            >
+              Sign In
+            </Button>
+          </form>
+
+          {/* Help Text */}
+          <div className="mt-6 pt-6 border-t border-glass-border">
+            <p className="text-xs text-text-tertiary text-center">
+              For demo purposes, use: admin@costfinders.com, moderator@costfinders.com, or support@costfinders.com
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <AdminAuthProvider>
+      <AdminLoginContent />
+    </AdminAuthProvider>
+  )
+}

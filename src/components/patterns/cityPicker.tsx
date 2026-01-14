@@ -1,6 +1,5 @@
 'use client'
 
-import type { City } from '@/types'
 import {
   CaretDown,
   Check,
@@ -8,6 +7,7 @@ import {
   MapPin,
 } from '@phosphor-icons/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { City } from '@/types'
 
 interface CityPickerProps {
   cities: City[]

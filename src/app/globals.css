@@ -4,27 +4,31 @@
   /* Typography */
   --font-sans: var(--font-manrope), system-ui, sans-serif;
 
-  /* Colors - Base */
-  --color-bg-primary: #0a0a0f;
-  --color-bg-secondary: #12121a;
-  --color-bg-tertiary: #1a1a24;
+  /* Colors - Base (Blue Slate Theme from Style Guide) */
+  --color-bg-primary: #4c5578;
+  --color-bg-secondary: #3d4563;
+  --color-bg-tertiary: #2a2d3a;
+
+  /* Colors - Surface (for lighter sections) */
+  --color-surface-light: #e2e8f0;
+  --color-surface-medium: #94a3b8;
 
   /* Colors - Glass */
-  --color-glass-bg: rgba(255, 255, 255, 0.03);
-  --color-glass-bg-hover: rgba(255, 255, 255, 0.06);
-  --color-glass-border: rgba(255, 255, 255, 0.08);
-  --color-glass-border-hover: rgba(255, 255, 255, 0.12);
+  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.10);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.15);
 
   /* Colors - Text */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #71717a;
-  --color-text-muted: #52525b;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-tertiary: #8b92a6;
+  --color-text-muted: #4c5578;
 
-  /* Colors - Brand */
-  --color-brand-primary: #FF6D00;
-  --color-brand-secondary: #FF8F00;
-  --color-brand-tertiary: #FFB300;
+  /* Colors - Brand (Pink/Magenta Accent from Style Guide) */
+  --color-brand-primary: #ff0080;
+  --color-brand-secondary: #ff4081;
+  --color-brand-tertiary: #ff6b9d;
 
   /* Colors - Semantic */
   --color-success: #22c55e;
@@ -32,12 +36,40 @@
   --color-error: #ef4444;
   --color-info: #3b82f6;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
-  --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.2);
-  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.35);
+  /* Shadows - Grounded/Product Photography Style
+   * Simulates overhead light source
+   * Concentrated at bottom center, fades outward
+   * Creates "resting on surface" feeling */
+  --shadow-sm:
+    0 1px 2px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.2),
+    0 8px 10px -2px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  --shadow-lg:
+    0 8px 12px -2px rgba(0, 0, 0, 0.25),
+    0 16px 24px -4px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  --shadow-glass:
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-elevated:
+    0 12px 20px -4px rgba(0, 0, 0, 0.3),
+    0 24px 40px -8px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+
+  /* Product Photography Shadows (named per style guide) */
+  --shadow-product-overhead:
+    0 6px 12px -2px rgba(0, 0, 0, 0.2),
+    0 12px 20px -4px rgba(0, 0, 0, 0.15);
+  --shadow-photographic-ground:
+    0 8px 16px -4px rgba(0, 0, 0, 0.25),
+    0 16px 32px -8px rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-natural-bottom:
+    0 10px 24px -6px rgba(0, 0, 0, 0.3),
+    0 20px 40px -12px rgba(0, 0, 0, 0.2);
 
   /* Blur */
   --blur-sm: 4px;
@@ -65,10 +97,10 @@
   --space-12: 3rem;
   --space-16: 4rem;
 
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-normal: 200ms ease;
-  --transition-slow: 300ms ease;
+  /* Transitions (ease-in-out per style guide) */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 200ms ease-in-out;
+  --transition-slow: 300ms ease-in-out;
 
   /* Legacy support */
   --background: var(--color-bg-primary);
@@ -76,27 +108,55 @@
 }
 
 @theme inline {
-  /* Background colors */
-  --color-bg-primary: #0a0a0f;
-  --color-bg-secondary: #12121a;
-  --color-bg-tertiary: #1a1a24;
+  /* Background colors (Blue Slate Theme) */
+  --color-bg-primary: #4c5578;
+  --color-bg-secondary: #3d4563;
+  --color-bg-tertiary: #2a2d3a;
+
+  /* Surface colors (for lighter sections) */
+  --color-surface-light: #e2e8f0;
+  --color-surface-medium: #94a3b8;
 
   /* Glass colors */
-  --color-glass-bg: rgba(255, 255, 255, 0.03);
-  --color-glass-bg-hover: rgba(255, 255, 255, 0.06);
-  --color-glass-border: rgba(255, 255, 255, 0.08);
-  --color-glass-border-hover: rgba(255, 255, 255, 0.12);
+  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.10);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.15);
 
-  /* Brand colors */
-  --color-brand-primary: #FF6D00;
-  --color-brand-secondary: #FF8F00;
-  --color-brand-tertiary: #FFB300;
+  /* Brand colors (Pink/Magenta Accent) */
+  --color-brand-primary: #ff0080;
+  --color-brand-secondary: #ff4081;
+  --color-brand-tertiary: #ff6b9d;
 
   /* Text colors */
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #71717a;
-  --color-text-muted: #52525b;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --color-text-tertiary: #8b92a6;
+  --color-text-muted: #4c5578;
+
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Semantic text variants (lighter for dark backgrounds) */
+  --color-success-text: #4ade80;
+  --color-warning-text: #fbbf24;
+  --color-error-text: #f87171;
+  --color-info-text: #60a5fa;
+
+  /* Product Photography Shadows */
+  --shadow-product-overhead:
+    0 6px 12px -2px rgba(0, 0, 0, 0.2),
+    0 12px 20px -4px rgba(0, 0, 0, 0.15);
+  --shadow-photographic-ground:
+    0 8px 16px -4px rgba(0, 0, 0, 0.25),
+    0 16px 32px -8px rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-natural-bottom:
+    0 10px 24px -6px rgba(0, 0, 0, 0.3),
+    0 20px 40px -12px rgba(0, 0, 0, 0.2);
 
   /* Legacy */
   --color-background: var(--background);

@@ -1,4 +1,4 @@
-import type { ReactNode, HTMLAttributes } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode
@@ -76,7 +76,9 @@ export function CardDescription({
   className?: string
 }) {
   return (
-    <p className={`text-sm text-text-secondary mt-1 ${className}`}>{children}</p>
+    <p className={`text-sm text-text-secondary mt-1 ${className}`}>
+      {children}
+    </p>
   )
 }
 

@@ -1,9 +1,10 @@
 'use client'
 
-import { Lock, MapPin, ShieldCheck, Star, Tag } from '@phosphor-icons/react'
-import Image from 'next/image'
+import { Lock, MapPin, ShieldCheck, Star } from '@phosphor-icons/react'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { BlurredImage } from '@/components/patterns/blurredImage'
+import { SaveButton } from '@/components/patterns/saveButton'
 import type { AnonymousDeal, TreatmentCategory } from '@/types'
 
 interface DealCardProps {
@@ -39,33 +40,33 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
           ${isGrid ? 'aspect-[4/3]' : 'w-48 shrink-0 aspect-square'}
         `}
       >
-        {deal.imageUrl ? (
-          <Image
-            src={deal.imageUrl}
-            alt={deal.title}
-            fill
-            className="object-cover"
-            sizes={isGrid ? '(max-width: 768px) 100vw, 33vw' : '192px'}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Tag size={48} weight="light" className="text-text-tertiary" />
-          </div>
-        )}
+        {/* Blurred Image with Lock Overlay */}
+        <BlurredImage
+          src={deal.imageUrl}
+          alt={deal.title}
+          sizes={isGrid ? '(max-width: 768px) 100vw, 33vw' : '192px'}
+        />
 
-        {/* Category Badge - Top Left */}
-        <Badge variant="default" size="sm" className="absolute top-3 left-3">
+        {/* Category Badge - Top Left (above blur) */}
+        <Badge
+          variant="default"
+          size="sm"
+          className="absolute top-3 left-3 z-10"
+        >
           {categoryLabels[deal.category]}
         </Badge>
 
-        {/* Discount Badge - Top Right */}
-        <Badge variant="brand" size="sm" className="absolute top-3 right-3">
-          {deal.discountPercent}% OFF
-        </Badge>
+        {/* Save Button & Discount Badge - Top Right (above blur) */}
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
+          <SaveButton dealId={deal.id} size="sm" />
+          <Badge variant="brand" size="sm">
+            {deal.discountPercent}% OFF
+          </Badge>
+        </div>
 
-        {/* Sponsored Indicator - Bottom Left */}
+        {/* Sponsored Indicator - Bottom Left (above blur) */}
         {deal.isSponsored && (
-          <span className="absolute bottom-3 left-3 text-xs text-text-tertiary bg-bg-tertiary/80 backdrop-blur-sm px-2 py-1 rounded">
+          <span className="absolute bottom-3 left-3 z-10 text-xs text-text-tertiary bg-bg-tertiary/80 backdrop-blur-sm px-2 py-1 rounded">
             Sponsored
           </span>
         )}

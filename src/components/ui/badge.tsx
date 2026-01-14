@@ -1,6 +1,12 @@
 import type { ReactNode } from 'react'
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'brand'
+type BadgeVariant =
+  | 'default'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info'
+  | 'brand'
 type BadgeSize = 'sm' | 'md'
 
 interface BadgeProps {
@@ -12,10 +18,10 @@ interface BadgeProps {
 
 const variants: Record<BadgeVariant, string> = {
   default: 'bg-glass-bg border-glass-border text-text-secondary',
-  success: 'bg-green-500/10 border-green-500/20 text-green-400',
-  warning: 'bg-amber-500/10 border-amber-500/20 text-amber-400',
-  error: 'bg-red-500/10 border-red-500/20 text-red-400',
-  info: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
+  success: 'bg-success/10 border-success/20 text-success-text',
+  warning: 'bg-warning/10 border-warning/20 text-warning-text',
+  error: 'bg-error/10 border-error/20 text-error-text',
+  info: 'bg-info/10 border-info/20 text-info-text',
   brand: 'bg-brand-primary/10 border-brand-primary/20 text-brand-primary',
 }
 

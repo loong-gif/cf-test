@@ -1,7 +1,7 @@
 'use client'
 
-import { useLocation } from '@/lib/context/locationContext'
 import { LocationSelector } from '@/components/features/locationSelector'
+import { useLocation } from '@/lib/context/locationContext'
 
 export function LocationTestSection() {
   const { state } = useLocation()

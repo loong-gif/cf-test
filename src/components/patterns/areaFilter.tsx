@@ -1,8 +1,8 @@
 'use client'
 
-import type { LocationArea } from '@/types'
 import { CaretDown, Check, X } from '@phosphor-icons/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { LocationArea } from '@/types'
 
 interface AreaFilterProps {
   areas: LocationArea[]
@@ -76,14 +76,20 @@ export function AreaFilter({
         {selectedArea ? (
           <>
             <span className="text-text-primary">{selectedArea.name}</span>
-            <button
-              type="button"
+            <span
+              role="button"
+              tabIndex={0}
               onClick={handleClear}
-              className="p-0.5 rounded-full hover:bg-glass-bg transition-colors"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleClear(e as unknown as React.MouseEvent)
+                }
+              }}
+              className="p-0.5 rounded-full hover:bg-glass-bg transition-colors cursor-pointer"
               aria-label="Clear area filter"
             >
               <X size={14} weight="bold" className="text-text-tertiary" />
-            </button>
+            </span>
           </>
         ) : (
           <>

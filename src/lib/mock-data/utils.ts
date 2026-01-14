@@ -19,7 +19,7 @@ export function getActiveDeals(): AnonymousDeal[] {
 }
 
 export function getDealsByCategory(
-  category: TreatmentCategory
+  category: TreatmentCategory,
 ): AnonymousDeal[] {
   return deals
     .filter((d) => d.isActive && d.category === category)
@@ -88,7 +88,7 @@ function haversineDistance(
   lat1: number,
   lon1: number,
   lat2: number,
-  lon2: number
+  lon2: number,
 ): number {
   const R = 3959 // Earth's radius in miles
   const dLat = ((lat2 - lat1) * Math.PI) / 180
@@ -118,7 +118,7 @@ export function findNearestCity(lat: number, lng: number): City {
     lat,
     lng,
     nearestCity.latitude,
-    nearestCity.longitude
+    nearestCity.longitude,
   )
 
   for (let i = 1; i < activeCities.length; i++) {
@@ -207,7 +207,7 @@ export type SortOption =
 
 export function sortDeals(
   dealsToSort: AnonymousDeal[],
-  sortBy: SortOption
+  sortBy: SortOption,
 ): AnonymousDeal[] {
   const sorted = [...dealsToSort]
 
@@ -223,7 +223,7 @@ export function sortDeals(
     case 'newest':
       return sorted.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
     default:
       return sorted

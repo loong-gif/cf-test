@@ -1,4 +1,125 @@
-import type { Business } from '@/types'
+import type { Business, BusinessStatus, BusinessTier } from '@/types'
+
+// Track dynamically claimed businesses (changes during session)
+let dynamicBusinesses: Business[] = []
+
+// Initialize dynamic array on first access
+function getDynamicBusinesses(): Business[] {
+  if (dynamicBusinesses.length === 0) {
+    dynamicBusinesses = [...businesses]
+  }
+  return dynamicBusinesses
+}
+
+/**
+ * Get a business by ID
+ */
+export function getBusinessById(id: string): Business | undefined {
+  return getDynamicBusinesses().find((b) => b.id === id)
+}
+
+/**
+ * Search businesses by name (case-insensitive)
+ */
+export function searchBusinessesByName(query: string): Business[] {
+  const normalizedQuery = query.toLowerCase().trim()
+  if (!normalizedQuery) return []
+
+  return getDynamicBusinesses().filter((b) =>
+    b.name.toLowerCase().includes(normalizedQuery)
+  )
+}
+
+/**
+ * Get all unclaimed businesses
+ */
+export function getUnclaimedBusinesses(): Business[] {
+  return getDynamicBusinesses().filter((b) => b.tier === 'unclaimed')
+}
+
+/**
+ * Create a new business listing
+ * Returns the new Business object
+ */
+export function createBusiness(
+  data: Omit<
+    Business,
+    'id' | 'slug' | 'createdAt' | 'updatedAt' | 'rating' | 'reviewCount' | 'isVerified' | 'tier' | 'status'
+  >
+): Business {
+  const now = new Date().toISOString()
+  const slug = data.name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+
+  const newBusiness: Business = {
+    ...data,
+    id: `biz-${Date.now()}`,
+    slug: `${slug}-${data.city.toLowerCase()}`,
+    tier: 'free',
+    status: 'active',
+    rating: 0,
+    reviewCount: 0,
+    isVerified: false,
+    createdAt: now,
+    updatedAt: now,
+  }
+
+  // Add to dynamic businesses
+  getDynamicBusinesses().push(newBusiness)
+
+  return newBusiness
+}
+
+/**
+ * Claim a business for an owner
+ * Updates tier, claimedBy, claimedAt, and isVerified
+ */
+export function claimBusiness(businessId: string, ownerId: string): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    tier: 'free',
+    claimedBy: ownerId,
+    claimedAt: now,
+    isVerified: true,
+    verifiedAt: now,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}
+
+/**
+ * Update a business with partial data
+ * Returns the updated business or null if not found
+ */
+export function updateBusiness(
+  businessId: string,
+  updates: Partial<Omit<Business, 'id' | 'slug' | 'createdAt' | 'tier' | 'status' | 'rating' | 'reviewCount' | 'isVerified' | 'verifiedAt' | 'claimedBy' | 'claimedAt'>>
+): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    ...updates,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}
 
 export const businesses: Business[] = [
   // Unclaimed businesses (scraped data)
@@ -160,3 +281,56 @@ export const businesses: Business[] = [
     updatedAt: '2024-03-10T10:00:00Z',
   },
 ]
+
+/**
+ * Get all businesses
+ */
+export function getAllBusinesses(): Business[] {
+  return getDynamicBusinesses()
+}
+
+/**
+ * Update business status
+ */
+export function updateBusinessStatus(
+  businessId: string,
+  status: BusinessStatus
+): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    status,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}
+
+/**
+ * Update business tier
+ */
+export function updateBusinessTier(
+  businessId: string,
+  tier: BusinessTier
+): Business | null {
+  const businesses = getDynamicBusinesses()
+  const index = businesses.findIndex((b) => b.id === businessId)
+
+  if (index === -1) return null
+
+  const now = new Date().toISOString()
+  const updatedBusiness: Business = {
+    ...businesses[index],
+    tier,
+    updatedAt: now,
+  }
+
+  dynamicBusinesses[index] = updatedBusiness
+  return updatedBusiness
+}

@@ -1,14 +1,5 @@
 'use client'
 
-import type { City, LocationArea, LocationState } from '@/types'
-import {
-  DEFAULT_CITY,
-  cities,
-  findNearestCity,
-  getAreasForCity,
-  getCityById,
-} from '@/lib/mock-data'
-import { useGeolocation } from '@/lib/hooks/useGeolocation'
 import {
   createContext,
   useCallback,
@@ -17,6 +8,15 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useGeolocation } from '@/lib/hooks/useGeolocation'
+import {
+  cities,
+  DEFAULT_CITY,
+  findNearestCity,
+  getAreasForCity,
+  getCityById,
+} from '@/lib/mock-data'
+import type { City, LocationArea, LocationState } from '@/types'
 
 const STORAGE_KEY = 'costfinders_location'
 
@@ -65,7 +65,11 @@ function loadStoredLocation(): StoredLocation | null {
   }
 }
 
-function saveLocation(cityId: string, areaId: string | null, type: 'selected' | 'detected') {
+function saveLocation(
+  cityId: string,
+  areaId: string | null,
+  type: 'selected' | 'detected',
+) {
   if (typeof window === 'undefined') return
 
   const data: StoredLocation = { cityId, areaId, type }
@@ -88,7 +92,9 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       const city = getCityById(stored.cityId)
       if (city) {
         const area = stored.areaId
-          ? getAreasForCity(stored.cityId).find((a) => a.id === stored.areaId) || null
+          ? getAreasForCity(stored.cityId).find(
+              (a) => a.id === stored.areaId,
+            ) || null
           : null
 
         setState((prev) => ({
@@ -135,7 +141,8 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       setState((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Failed to detect location',
+        error:
+          error instanceof Error ? error.message : 'Failed to detect location',
         hasPermission: false,
       }))
     }
@@ -201,7 +208,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       selectArea,
       clearSelection,
     }),
-    [state, detectLocation, selectCity, selectArea, clearSelection]
+    [state, detectLocation, selectCity, selectArea, clearSelection],
   )
 
   return (

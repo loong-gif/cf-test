@@ -1,13 +1,9 @@
 'use client'
 
-import { useLocation } from '@/lib/context/locationContext'
-import { CityPicker } from '@/components/patterns/cityPicker'
+import { Crosshair, SpinnerGap, WarningCircle } from '@phosphor-icons/react'
 import { AreaFilter } from '@/components/patterns/areaFilter'
-import {
-  Crosshair,
-  SpinnerGap,
-  WarningCircle,
-} from '@phosphor-icons/react'
+import { CityPicker } from '@/components/patterns/cityPicker'
+import { useLocation } from '@/lib/context/locationContext'
 
 interface LocationSelectorProps {
   showAreaFilter?: boolean
@@ -83,13 +79,13 @@ export function LocationSelector({
 
       {/* Error Message */}
       {error && (
-        <div className="flex items-start gap-2 px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg">
+        <div className="flex items-start gap-2 px-3 py-2 bg-error/10 border border-error/20 rounded-lg">
           <WarningCircle
             size={18}
             weight="fill"
-            className="text-red-400 flex-shrink-0 mt-0.5"
+            className="text-error-text flex-shrink-0 mt-0.5"
           />
-          <p className="text-sm text-red-400">{error}</p>
+          <p className="text-sm text-error-text">{error}</p>
         </div>
       )}
 

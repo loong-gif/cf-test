@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useCallback, type ReactNode } from 'react'
 import { X } from '@phosphor-icons/react'
+import { type ReactNode, useCallback, useEffect } from 'react'
 
 interface ModalProps {
   isOpen: boolean
@@ -29,7 +29,7 @@ export function Modal({
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     },
-    [onClose]
+    [onClose],
   )
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export function Modal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 pb-4 overflow-y-auto">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"

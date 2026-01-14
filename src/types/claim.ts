@@ -1,4 +1,10 @@
-export type ClaimStatus = 'pending' | 'contacted' | 'booked' | 'completed' | 'cancelled' | 'expired'
+export type ClaimStatus =
+  | 'pending'
+  | 'contacted'
+  | 'booked'
+  | 'completed'
+  | 'cancelled'
+  | 'expired'
 
 export interface Claim {
   id: string

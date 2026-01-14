@@ -1,14 +1,16 @@
 'use client'
 
-import { useState } from 'react'
-import { useLocation } from '@/lib/context/locationContext'
-import { Modal } from '@/components/ui/modal'
-import { LocationSelector } from '@/components/features/locationSelector'
 import { CaretDown, MapPin } from '@phosphor-icons/react'
+import { useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { LocationSelector } from '@/components/features/locationSelector'
+import { Modal } from '@/components/ui/modal'
+import { useLocation } from '@/lib/context/locationContext'
 
 export function LocationDisplay() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { state } = useLocation()
+  const router = useRouter()
   const { current } = state
 
   const getDisplayText = () => {
@@ -23,10 +25,10 @@ export function LocationDisplay() {
     return `${current.city.name}, ${current.city.stateCode}`
   }
 
-  const handleLocationChange = () => {
-    // Optionally close modal after selection
-    // setIsModalOpen(false)
-  }
+  const handleLocationChange = useCallback(() => {
+    setIsModalOpen(false)
+    router.push('/deals')
+  }, [router])
 
   return (
     <>
