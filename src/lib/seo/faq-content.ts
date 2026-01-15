@@ -61,3 +61,60 @@ export function getStateFaqs(stateName: string): FaqItem[] {
     },
   ]
 }
+
+// SEO Deals Pages FAQ Content
+
+/**
+ * Get FAQ items for city deals pages
+ * @param cityName - Name of the city (e.g., "Houston")
+ * @returns Array of FAQ items specific to medspa deals in this city
+ */
+export function getCityDealsFaqs(cityName: string): FaqItem[] {
+  return [
+    {
+      question: `What are the best medspa deals in ${cityName}?`,
+      answer: `CostFinders lists verified medspa deals in ${cityName} with savings up to 50% off regular prices. Browse current offers on Botox, fillers, facials, laser treatments, and more from trusted providers in your area.`,
+    },
+    {
+      question: `How do I find reputable medspas in ${cityName}?`,
+      answer: `All providers on CostFinders are verified. Look for medspas with high ratings, transparent pricing, and positive reviews. We recommend comparing multiple ${cityName} providers and scheduling consultations before booking your treatment.`,
+    },
+    {
+      question: `Are medspa prices in ${cityName} negotiable?`,
+      answer: `Prices can vary between providers, but most medspas in ${cityName} offer promotional deals and package discounts. CostFinders helps you compare current offers so you can find the best value without negotiating.`,
+    },
+    {
+      question: `What should I look for when choosing a medspa in ${cityName}?`,
+      answer: `Look for licensed practitioners, clean facilities, transparent pricing, and positive patient reviews. CostFinders only lists verified ${cityName} providers, making it easier to find reputable medspas offering quality treatments.`,
+    },
+  ]
+}
+
+/**
+ * Get FAQ items for treatment+city pages
+ * @param treatmentName - Name of the treatment (e.g., "Botox")
+ * @param cityName - Name of the city (e.g., "Houston")
+ * @returns Array of FAQ items specific to this treatment in this city
+ */
+export function getTreatmentCityFaqs(treatmentName: string, cityName: string): FaqItem[] {
+  const lowerName = treatmentName.toLowerCase()
+
+  return [
+    {
+      question: `How much does ${treatmentName} cost in ${cityName}?`,
+      answer: `${treatmentName} prices in ${cityName} vary by provider and treatment area. On CostFinders, you can compare ${lowerName} deals from multiple ${cityName} medspas to find the best price. Many providers offer discounts of 20-40% off regular pricing.`,
+    },
+    {
+      question: `Where can I get ${treatmentName} in ${cityName}?`,
+      answer: `CostFinders lists verified providers offering ${lowerName} treatments throughout ${cityName}. Browse current deals, compare prices, and read reviews to find the right provider for your needs.`,
+    },
+    {
+      question: `How do I find the best ${treatmentName} deals in ${cityName}?`,
+      answer: `Compare ${lowerName} offers from verified ${cityName} providers on CostFinders. Filter by price, discount percentage, or rating to find deals that match your budget. Many providers offer seasonal promotions and package discounts.`,
+    },
+    {
+      question: `What should I ask during a ${treatmentName} consultation in ${cityName}?`,
+      answer: `Ask about the practitioner's experience, the products used, expected results, and aftercare. Inquire about pricing, including any additional fees. CostFinders ${cityName} providers offer transparent pricing so you know what to expect.`,
+    },
+  ]
+}

@@ -2,7 +2,7 @@
 
 > Complete list of all pages organized by user type.
 > Mock auth - no password validation (any password works).
-> Last updated: 2026-01-12
+> Last updated: 2026-01-14
 
 ---
 
@@ -22,8 +22,10 @@
 
 | Route | Description |
 |-------|-------------|
-| `/` | Homepage - hero section, location selector, mock data stats |
-| `/deals` | Deal listing - filterable/sortable grid of medspa deals |
+| `/` | Homepage - hero, category previews with deals, value props, business CTA |
+| `/deals` | Gateway - auto-redirects to nearest city based on geolocation |
+| `/deals/[city]` | City deals - all deals in city, category filters, SEO for "medspa deals [city]" |
+| `/deals/[treatment]/[city]` | Treatment+city - filtered deals, SEO for "botox [city]" keywords |
 | `/deals/[id]` | Deal detail - full deal info, pricing breakdown, booking sidebar |
 
 ### Consumer Dashboard
@@ -118,10 +120,12 @@
 
 | User Type | Page Count |
 |-----------|------------|
-| Consumer (Public + Dashboard) | 7 |
+| Consumer (Public + Dashboard) | 9 |
 | Business | 16 |
 | Admin | 13 |
-| **Total** | **36 pages** |
+| **Total** | **38 pages** |
+
+> Note: SEO pages generate 42+ static variations (6 cities + 36 treatment+city combos)
 
 ---
 
@@ -131,8 +135,7 @@
 src/app/
 ├── page.tsx                          # /
 ├── deals/
-│   ├── page.tsx                      # /deals
-│   └── [id]/page.tsx                 # /deals/[id]
+│   └── [[...slugs]]/page.tsx         # /deals, /deals/[city], /deals/[treatment]/[city], /deals/[id]
 ├── dashboard/
 │   ├── page.tsx                      # /dashboard
 │   ├── favorites/page.tsx            # /dashboard/favorites

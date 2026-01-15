@@ -5,6 +5,7 @@ import { getAllNeighborhoodsWithCityAndState } from '@/lib/mock-data/neighborhoo
 import { getAllProvidersWithCityAndState } from '@/lib/mock-data/providers'
 import { getAllCategorySlugs, getCategoryStateComboSlugs } from '@/lib/mock-data/categories'
 import { getAllDealIds } from '@/lib/mock-data/deals'
+import { getAllActiveCitySlugs, getAllTreatmentCityCombos } from '@/lib/mock-data'
 
 /**
  * Sitemap Configuration
@@ -156,8 +157,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
 
   // ═══════════════════════════════════════════════════════════════════
+  // Section 9: City Deals Pages
+  // Count: 6 URLs (one per active city)
+  // Route: /deals/[city] (e.g., /deals/houston)
+  // Target keywords: "medspa deals [city]"
+  // ═══════════════════════════════════════════════════════════════════
+  const citySlugs = getAllActiveCitySlugs()
+  const cityDealsPages: MetadataRoute.Sitemap = citySlugs.map((citySlug) => ({
+    url: `${baseUrl}/deals/${citySlug}`,
+    lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
+    changeFrequency: 'daily',
+    priority: 0.8,
+  }))
+
+  // ═══════════════════════════════════════════════════════════════════
+  // Section 10: Treatment+City Combination Pages
+  // Count: 36 URLs (6 treatments × 6 cities)
+  // Route: /deals/[treatment]/[city] (e.g., /deals/botox/houston)
+  // Target keywords: "botox houston", "botox deals houston"
+  // ═══════════════════════════════════════════════════════════════════
+  const treatmentCityCombos = getAllTreatmentCityCombos()
+  const treatmentCityPages: MetadataRoute.Sitemap = treatmentCityCombos.map(
+    ({ treatment, city }) => ({
+      url: `${baseUrl}/deals/${treatment}/${city}`,
+      lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
+      changeFrequency: 'daily',
+      priority: 0.75,
+    })
+  )
+
+  // ═══════════════════════════════════════════════════════════════════
   // Combine All Sections
-  // Total: ~89 URLs (well under 50,000 limit)
+  // Total: ~131 URLs (well under 50,000 limit)
   // ═══════════════════════════════════════════════════════════════════
   const allUrls = [
     ...staticPages,          // 2 URLs
@@ -168,6 +199,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...categoryPages,        // 6 URLs
     ...dealPages,            // ~12 URLs
     ...categoryStatePages,   // 24 URLs
+    ...cityDealsPages,       // 6 URLs
+    ...treatmentCityPages,   // 36 URLs
   ]
 
   // Log URL count in development for monitoring

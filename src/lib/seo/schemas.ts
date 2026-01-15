@@ -147,3 +147,97 @@ export function buildFaqSchema(
     })),
   }
 }
+
+// SEO Deals Pages Schemas
+
+/**
+ * Build ItemList schema for city deals page
+ * Shows deals as a structured list for rich results
+ * @param deals - Array of deals to include
+ * @param cityName - City name for location context
+ * @returns JSON-LD ItemList object
+ */
+export function buildDealsListSchema(
+  deals: Array<{
+    id: string
+    title: string
+    description: string
+    dealPrice: number
+    locationArea: string
+  }>,
+  cityName: string
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Medspa Deals in ${cityName}`,
+    description: `Best medspa deals and discounts in ${cityName}`,
+    numberOfItems: deals.length,
+    itemListElement: deals.slice(0, 10).map((deal, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Offer',
+        name: deal.title,
+        description: deal.description,
+        price: deal.dealPrice,
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+        url: `${SITE_CONFIG.url}/deals/${deal.id}`,
+        seller: {
+          '@type': 'HealthAndBeautyBusiness',
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: cityName,
+          },
+        },
+      },
+    })),
+  }
+}
+
+/**
+ * Build Service schema for treatment+city pages
+ * Shows the treatment as a service available in the city
+ * @param treatmentName - Treatment name (e.g., "Botox")
+ * @param cityName - City name
+ * @param stats - Price and count stats
+ * @returns JSON-LD Service object
+ */
+export function buildTreatmentServiceSchema(
+  treatmentName: string,
+  cityName: string,
+  stats: {
+    dealCount: number
+    minPrice?: number
+    maxPrice?: number
+  }
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${treatmentName} Treatments in ${cityName}`,
+    serviceType: treatmentName,
+    description: `Compare ${treatmentName.toLowerCase()} deals from verified medspa providers in ${cityName}`,
+    areaServed: {
+      '@type': 'City',
+      name: cityName,
+    },
+    ...(stats.minPrice && stats.maxPrice && {
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: stats.minPrice,
+        highPrice: stats.maxPrice,
+        priceCurrency: 'USD',
+        offerCount: stats.dealCount,
+      },
+    }),
+    provider: {
+      '@type': 'HealthAndBeautyBusiness',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: cityName,
+      },
+    },
+  }
+}

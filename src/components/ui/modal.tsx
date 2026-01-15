@@ -68,7 +68,7 @@ export function Modal({
   if (!isOpen) return null
 
   return (
-    <div className={`fixed inset-0 z-50 ${variant.container} overflow-y-auto`}>
+    <div className={`fixed inset-0 z-50 ${variant.container}`}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"

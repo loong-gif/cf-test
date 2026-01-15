@@ -11,7 +11,7 @@ import type {
 import { businesses } from './businesses'
 import { claims, consumers } from './consumers'
 import { deals, toAnonymousDeal } from './deals'
-import { cities, locationAreas } from './locations'
+import { cities, locationAreas, getCityBySlug, slugifyCity } from './locations'
 
 // Deal queries
 export function getActiveDeals(): AnonymousDeal[] {
@@ -228,4 +228,103 @@ export function sortDeals(
     default:
       return sorted
   }
+}
+
+// SEO Page Queries
+
+/**
+ * Get deals for a city by URL slug
+ * Used by /deals/[city] pages
+ */
+export function getDealsForCitySlug(citySlug: string): AnonymousDeal[] {
+  const city = getCityBySlug(citySlug)
+  if (!city) return []
+
+  const cityBusinessIds = businesses
+    .filter((b) => b.city.toLowerCase() === city.name.toLowerCase())
+    .map((b) => b.id)
+
+  return deals
+    .filter((d) => d.isActive && cityBusinessIds.includes(d.businessId))
+    .map(toAnonymousDeal)
+}
+
+/**
+ * Get deals filtered by both treatment category AND city slug
+ * Used by /deals/[treatment]/[city] pages
+ */
+export function getDealsForTreatmentAndCity(
+  category: TreatmentCategory,
+  citySlug: string,
+): AnonymousDeal[] {
+  const city = getCityBySlug(citySlug)
+  if (!city) return []
+
+  const cityBusinessIds = businesses
+    .filter((b) => b.city.toLowerCase() === city.name.toLowerCase())
+    .map((b) => b.id)
+
+  return deals
+    .filter(
+      (d) =>
+        d.isActive &&
+        d.category === category &&
+        cityBusinessIds.includes(d.businessId),
+    )
+    .map(toAnonymousDeal)
+}
+
+/**
+ * Get deal count for a city by slug
+ * Used for SEO metadata
+ */
+export function getDealCountForCitySlug(citySlug: string): number {
+  return getDealsForCitySlug(citySlug).length
+}
+
+/**
+ * Get deal count for treatment+city combo
+ * Used for SEO metadata
+ */
+export function getDealCountForTreatmentAndCity(
+  category: TreatmentCategory,
+  citySlug: string,
+): number {
+  return getDealsForTreatmentAndCity(category, citySlug).length
+}
+
+/**
+ * Get min deal price for a city
+ * Used for SEO metadata
+ */
+export function getMinPriceForCitySlug(citySlug: string): number | undefined {
+  const cityDeals = getDealsForCitySlug(citySlug)
+  if (cityDeals.length === 0) return undefined
+  return Math.min(...cityDeals.map((d) => d.dealPrice))
+}
+
+/**
+ * Get min deal price for treatment+city
+ * Used for SEO metadata
+ */
+export function getMinPriceForTreatmentAndCity(
+  category: TreatmentCategory,
+  citySlug: string,
+): number | undefined {
+  const cityDeals = getDealsForTreatmentAndCity(category, citySlug)
+  if (cityDeals.length === 0) return undefined
+  return Math.min(...cityDeals.map((d) => d.dealPrice))
+}
+
+/**
+ * Get business count for a city
+ * Used for SEO metadata and page stats
+ */
+export function getBusinessCountForCitySlug(citySlug: string): number {
+  const city = getCityBySlug(citySlug)
+  if (!city) return 0
+
+  return businesses.filter(
+    (b) => b.city.toLowerCase() === city.name.toLowerCase(),
+  ).length
 }

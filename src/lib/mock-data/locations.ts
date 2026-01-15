@@ -315,6 +315,39 @@ export function updateArea(
   return locationAreasData[index]
 }
 
+// Slug helpers for SEO routing
+
+/**
+ * Convert city name to URL-safe slug
+ * e.g., "Los Angeles" -> "los-angeles", "New York" -> "new-york"
+ */
+export function slugifyCity(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
+/**
+ * Get city by URL slug (without state)
+ * Used for /deals/[city] routing
+ */
+export function getCityBySlug(slug: string): City | undefined {
+  return citiesData.find(
+    (city) => city.isActive && slugifyCity(city.name) === slug
+  )
+}
+
+/**
+ * Get all active city slugs for static params generation
+ * Used by /deals/[city] page
+ */
+export function getAllActiveCitySlugs(): string[] {
+  return citiesData
+    .filter((city) => city.isActive)
+    .map((city) => slugifyCity(city.name))
+}
+
 // Stats helpers
 export function getLocationStats() {
   const totalCities = citiesData.length

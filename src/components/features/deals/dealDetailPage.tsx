@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -7,13 +6,12 @@ import {
   MapPin,
   Star,
 } from '@phosphor-icons/react/dist/ssr'
-import { getAnonymousDealById, getDealById } from '@/lib/mock-data'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { BlurredImage } from '@/components/patterns/blurredImage'
 import { PricingBreakdown } from '@/components/features/pricingBreakdown'
 import { DealSidebar } from '@/components/features/dealSidebar'
-import type { TreatmentCategory } from '@/types'
+import type { AnonymousDeal, Deal, TreatmentCategory } from '@/types'
 
 const categoryLabels: Record<TreatmentCategory, string> = {
   botox: 'Botox',
@@ -25,18 +23,11 @@ const categoryLabels: Record<TreatmentCategory, string> = {
 }
 
 interface DealDetailPageProps {
-  params: Promise<{ id: string }>
+  deal: AnonymousDeal
+  fullDeal: Deal
 }
 
-export default async function DealDetailPage({ params }: DealDetailPageProps) {
-  const { id } = await params
-  const deal = getAnonymousDealById(id)
-  const fullDeal = getDealById(id)
-
-  if (!deal || !fullDeal) {
-    notFound()
-  }
-
+export function DealDetailPage({ deal, fullDeal }: DealDetailPageProps) {
   return (
     <main className="pt-20 pb-20 md:pb-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">

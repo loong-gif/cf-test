@@ -22,7 +22,14 @@ export {
   type ConversationSummary,
 } from './messages'
 export { deals, toAnonymousDeal, getDealById as getDealByIdDynamic, getDealsForBusiness } from './deals'
-export { cities, locationAreas } from './locations'
+export {
+  cities,
+  locationAreas,
+  getCityBySlug,
+  getAllActiveCitySlugs,
+  slugifyCity,
+  getCities,
+} from './locations'
 export {
   getCategories,
   getCategoryById,
@@ -92,4 +99,42 @@ export {
   getSponsoredDeals,
   type SortOption,
   sortDeals,
+  // SEO Page Queries
+  getDealsForCitySlug,
+  getDealsForTreatmentAndCity,
+  getDealCountForCitySlug,
+  getDealCountForTreatmentAndCity,
+  getMinPriceForCitySlug,
+  getMinPriceForTreatmentAndCity,
+  getBusinessCountForCitySlug,
 } from './utils'
+
+// SEO Static Params Generation
+import { getAllActiveCitySlugs } from './locations'
+import { getCategories } from './categories'
+import type { TreatmentCategory } from '@/types'
+
+/**
+ * Get all treatment+city combinations for static params generation
+ * Used by /deals/[treatment]/[city] pages
+ */
+export function getAllTreatmentCityCombos(): Array<{
+  treatment: TreatmentCategory
+  city: string
+}> {
+  const cities = getAllActiveCitySlugs()
+  const categories = getCategories().filter((c) => c.isActive)
+
+  const combos: Array<{ treatment: TreatmentCategory; city: string }> = []
+
+  for (const city of cities) {
+    for (const category of categories) {
+      combos.push({
+        treatment: category.slug,
+        city,
+      })
+    }
+  }
+
+  return combos
+}
