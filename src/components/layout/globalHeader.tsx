@@ -17,8 +17,12 @@ export function GlobalHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalView, setModalView] = useState<AuthView>('signIn')
 
-  // Hide on dashboard pages (they have their own navigation)
-  if (pathname.startsWith('/dashboard')) {
+  // Hide on all dashboard pages (they have their own navigation)
+  if (
+    pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/business/dashboard') ||
+    pathname.startsWith('/admin/dashboard')
+  ) {
     return null
   }
 

@@ -45,13 +45,13 @@ export default function BusinessPage() {
   }
 
   return (
-    <main className="min-h-screen bg-bg-primary">
+    <main className="min-h-screen bg-bg-primary pt-20">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/5 via-transparent to-transparent" />
 
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
           <div className="text-center">
             {/* Icon */}
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 mb-8">

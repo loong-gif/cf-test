@@ -159,8 +159,8 @@ export default function CreateBusinessPage() {
   // Render auth view
   if (pageView === 'auth') {
     return (
-      <main className="min-h-screen bg-bg-primary">
-        <div className="max-w-md mx-auto px-4 sm:px-6 py-20">
+      <main className="min-h-screen bg-bg-primary pt-20">
+        <div className="max-w-md mx-auto px-4 sm:px-6 py-12">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 mb-6">
@@ -301,8 +301,8 @@ export default function CreateBusinessPage() {
   // Render success view
   if (pageView === 'success' && createdBusiness) {
     return (
-      <main className="min-h-screen bg-bg-primary">
-        <div className="max-w-md mx-auto px-4 sm:px-6 py-20">
+      <main className="min-h-screen bg-bg-primary pt-20">
+        <div className="max-w-md mx-auto px-4 sm:px-6 py-12">
           <div className="text-center space-y-6">
             {/* Success icon */}
             <div className="flex justify-center">
@@ -365,8 +365,8 @@ export default function CreateBusinessPage() {
 
   // Render form view (authenticated)
   return (
-    <main className="min-h-screen bg-bg-primary">
-      <div className="max-w-xl mx-auto px-4 sm:px-6 py-20">
+    <main className="min-h-screen bg-bg-primary pt-20">
+      <div className="max-w-xl mx-auto px-4 sm:px-6 py-12">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 mb-6">

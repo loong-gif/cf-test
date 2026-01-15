@@ -67,7 +67,7 @@ function AdminLoginContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 pt-20">
       <div className="w-full max-w-md">
         {/* Login Card */}
         <div className="bg-glass-bg backdrop-blur-xl border border-glass-border rounded-2xl p-8">
