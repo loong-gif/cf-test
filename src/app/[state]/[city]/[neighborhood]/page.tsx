@@ -142,7 +142,7 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
           {/* Deals Grid */}
           <section>
             <h2 className="text-xl font-semibold text-text-primary mb-6">
-              Available Deals in {neighborhood.name}
+              Available Deals in {neighborhoodName}
             </h2>
 
             {deals.length > 0 ? (
