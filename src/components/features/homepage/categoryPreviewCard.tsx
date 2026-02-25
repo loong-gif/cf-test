@@ -62,22 +62,32 @@ export function CategoryPreviewCard({ category, deals }: CategoryPreviewCardProp
           >
             <div className="flex-1 min-w-0 mr-3">
               <p className="font-medium text-sm text-text-primary truncate">
-                {deal.title}
+                {deal.serviceName || deal.title}
+              </p>
+              <p className="text-xs text-text-tertiary truncate">
+                {deal.sourceName} · {deal.templateType}
               </p>
               <p className="text-xs text-text-tertiary truncate">
                 {deal.locationArea}
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              {deal.dealPrice > 0 ? (
-                <span className="font-bold text-brand-primary">
-                  ${deal.dealPrice}
-                </span>
-              ) : (
-                <span className="text-xs text-text-tertiary">
-                  Contact for price
-                </span>
-              )}
+              <div className="flex flex-col items-end">
+                {deal.originalPrice > 0 && (
+                  <span className="text-xs text-text-tertiary line-through">
+                    ${deal.originalPrice}
+                  </span>
+                )}
+                {deal.discountPrice > 0 ? (
+                  <span className="font-bold text-brand-primary">
+                    ${deal.discountPrice}
+                  </span>
+                ) : (
+                  <span className="text-xs text-text-tertiary">
+                    Contact for price
+                  </span>
+                )}
+              </div>
               {deal.discountPercent > 0 && (
                 <Badge variant="brand" size="sm">
                   {deal.discountPercent}% off

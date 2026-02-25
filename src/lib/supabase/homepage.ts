@@ -12,6 +12,7 @@ type DealRow = {
   unit_type: string | null
   service_area: string | null
   source_name: string | null
+  template_type: string | null
 }
 
 type CategoryBucket = {
@@ -99,7 +100,7 @@ export async function getHomepageCategoryPreviews(): Promise<
       const { data: deals, error: dealError } = await supabase
         .from('promo_offer_master')
         .select(
-          'id,service_name,service_category,discount_percent,discount_unit_price,original_unit_price,delivered_unit,unit_type,service_area,source_name',
+          'id,service_name,service_category,discount_percent,discount_unit_price,original_unit_price,delivered_unit,unit_type,service_area,source_name,template_type',
         )
         .eq('service_category', category.name)
         .order('discount_percent', { ascending: false })
@@ -113,11 +114,12 @@ export async function getHomepageCategoryPreviews(): Promise<
 
       const dealPreviews = (deals ?? []).map((deal: DealRow) => {
         const discountPercent = toNumber(deal.discount_percent, 0)
+        const originalPrice = parsePrice(deal.original_unit_price) ?? 0
         const discountPrice =
           parsePrice(deal.discount_unit_price) ??
-          parsePrice(deal.original_unit_price)
+          (originalPrice > 0 ? originalPrice : null)
         const deliveredUnit = toNumber(deal.delivered_unit, 0)
-        const dealPrice =
+        const resolvedDiscountPrice =
           discountPrice !== null
             ? discountPrice
             : deliveredUnit > 0
@@ -130,8 +132,15 @@ export async function getHomepageCategoryPreviews(): Promise<
             deal.service_name ?? deal.service_category ?? deal.source_name,
             category.name,
           ),
+          sourceName: toText(deal.source_name, 'Unknown source'),
+          templateType: toText(deal.template_type, 'Offer'),
+          serviceName: toText(
+            deal.service_name ?? deal.service_category,
+            category.name,
+          ),
           locationArea: toText(deal.service_area, 'Local area'),
-          dealPrice,
+          originalPrice,
+          discountPrice: resolvedDiscountPrice,
           discountPercent,
         }
       })

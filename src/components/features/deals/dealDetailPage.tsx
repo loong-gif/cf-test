@@ -115,6 +115,28 @@ export function DealDetailPage({
               </p>
             </Card>
 
+            {/* Offer Details */}
+            {(fullDeal.offerRawText || fullDeal.eligibility) && (
+              <Card variant="glass" padding="lg">
+                <h2 className="text-lg font-semibold text-text-primary mb-3">
+                  Offer Details
+                </h2>
+                {fullDeal.offerRawText && (
+                  <p className="text-text-secondary whitespace-pre-line mb-4">
+                    {fullDeal.offerRawText}
+                  </p>
+                )}
+                {fullDeal.eligibility && (
+                  <div className="text-sm text-text-tertiary whitespace-pre-line">
+                    <span className="font-medium text-text-secondary">
+                      Eligibility:
+                    </span>{' '}
+                    {fullDeal.eligibility}
+                  </div>
+                )}
+              </Card>
+            )}
+
             {/* Terms */}
             <Card variant="glass" padding="lg">
               <div className="flex items-center gap-2 mb-3">

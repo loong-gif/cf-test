@@ -20,6 +20,7 @@ type OfferRow = {
   service_area: string | null
   source_name: string | null
   source_url: string | null
+  template_type: string | null
   created_at: string
 }
 
@@ -203,6 +204,13 @@ function mapOfferToDeal(
     updatedAt: createdAt,
     moderationStatus: undefined,
     moderationNotes: undefined,
+    sourceName: offer.source_name ?? undefined,
+    templateType: offer.template_type ?? undefined,
+    serviceName: offer.service_name ?? undefined,
+    offerRawText: offer.offer_raw_text ?? undefined,
+    eligibility: offer.eligibility ?? undefined,
+    originalUnitPrice: offer.original_unit_price ?? undefined,
+    discountUnitPrice: offer.discount_unit_price ?? undefined,
   }
 
   const anonymous: AnonymousDeal = {
@@ -241,7 +249,7 @@ export async function getOfferById(id: string) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .eq('id', Number(id))
     .limit(1)
@@ -268,7 +276,7 @@ export async function getOffersByCitySlug(citySlug: string) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .eq('service_area', city.name)
     .order('discount_percent', { ascending: false })
@@ -298,7 +306,7 @@ export async function getOffersByCategoryAndCity(
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .eq('service_area', city.name)
     .order('discount_percent', { ascending: false })
@@ -331,7 +339,7 @@ export async function getDealsByCategory(category: TreatmentCategory) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .order('discount_percent', { ascending: false })
     .limit(500)
@@ -491,7 +499,7 @@ export async function getAllActiveOffers() {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .order('created_at', { ascending: false })
     .limit(500)
@@ -579,7 +587,7 @@ export async function getOffersForBusiness(businessId: string) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .eq('business_id', Number(businessId))
     .order('discount_percent', { ascending: false })

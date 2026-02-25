@@ -38,6 +38,14 @@ export interface Deal {
   // Moderation fields (optional for backward compatibility)
   moderationStatus?: ModerationStatus
   moderationNotes?: string
+  // Source metadata (optional for Supabase-backed offers)
+  sourceName?: string
+  templateType?: string
+  serviceName?: string
+  offerRawText?: string
+  eligibility?: string
+  originalUnitPrice?: string
+  discountUnitPrice?: string
 }
 
 // What consumers see before verification

@@ -9,7 +9,11 @@ export interface HomepageCategory {
 export interface HomepageDealPreview {
   id: string
   title: string
+  sourceName: string
+  templateType: string
+  serviceName: string
   locationArea: string
-  dealPrice: number
+  originalPrice: number
+  discountPrice: number
   discountPercent: number
 }
