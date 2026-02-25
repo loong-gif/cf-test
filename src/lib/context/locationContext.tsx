@@ -9,16 +9,29 @@ import {
   useState,
 } from 'react'
 import { useGeolocation } from '@/lib/hooks/useGeolocation'
-import {
-  cities,
-  DEFAULT_CITY,
-  findNearestCity,
-  getAreasForCity,
-  getCityById,
-} from '@/lib/mock-data'
 import type { City, LocationArea, LocationState } from '@/types'
 
 const STORAGE_KEY = 'costfinders_location'
+
+const FALLBACK_CITY: City = {
+  id: 'austin',
+  name: 'Austin',
+  state: '',
+  stateCode: '',
+  latitude: 0,
+  longitude: 0,
+  timezone: 'UTC',
+  isActive: true,
+}
+
+const cities: City[] = [FALLBACK_CITY]
+
+const getAreasForCity = () => [] as LocationArea[]
+
+const getCityById = (cityId: string) =>
+  cities.find((city) => city.id === cityId) ?? null
+
+const findNearestCity = () => FALLBACK_CITY
 
 interface StoredLocation {
   cityId: string
@@ -42,7 +55,7 @@ function getInitialState(): LocationState {
   return {
     current: {
       type: 'default',
-      city: DEFAULT_CITY,
+      city: FALLBACK_CITY,
       area: null,
       coordinates: null,
       accuracy: null,
@@ -185,7 +198,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     setState({
       current: {
         type: 'default',
-        city: DEFAULT_CITY,
+        city: FALLBACK_CITY,
         area: null,
         coordinates: null,
         accuracy: null,

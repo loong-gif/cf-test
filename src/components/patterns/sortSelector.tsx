@@ -10,7 +10,7 @@ import {
   Tag,
 } from '@phosphor-icons/react'
 import { useEffect, useRef, useState } from 'react'
-import type { SortOption } from '@/lib/mock-data'
+import type { SortOption } from '@/types/deals'
 
 interface SortSelectorProps {
   value: SortOption

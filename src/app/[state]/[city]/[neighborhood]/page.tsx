@@ -10,23 +10,11 @@ import {
   generateLocationMetadata,
   SITE_CONFIG,
 } from '@/lib/seo/metadata'
-import { getStateBySlug } from '@/lib/mock-data/states'
-import { getCityBySlug, slugifyNeighborhood } from '@/lib/mock-data/cities'
-import {
-  getNeighborhoodBySlug,
-  getNeighborhoodStats,
-  getDealsForNeighborhood,
-  getAllNeighborhoodsWithCityAndState,
-} from '@/lib/mock-data/neighborhoods'
+import { getCityBySlug } from '@/lib/supabase/offers'
 
 // Generate static params for all supported neighborhoods
 export async function generateStaticParams() {
-  const neighborhoodsWithContext = getAllNeighborhoodsWithCityAndState()
-  return neighborhoodsWithContext.map(({ stateSlug, citySlug, neighborhoodSlug }) => ({
-    state: stateSlug,
-    city: citySlug,
-    neighborhood: neighborhoodSlug,
-  }))
+  return []
 }
 
 // Generate metadata for SEO
@@ -38,24 +26,26 @@ export async function generateMetadata({
   params,
 }: MetadataProps): Promise<Metadata> {
   const { state: stateSlug, city: citySlug, neighborhood: neighborhoodSlug } = await params
-  const state = getStateBySlug(stateSlug)
-  const city = getCityBySlug(stateSlug, citySlug)
-  const neighborhood = getNeighborhoodBySlug(stateSlug, citySlug, neighborhoodSlug)
+  const city = await getCityBySlug(citySlug)
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  const neighborhoodName = neighborhoodSlug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
 
-  if (!state || !city || !neighborhood) {
+  if (!city) {
     return {
       title: 'Neighborhood Not Found | CostFinders',
       description: 'The requested neighborhood page could not be found.',
     }
   }
 
-  const stats = getNeighborhoodStats(neighborhood.id)
-
-  // Generate metadata with neighborhood context
   return {
-    ...generateLocationMetadata(city.name, state.name, stats.dealCount),
-    title: `Medspa Deals in ${neighborhood.name}, ${city.name} | CostFinders`,
-    description: `Compare ${stats.dealCount} medspa deals in ${neighborhood.name}, ${city.name}, ${state.name}. Find Botox, fillers, facials, and laser treatments from ${stats.businessCount} local providers.`,
+    ...generateLocationMetadata(city.name, stateName, 0),
+    title: `Medspa Deals in ${neighborhoodName}, ${city.name} | CostFinders`,
+    description: `Explore medspa deals in ${neighborhoodName}, ${city.name}, ${stateName}.`,
   }
 }
 
@@ -66,25 +56,30 @@ interface NeighborhoodPageProps {
 
 export default async function NeighborhoodPage({ params }: NeighborhoodPageProps) {
   const { state: stateSlug, city: citySlug, neighborhood: neighborhoodSlug } = await params
-  const state = getStateBySlug(stateSlug)
-  const city = getCityBySlug(stateSlug, citySlug)
-  const neighborhood = getNeighborhoodBySlug(stateSlug, citySlug, neighborhoodSlug)
+  const city = await getCityBySlug(citySlug)
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  const neighborhoodName = neighborhoodSlug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase())
 
-  if (!state || !city || !neighborhood) {
+  if (!city) {
     notFound()
   }
 
-  const stats = getNeighborhoodStats(neighborhood.id)
-  const deals = getDealsForNeighborhood(neighborhood.id)
+  const stats = { dealCount: 0, businessCount: 0 }
+  const deals: Array<import('@/types').AnonymousDeal> = []
 
   // Build breadcrumb items
   const breadcrumbItems = [
     { name: 'Home', url: SITE_CONFIG.url },
-    { name: state.name, url: buildCanonicalUrl(`/${state.slug}`) },
-    { name: city.name, url: buildCanonicalUrl(`/${state.slug}/${citySlug}`) },
+    { name: stateName, url: buildCanonicalUrl(`/${stateSlug}`) },
+    { name: city.name, url: buildCanonicalUrl(`/${stateSlug}/${citySlug}`) },
     {
-      name: neighborhood.name,
-      url: buildCanonicalUrl(`/${state.slug}/${citySlug}/${neighborhoodSlug}`),
+      name: neighborhoodName,
+      url: buildCanonicalUrl(`/${stateSlug}/${citySlug}/${neighborhoodSlug}`),
     },
   ]
 
@@ -101,9 +96,9 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
             <Breadcrumb
               items={[
                 { label: 'Home', href: '/' },
-                { label: state.name, href: `/${state.slug}` },
-                { label: city.name, href: `/${state.slug}/${citySlug}` },
-                { label: neighborhood.name },
+                { label: stateName, href: `/${stateSlug}` },
+                { label: city.name, href: `/${stateSlug}/${citySlug}` },
+                { label: neighborhoodName },
               ]}
             />
 
@@ -114,13 +109,13 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
                   <MapPin size={24} weight="fill" className="text-brand-primary" />
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-bold text-text-primary">
-                  Medspa Deals in {neighborhood.name}
+                  Medspa Deals in {neighborhoodName}
                 </h1>
               </div>
 
               <p className="text-text-secondary max-w-2xl mb-6">
                 Browse exclusive medspa deals and aesthetic treatments in{' '}
-                {neighborhood.name}, {city.name}. Compare prices on Botox, fillers,
+                {neighborhoodName}, {city.name}. Compare prices on Botox, fillers,
                 laser treatments, and facials from trusted local providers.
               </p>
 
@@ -165,10 +160,10 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
                 </h3>
                 <p className="text-text-secondary max-w-md mx-auto mb-6">
                   We&apos;re working to bring you the best medspa deals in{' '}
-                  {neighborhood.name}. Check back soon for new offers.
+                  {neighborhoodName}. Check back soon for new offers.
                 </p>
                 <Link
-                  href={`/${state.slug}/${citySlug}`}
+                  href={`/${stateSlug}/${citySlug}`}
                   className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-primary/80 transition-colors font-medium"
                 >
                   <MapPin size={18} weight="light" />
@@ -181,7 +176,7 @@ export default async function NeighborhoodPage({ params }: NeighborhoodPageProps
           {/* Back Navigation */}
           <div className="mt-8 pt-6 border-t border-glass-border">
             <Link
-              href={`/${state.slug}/${citySlug}`}
+              href={`/${stateSlug}/${citySlug}`}
               className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
             >
               <MapPin size={18} weight="light" />

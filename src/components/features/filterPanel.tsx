@@ -4,7 +4,7 @@ import { Funnel, X } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { PriceRangeFilter } from '@/components/patterns/priceRangeFilter'
 import { SortSelector } from '@/components/patterns/sortSelector'
-import type { DealFilters, SortOption } from '@/lib/mock-data'
+import type { DealFilters, SortOption } from '@/types/deals'
 
 interface FilterPanelProps {
   filters: DealFilters

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { MapPin, Spinner } from '@phosphor-icons/react'
 import { useLocation } from '@/lib/context/locationContext'
-import { slugifyCity, DEFAULT_CITY } from '@/lib/mock-data'
 import { Card } from '@/components/ui/card'
 
 /**
@@ -21,6 +20,13 @@ export function DealsRedirect() {
   const [status, setStatus] = useState<'detecting' | 'redirecting' | 'error'>(
     'detecting'
   )
+  const fallbackCityName = 'Austin'
+
+  const slugifyCity = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
 
   useEffect(() => {
     async function handleRedirect() {
@@ -48,13 +54,13 @@ export function DealsRedirect() {
         } else {
           // Fallback to default city
           setStatus('redirecting')
-          const citySlug = slugifyCity(DEFAULT_CITY.name)
+          const citySlug = slugifyCity(fallbackCityName)
           router.replace(`/deals/${citySlug}`)
         }
       } catch {
         // On error, redirect to default city
         setStatus('redirecting')
-        const citySlug = slugifyCity(DEFAULT_CITY.name)
+        const citySlug = slugifyCity(fallbackCityName)
         router.replace(`/deals/${citySlug}`)
       }
     }
@@ -106,7 +112,7 @@ export function DealsRedirect() {
           <p className="text-text-secondary">
             {status === 'detecting'
               ? 'Detecting your location to show nearby medspa deals'
-              : `Taking you to deals in ${locationState.current.city?.name || DEFAULT_CITY.name}`}
+              : `Taking you to deals in ${locationState.current.city?.name || fallbackCityName}`}
           </p>
         </Card>
       </div>

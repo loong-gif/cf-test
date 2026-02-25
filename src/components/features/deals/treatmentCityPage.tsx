@@ -8,25 +8,22 @@ import { DealsGrid } from '@/components/features/dealsGrid'
 import { FilterPanel } from '@/components/features/filterPanel'
 import { Card } from '@/components/ui/card'
 import { Faq } from '@/components/ui/faq'
-import {
-  getDealsForTreatmentAndCity,
-  getDealCountForTreatmentAndCity,
-  getBusinessCountForCitySlug,
-  getCategories,
-  getAllActiveCitySlugs,
-  getCityBySlug,
-  type DealFilters,
-  type SortOption,
-  sortDeals,
-} from '@/lib/mock-data'
+import type { CategoryInfo, CityInfo } from '@/lib/supabase/offers'
+import type { DealFilters, SortOption } from '@/types/deals'
+import { sortDeals } from '@/types/deals'
 import { getTreatmentCityFaqs } from '@/lib/seo/faq-content'
-import type { TreatmentCategory } from '@/types'
+import type { AnonymousDeal, TreatmentCategory } from '@/types'
 
 interface TreatmentCityPageProps {
   treatmentSlug: TreatmentCategory
   treatmentName: string
   citySlug: string
   cityName: string
+  deals: AnonymousDeal[]
+  dealCount: number
+  businessCount: number
+  categories: CategoryInfo[]
+  otherCities: CityInfo[]
 }
 
 export function TreatmentCityPage({
@@ -34,25 +31,16 @@ export function TreatmentCityPage({
   treatmentName,
   citySlug,
   cityName,
+  deals,
+  dealCount,
+  businessCount,
+  categories,
+  otherCities,
 }: TreatmentCityPageProps) {
   const router = useRouter()
   const [filters, setFilters] = useState<DealFilters>({})
   const [sortBy, setSortBy] = useState<SortOption>('popular')
 
-  // Get data
-  const dealCount = getDealCountForTreatmentAndCity(treatmentSlug, citySlug)
-  const businessCount = getBusinessCountForCitySlug(citySlug)
-  const categories = getCategories()
-    .filter((c) => c.isActive && c.slug !== treatmentSlug)
-    .slice(0, 5)
-  const otherCities = getAllActiveCitySlugs()
-    .filter((slug) => slug !== citySlug)
-    .slice(0, 4)
-    .map((slug) => {
-      const city = getCityBySlug(slug)
-      return city ? { slug, name: city.name } : null
-    })
-    .filter(Boolean) as Array<{ slug: string; name: string }>
   const faqs = getTreatmentCityFaqs(treatmentName, cityName)
 
   // Calculate active filter count
@@ -65,19 +53,19 @@ export function TreatmentCityPage({
 
   // Filter and sort deals
   const filteredDeals = useMemo(() => {
-    let deals = getDealsForTreatmentAndCity(treatmentSlug, citySlug)
+    let filtered = deals
 
     // Apply price filters
     if (filters.minPrice !== undefined) {
-      deals = deals.filter((d) => d.dealPrice >= filters.minPrice!)
+      filtered = filtered.filter((d) => d.dealPrice >= filters.minPrice!)
     }
     if (filters.maxPrice !== undefined) {
-      deals = deals.filter((d) => d.dealPrice <= filters.maxPrice!)
+      filtered = filtered.filter((d) => d.dealPrice <= filters.maxPrice!)
     }
 
     // Apply sorting
-    return sortDeals(deals, sortBy)
-  }, [treatmentSlug, citySlug, filters, sortBy])
+    return sortDeals(filtered, sortBy)
+  }, [deals, filters, sortBy])
 
   const handleDealClick = (dealId: string) => {
     router.push(`/deals/${dealId}`)
@@ -169,11 +157,11 @@ export function TreatmentCityPage({
             Other Treatments in {cityName}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            {categories.map((category) => (
-              <Link
-                key={category.slug}
-                href={`/deals/${category.slug}/${citySlug}`}
-                className="group"
+        {categories.map((category) => (
+          <Link
+            key={category.slug}
+            href={`/deals/${category.slug}/${citySlug}`}
+            className="group"
               >
                 <Card
                   variant="glass"

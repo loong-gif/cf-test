@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { ClaimBusinessFlow } from '@/components/features/claimBusinessFlow'
 import { Card } from '@/components/ui/card'
-import { getBusinessById } from '@/lib/mock-data/businesses'
+import { getBusinessById } from '@/lib/supabase/offers'
 
 interface ClaimBusinessPageProps {
   params: Promise<{
@@ -13,7 +13,7 @@ export default async function ClaimBusinessPage({
   params,
 }: ClaimBusinessPageProps) {
   const { businessId } = await params
-  const business = getBusinessById(businessId)
+  const business = await getBusinessById(businessId)
 
   if (!business) {
     notFound()

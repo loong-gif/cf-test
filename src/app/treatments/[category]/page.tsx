@@ -10,11 +10,11 @@ import { DealCard } from '@/components/features/dealCard'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
 import { getCategoryFaqs } from '@/lib/seo/faq-content'
 import {
-  getAllCategorySlugs,
-  getCategoryWithStats,
-} from '@/lib/mock-data/categories'
-import { getDealsForCategory, toAnonymousDeal } from '@/lib/mock-data/deals'
-import { getStates } from '@/lib/mock-data/states'
+  getDealsByCategory,
+  getOffersByCategory,
+  listCategories,
+  listCities,
+} from '@/lib/supabase/offers'
 import {
   Syringe,
   Drop,
@@ -36,8 +36,8 @@ const categoryIcons: Record<string, React.ReactNode> = {
 
 // Generate static params for all categories
 export async function generateStaticParams() {
-  const slugs = getAllCategorySlugs()
-  return slugs.map((category) => ({ category }))
+  const categories = await listCategories()
+  return categories.map((category) => ({ category: category.slug }))
 }
 
 // Generate metadata for SEO
@@ -49,7 +49,9 @@ export async function generateMetadata({
   params,
 }: MetadataProps): Promise<Metadata> {
   const { category: categorySlug } = await params
-  const category = getCategoryWithStats(categorySlug)
+  const category = (await listCategories()).find(
+    (cat) => cat.slug === categorySlug,
+  )
 
   if (!category) {
     return {
@@ -58,8 +60,9 @@ export async function generateMetadata({
     }
   }
 
+  const deals = await getOffersByCategory(category.slug)
   const title = `${category.name} Deals & Discounts | CostFinders`
-  const description = `Compare ${category.dealCount} ${category.name.toLowerCase()} deals from ${category.businessCount} verified providers. ${category.description}`
+  const description = `Compare ${deals.length} ${category.name.toLowerCase()} deals from verified providers.`
 
   return {
     title,
@@ -84,23 +87,27 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category: categorySlug } = await params
-  const category = getCategoryWithStats(categorySlug)
+  const category = (await listCategories()).find(
+    (cat) => cat.slug === categorySlug,
+  )
 
   if (!category) {
     notFound()
   }
 
-  const deals = getDealsForCategory(categorySlug).map(toAnonymousDeal)
+  const deals = await getOffersByCategory(category.slug)
+  const fullDeals = await getDealsByCategory(category.slug)
+  const businessCount = new Set(fullDeals.map((deal) => deal.businessId)).size
   const CategoryIcon = categoryIcons[category.icon] || (
     <Tag size={24} weight="fill" className="text-brand-primary" />
   )
 
   // Build state links for related locations section
-  const states = getStates()
-  const stateLinks: RelatedLink[] = states.map((s) => ({
-    label: `${category.name} in ${s.name}`,
-    href: `/${s.slug}`,
-    description: `Browse ${category.name.toLowerCase()} deals in ${s.name}`,
+  const cities = await listCities()
+  const stateLinks: RelatedLink[] = cities.slice(0, 12).map((city) => ({
+    label: `${category.name} in ${city.name}`,
+    href: `/deals/${category.slug}/${city.slug}`,
+    description: `Browse ${category.name.toLowerCase()} deals in ${city.name}`,
   }))
 
   // Get FAQ content for this category
@@ -147,9 +154,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
 
               <p className="text-text-secondary max-w-2xl mb-6">
-                {category.description}. Compare prices from verified medspa
-                providers and find the best deals on {category.name.toLowerCase()}{' '}
-                treatments near you.
+                Compare prices from verified providers and find the best deals on{' '}
+                {category.name.toLowerCase()} treatments near you.
               </p>
 
               {/* Stats Row */}
@@ -164,7 +170,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 <div className="flex items-center gap-2">
                   <Storefront size={20} weight="light" className="text-brand-primary" />
                   <span className="font-semibold text-text-primary">
-                    {category.businessCount}
+                    {businessCount}
                   </span>
                   <span className="text-text-secondary">Verified Providers</span>
                 </div>

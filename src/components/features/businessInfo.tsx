@@ -62,25 +62,35 @@ export function BusinessInfo({ business, deal }: BusinessInfoProps) {
         {/* Contact Info */}
         <div className="space-y-3 pt-2 border-t border-glass-border">
           {/* Address */}
-          <div className="flex items-start gap-2">
-            <MapPin size={18} className="text-text-muted mt-0.5 shrink-0" />
-            <span className="text-sm text-text-secondary">
-              {business.address}
-              <br />
-              {business.city}, {business.state} {business.zipCode}
-            </span>
-          </div>
+          {(business.address || business.city || business.state || business.zipCode) && (
+            <div className="flex items-start gap-2">
+              <MapPin size={18} className="text-text-muted mt-0.5 shrink-0" />
+              <span className="text-sm text-text-secondary">
+                {business.address}
+                {(business.city || business.state || business.zipCode) && (
+                  <>
+                    <br />
+                    {business.city}
+                    {business.state ? `, ${business.state}` : ''}
+                    {business.zipCode ? ` ${business.zipCode}` : ''}
+                  </>
+                )}
+              </span>
+            </div>
+          )}
 
           {/* Phone */}
-          <div className="flex items-center gap-2">
-            <Phone size={18} className="text-text-muted shrink-0" />
-            <a
-              href={`tel:${business.phone.replace(/\D/g, '')}`}
-              className="text-sm text-brand-primary hover:text-brand-secondary transition-colors"
-            >
-              {business.phone}
-            </a>
-          </div>
+          {business.phone && (
+            <div className="flex items-center gap-2">
+              <Phone size={18} className="text-text-muted shrink-0" />
+              <a
+                href={`tel:${business.phone.replace(/\D/g, '')}`}
+                className="text-sm text-brand-primary hover:text-brand-secondary transition-colors"
+              >
+                {business.phone}
+              </a>
+            </div>
+          )}
 
           {/* Website */}
           {business.website && (

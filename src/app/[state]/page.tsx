@@ -1,6 +1,5 @@
 import { MapPin, Storefront, Tag } from '@phosphor-icons/react/dist/ssr'
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { BreadcrumbSchema, FaqSchema } from '@/components/seo'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Faq } from '@/components/ui/faq'
@@ -13,22 +12,18 @@ import {
 } from '@/lib/seo/metadata'
 import { getStateFaqs } from '@/lib/seo/faq-content'
 import {
-  getStates,
-  getStateBySlug,
-  getCitiesForState,
-  getStateStats,
-  slugifyCity,
-} from '@/lib/mock-data/states'
-import {
-  getDealCountForCity,
-  getBusinessCountForCity,
-} from '@/lib/mock-data/locations'
-import { getCategories } from '@/lib/mock-data/categories'
+  getAllActiveCitySlugs,
+  getBusinessCountForCitySlug,
+  getDealCountForCitySlug,
+  getTotalBusinessCount,
+  getTotalDealCount,
+  listCategories,
+  listCities,
+} from '@/lib/supabase/offers'
 
 // Generate static params for all supported states
 export async function generateStaticParams() {
-  const states = getStates()
-  return states.map((state) => ({ state: state.slug }))
+  return [{ state: 'all' }]
 }
 
 // Generate metadata for SEO
@@ -40,17 +35,13 @@ export async function generateMetadata({
   params,
 }: MetadataProps): Promise<Metadata> {
   const { state: stateSlug } = await params
-  const state = getStateBySlug(stateSlug)
-
-  if (!state) {
-    return {
-      title: 'State Not Found | CostFinders',
-      description: 'The requested state page could not be found.',
-    }
-  }
-
-  const stats = getStateStats(state.code)
-  return generateStateMetadata(state.name, stats.cityCount, stats.dealCount)
+  const cityCount = (await listCities()).length
+  const dealCount = await getTotalDealCount()
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  return generateStateMetadata(stateName, cityCount, dealCount)
 }
 
 // Page props with Next.js 15 async params
@@ -60,30 +51,41 @@ interface StatePageProps {
 
 export default async function StatePage({ params }: StatePageProps) {
   const { state: stateSlug } = await params
-  const state = getStateBySlug(stateSlug)
-
-  if (!state) {
-    notFound()
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  const cities = await listCities()
+  const stats = {
+    cityCount: cities.length,
+    dealCount: await getTotalDealCount(),
+    businessCount: await getTotalBusinessCount(),
   }
 
-  const cities = getCitiesForState(state.code)
-  const stats = getStateStats(state.code)
+  const cityCards = await Promise.all(
+    cities.map(async (city) => {
+      const citySlug = city.slug
+      const dealCount = await getDealCountForCitySlug(citySlug)
+      const businessCount = await getBusinessCountForCitySlug(citySlug)
+      return { ...city, slug: citySlug, dealCount, businessCount }
+    }),
+  )
 
   // Build category links for related treatments section
-  const categories = getCategories()
+  const categories = await listCategories()
   const categoryLinks: RelatedLink[] = categories.slice(0, 6).map((cat) => ({
-    label: `${cat.name} in ${state.name}`,
+    label: `${cat.name} in ${stateName}`,
     href: `/treatments/${cat.slug}`,
-    description: `${cat.description.substring(0, 50)}...`,
+    description: `Browse ${cat.name.toLowerCase()} offers in ${stateName}.`,
   }))
 
   // Get FAQ content for this state
-  const faqItems = getStateFaqs(state.name)
+  const faqItems = getStateFaqs(stateName)
 
   // Build breadcrumb items
   const breadcrumbItems = [
     { name: 'Home', url: SITE_CONFIG.url },
-    { name: state.name, url: buildCanonicalUrl(`/${state.slug}`) },
+    { name: stateName, url: buildCanonicalUrl(`/${stateSlug}`) },
   ]
 
   return (
@@ -111,13 +113,13 @@ export default async function StatePage({ params }: StatePageProps) {
                   <MapPin size={24} weight="fill" className="text-brand-primary" />
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-bold text-text-primary">
-                  Medspa Deals in {state.name}
+                  Medspa Deals in {stateName}
                 </h1>
               </div>
 
-              <p className="text-text-secondary max-w-2xl mb-6">
-                Discover the best medspa deals and aesthetic treatments across{' '}
-                {state.name}. Compare prices on Botox, fillers, laser treatments, and
+                <p className="text-text-secondary max-w-2xl mb-6">
+                  Discover the best medspa deals and aesthetic treatments across{' '}
+                {stateName}. Compare prices on Botox, fillers, laser treatments, and
                 more from verified providers in {stats.cityCount}{' '}
                 {stats.cityCount === 1 ? 'city' : 'cities'}.
               </p>
@@ -158,23 +160,17 @@ export default async function StatePage({ params }: StatePageProps) {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {cities.map((city) => {
-                const citySlug = slugifyCity(city.name)
-                const dealCount = getDealCountForCity(city.id)
-                const businessCount = getBusinessCountForCity(city.id)
-
-                return (
-                  <CityCard
-                    key={city.id}
-                    name={city.name}
-                    slug={citySlug}
-                    stateSlug={state.slug}
-                    stateName={state.name}
-                    dealCount={dealCount}
-                    businessCount={businessCount}
-                  />
-                )
-              })}
+              {cityCards.map((city) => (
+                <CityCard
+                  key={city.slug}
+                  name={city.name}
+                  slug={city.slug}
+                  stateSlug={stateSlug}
+                  stateName={stateName}
+                  dealCount={city.dealCount}
+                  businessCount={city.businessCount}
+                />
+              ))}
             </div>
 
             {/* Empty State */}
@@ -185,7 +181,7 @@ export default async function StatePage({ params }: StatePageProps) {
                   No Cities Available Yet
                 </h3>
                 <p className="text-text-secondary max-w-md mx-auto">
-                  We&apos;re expanding to more cities in {state.name} soon. Check back
+                  We&apos;re expanding to more cities in {stateName} soon. Check back
                   later for new locations.
                 </p>
               </div>

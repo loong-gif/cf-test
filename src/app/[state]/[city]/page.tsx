@@ -9,21 +9,19 @@ import {
   generateLocationMetadata,
   SITE_CONFIG,
 } from '@/lib/seo/metadata'
-import { getStateBySlug } from '@/lib/mock-data/states'
 import {
+  getBusinessCountForCitySlug,
   getCityBySlug,
-  getNeighborhoodsForCity,
-  getCityStats,
-  getAllCitiesWithState,
-  slugifyNeighborhood,
-} from '@/lib/mock-data/cities'
+  getDealCountForCitySlug,
+  listCities,
+} from '@/lib/supabase/offers'
 
 // Generate static params for all supported cities
 export async function generateStaticParams() {
-  const citiesWithState = getAllCitiesWithState()
-  return citiesWithState.map(({ stateSlug, citySlug }) => ({
-    state: stateSlug,
-    city: citySlug,
+  const cities = await listCities()
+  return cities.map((city) => ({
+    state: 'all',
+    city: city.slug,
   }))
 }
 
@@ -36,18 +34,21 @@ export async function generateMetadata({
   params,
 }: MetadataProps): Promise<Metadata> {
   const { state: stateSlug, city: citySlug } = await params
-  const state = getStateBySlug(stateSlug)
-  const city = getCityBySlug(stateSlug, citySlug)
+  const city = await getCityBySlug(citySlug)
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
-  if (!state || !city) {
+  if (!city) {
     return {
       title: 'City Not Found | CostFinders',
       description: 'The requested city page could not be found.',
     }
   }
 
-  const stats = getCityStats(city.id)
-  return generateLocationMetadata(city.name, state.name, stats.dealCount)
+  const dealCount = await getDealCountForCitySlug(city.slug)
+  return generateLocationMetadata(city.name, stateName, dealCount)
 }
 
 // Page props with Next.js 15 async params
@@ -57,21 +58,28 @@ interface CityPageProps {
 
 export default async function CityPage({ params }: CityPageProps) {
   const { state: stateSlug, city: citySlug } = await params
-  const state = getStateBySlug(stateSlug)
-  const city = getCityBySlug(stateSlug, citySlug)
+  const city = await getCityBySlug(citySlug)
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
-  if (!state || !city) {
+  if (!city) {
     notFound()
   }
 
-  const neighborhoods = getNeighborhoodsForCity(city.id)
-  const stats = getCityStats(city.id)
+  const neighborhoods: Array<{ id: string; name: string }> = []
+  const stats = {
+    dealCount: await getDealCountForCitySlug(city.slug),
+    businessCount: await getBusinessCountForCitySlug(city.slug),
+    neighborhoodCount: neighborhoods.length,
+  }
 
   // Build breadcrumb items
   const breadcrumbItems = [
     { name: 'Home', url: SITE_CONFIG.url },
-    { name: state.name, url: buildCanonicalUrl(`/${state.slug}`) },
-    { name: city.name, url: buildCanonicalUrl(`/${state.slug}/${citySlug}`) },
+    { name: stateName, url: buildCanonicalUrl(`/${stateSlug}`) },
+    { name: city.name, url: buildCanonicalUrl(`/${stateSlug}/${citySlug}`) },
   ]
 
   return (
@@ -87,7 +95,7 @@ export default async function CityPage({ params }: CityPageProps) {
             <Breadcrumb
               items={[
                 { label: 'Home', href: '/' },
-                { label: state.name, href: `/${state.slug}` },
+                { label: stateName, href: `/${stateSlug}` },
                 { label: city.name },
               ]}
             />
@@ -99,13 +107,13 @@ export default async function CityPage({ params }: CityPageProps) {
                   <MapPin size={24} weight="fill" className="text-brand-primary" />
                 </div>
                 <h1 className="text-3xl sm:text-4xl font-bold text-text-primary">
-                  Medspa Deals in {city.name}, {state.name}
+                  Medspa Deals in {city.name}, {stateName}
                 </h1>
               </div>
 
               <p className="text-text-secondary max-w-2xl mb-6">
                 Discover the best medspa deals and aesthetic treatments in{' '}
-                {city.name}, {state.name}. Compare prices on Botox, fillers, laser
+                {city.name}, {stateName}. Compare prices on Botox, fillers, laser
                 treatments, and more from verified providers across{' '}
                 {stats.neighborhoodCount}{' '}
                 {stats.neighborhoodCount === 1 ? 'neighborhood' : 'neighborhoods'}.
@@ -147,29 +155,18 @@ export default async function CityPage({ params }: CityPageProps) {
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {neighborhoods.map((neighborhood) => {
-                const neighborhoodSlug = slugifyNeighborhood(neighborhood.name)
-                // Mock data: distribute deals/businesses across neighborhoods
-                const neighborhoodDealCount = Math.ceil(
-                  stats.dealCount / Math.max(stats.neighborhoodCount, 1)
-                )
-                const neighborhoodBusinessCount = Math.ceil(
-                  stats.businessCount / Math.max(stats.neighborhoodCount, 1)
-                )
-
-                return (
-                  <NeighborhoodCard
-                    key={neighborhood.id}
-                    name={neighborhood.name}
-                    slug={neighborhoodSlug}
-                    citySlug={citySlug}
-                    stateSlug={state.slug}
-                    cityName={city.name}
-                    dealCount={neighborhoodDealCount}
-                    businessCount={neighborhoodBusinessCount}
-                  />
-                )
-              })}
+              {neighborhoods.map((neighborhood) => (
+                <NeighborhoodCard
+                  key={neighborhood.id}
+                  name={neighborhood.name}
+                  slug={neighborhood.id}
+                  citySlug={citySlug}
+                  stateSlug={stateSlug}
+                  cityName={city.name}
+                  dealCount={0}
+                  businessCount={0}
+                />
+              ))}
             </div>
 
             {/* Empty State */}

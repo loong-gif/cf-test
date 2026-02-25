@@ -14,7 +14,8 @@ import Link from 'next/link'
 import { BreadcrumbSchema } from '@/components/seo'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
-import { getCategories, type Category } from '@/lib/mock-data/categories'
+import type { CategoryInfo } from '@/lib/supabase/offers'
+import { listCategories } from '@/lib/supabase/offers'
 
 // Icon mapping for categories
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -45,7 +46,11 @@ export const metadata: Metadata = {
 }
 
 // Category card component
-function CategoryCard({ category }: { category: Category }) {
+function categoryDescription(name: string) {
+  return `Browse ${name.toLowerCase()} offers and compare prices from providers.`
+}
+
+function CategoryCard({ category }: { category: CategoryInfo }) {
   const icon = categoryIcons[category.icon] || (
     <Tag size={24} weight="fill" className="text-brand-primary" />
   )
@@ -75,7 +80,7 @@ function CategoryCard({ category }: { category: Category }) {
 
       {/* Description */}
       <p className="mt-3 text-sm text-text-secondary line-clamp-2">
-        {category.description}
+        {categoryDescription(category.name)}
       </p>
 
       {/* Stats */}
@@ -93,8 +98,8 @@ function CategoryCard({ category }: { category: Category }) {
   )
 }
 
-export default function TreatmentsPage() {
-  const categories = getCategories().filter((c) => c.isActive)
+export default async function TreatmentsPage() {
+  const categories = await listCategories()
 
   // Build breadcrumb items
   const breadcrumbItems = [
@@ -160,7 +165,7 @@ export default function TreatmentsPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {categories.map((category) => (
-                <CategoryCard key={category.id} category={category} />
+                <CategoryCard key={category.slug} category={category} />
               ))}
             </div>
           </section>

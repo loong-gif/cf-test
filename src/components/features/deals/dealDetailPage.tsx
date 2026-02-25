@@ -25,9 +25,14 @@ const categoryLabels: Record<TreatmentCategory, string> = {
 interface DealDetailPageProps {
   deal: AnonymousDeal
   fullDeal: Deal
+  business: import('@/types').Business | null
 }
 
-export function DealDetailPage({ deal, fullDeal }: DealDetailPageProps) {
+export function DealDetailPage({
+  deal,
+  fullDeal,
+  business,
+}: DealDetailPageProps) {
   return (
     <main className="pt-20 pb-20 md:pb-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
@@ -130,7 +135,7 @@ export function DealDetailPage({ deal, fullDeal }: DealDetailPageProps) {
             <PricingBreakdown deal={deal} />
 
             {/* Business Info / Auth Wall */}
-            <DealSidebar deal={fullDeal} />
+            <DealSidebar deal={fullDeal} business={business} />
 
             {/* Verified Badge */}
             {deal.businessTier === 'paid' && (

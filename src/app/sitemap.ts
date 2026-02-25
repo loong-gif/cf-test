@@ -1,51 +1,22 @@
 import type { MetadataRoute } from 'next'
-import { getStates } from '@/lib/mock-data/states'
-import { getAllCitiesWithState } from '@/lib/mock-data/cities'
-import { getAllNeighborhoodsWithCityAndState } from '@/lib/mock-data/neighborhoods'
-import { getAllProvidersWithCityAndState } from '@/lib/mock-data/providers'
-import { getAllCategorySlugs, getCategoryStateComboSlugs } from '@/lib/mock-data/categories'
-import { getAllDealIds } from '@/lib/mock-data/deals'
-import { getAllActiveCitySlugs, getAllTreatmentCityCombos } from '@/lib/mock-data'
+import {
+  getAllActiveCitySlugs,
+  getAllOfferIds,
+  getAllTreatmentCityCombos,
+  listBusinesses,
+  listCategories,
+  listCities,
+} from '@/lib/supabase/offers'
 
-/**
- * Sitemap Configuration
- *
- * URL Limit: Google supports up to 50,000 URLs per sitemap file.
- * When total URLs exceed ~45,000, switch to generateSitemaps() pattern
- * which creates multiple sitemap files with a sitemap index.
- *
- * Migration path (when needed):
- * 1. Rename this file or create src/app/sitemap/[id]/route.ts
- * 2. Export generateSitemaps() returning array of { id: number }
- * 3. Each sitemap function receives { id } and returns subset of URLs
- * See: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
- *
- * Current section sizes (updated 2026-01-14):
- * - Static pages: 2
- * - State pages: 4
- * - City pages: ~11 (Orange County focus)
- * - Neighborhood pages: ~24
- * - Provider pages: ~6
- * - Category pages: 6
- * - Deal pages: ~12 (active deals)
- * - Category-state combos: 24 (6 categories × 4 states)
- * ─────────────────────────────────
- * Total: ~89 URLs (well under limit)
- */
 const SITEMAP_CONFIG = {
   URL_LIMIT: 50000,
-  MIGRATION_THRESHOLD: 45000, // Switch to generateSitemaps when approaching limit
-  // Fallback date for static content without timestamps
   STATIC_CONTENT_DATE: new Date('2026-01-14'),
 } as const
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai'
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai'
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 1: Static Pages
-  // Count: 2 URLs (homepage, deals listing)
-  // ═══════════════════════════════════════════════════════════════════
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -61,78 +32,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 2: Location Hierarchy - States
-  // Count: 4 URLs (CA, TX, NY, FL)
-  // ═══════════════════════════════════════════════════════════════════
-  const states = getStates()
-  const statePages: MetadataRoute.Sitemap = states.map((state) => ({
-    url: `${baseUrl}/${state.slug}`,
-    lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }))
-
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 3: Location Hierarchy - Cities
-  // Count: ~11 URLs (Orange County cities)
-  // ═══════════════════════════════════════════════════════════════════
-  const citiesWithState = getAllCitiesWithState()
-  const cityPages: MetadataRoute.Sitemap = citiesWithState.map(
-    ({ stateSlug, citySlug }) => ({
-      url: `${baseUrl}/${stateSlug}/${citySlug}`,
+  const statePages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/all`,
       lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
       changeFrequency: 'weekly',
-      priority: 0.7,
-    })
-  )
+      priority: 0.8,
+    },
+  ]
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 4: Location Hierarchy - Neighborhoods
-  // Count: ~24 URLs (2-3 neighborhoods per city)
-  // ═══════════════════════════════════════════════════════════════════
-  const neighborhoodsWithContext = getAllNeighborhoodsWithCityAndState()
-  const neighborhoodPages: MetadataRoute.Sitemap = neighborhoodsWithContext.map(
-    ({ stateSlug, citySlug, neighborhoodSlug }) => ({
-      url: `${baseUrl}/${stateSlug}/${citySlug}/${neighborhoodSlug}`,
-      lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    })
-  )
-
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 5: Provider Pages
-  // Count: ~6 URLs (mock businesses)
-  // ═══════════════════════════════════════════════════════════════════
-  const providersWithContext = getAllProvidersWithCityAndState()
-  const providerPages: MetadataRoute.Sitemap = providersWithContext.map(
-    ({ business, stateSlug, citySlug }) => ({
-      url: `${baseUrl}/${stateSlug}/${citySlug}/provider/${business.slug}`,
-      lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
-      changeFrequency: 'weekly',
-      priority: 0.5,
-    })
-  )
-
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 6: Category/Treatment Pages
-  // Count: 6 URLs (botox, fillers, facials, laser, body, skincare)
-  // ═══════════════════════════════════════════════════════════════════
-  const categorySlugs = getAllCategorySlugs()
-  const categoryPages: MetadataRoute.Sitemap = categorySlugs.map((slug) => ({
-    url: `${baseUrl}/treatments/${slug}`,
+  const cities = await listCities()
+  const cityPages: MetadataRoute.Sitemap = cities.map((city) => ({
+    url: `${baseUrl}/all/${city.slug}`,
     lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
     changeFrequency: 'weekly',
     priority: 0.7,
   }))
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 7: Deal Detail Pages
-  // Count: ~12 URLs (active, approved deals)
-  // Note: Uses actual deal.updatedAt for accurate lastModified
-  // ═══════════════════════════════════════════════════════════════════
-  const dealData = getAllDealIds()
+  const businesses = await listBusinesses()
+  const providerPages: MetadataRoute.Sitemap = businesses.map((business) => ({
+    url: `${baseUrl}/all/${(business.city || 'city')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')}/provider/${business.slug}`,
+    lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
+    changeFrequency: 'weekly',
+    priority: 0.5,
+  }))
+
+  const categories = await listCategories()
+  const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
+    url: `${baseUrl}/treatments/${category.slug}`,
+    lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
+    changeFrequency: 'weekly',
+    priority: 0.7,
+  }))
+
+  const dealData = await getAllOfferIds()
   const dealPages: MetadataRoute.Sitemap = dealData.map(({ id, updatedAt }) => ({
     url: `${baseUrl}/deals/${id}`,
     lastModified: new Date(updatedAt),
@@ -140,29 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 8: Category-State Combination Pages
-  // Count: 24 URLs (6 categories × 4 states)
-  // Route: /treatments/[category]/[state] (e.g., /treatments/botox/california)
-  // Note: Actual pages planned for Phase 31+ ("Botox in California" landing pages)
-  // ═══════════════════════════════════════════════════════════════════
-  const categoryStateCombos = getCategoryStateComboSlugs()
-  const categoryStatePages: MetadataRoute.Sitemap = categoryStateCombos.map(
-    ({ categorySlug, stateSlug }) => ({
-      url: `${baseUrl}/treatments/${categorySlug}/${stateSlug}`,
-      lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
-      changeFrequency: 'weekly',
-      priority: 0.65,
-    })
-  )
-
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 9: City Deals Pages
-  // Count: 6 URLs (one per active city)
-  // Route: /deals/[city] (e.g., /deals/houston)
-  // Target keywords: "medspa deals [city]"
-  // ═══════════════════════════════════════════════════════════════════
-  const citySlugs = getAllActiveCitySlugs()
+  const citySlugs = await getAllActiveCitySlugs()
   const cityDealsPages: MetadataRoute.Sitemap = citySlugs.map((citySlug) => ({
     url: `${baseUrl}/deals/${citySlug}`,
     lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
@@ -170,43 +83,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Section 10: Treatment+City Combination Pages
-  // Count: 36 URLs (6 treatments × 6 cities)
-  // Route: /deals/[treatment]/[city] (e.g., /deals/botox/houston)
-  // Target keywords: "botox houston", "botox deals houston"
-  // ═══════════════════════════════════════════════════════════════════
-  const treatmentCityCombos = getAllTreatmentCityCombos()
+  const treatmentCityCombos = await getAllTreatmentCityCombos()
   const treatmentCityPages: MetadataRoute.Sitemap = treatmentCityCombos.map(
     ({ treatment, city }) => ({
       url: `${baseUrl}/deals/${treatment}/${city}`,
       lastModified: SITEMAP_CONFIG.STATIC_CONTENT_DATE,
       changeFrequency: 'daily',
       priority: 0.75,
-    })
+    }),
   )
 
-  // ═══════════════════════════════════════════════════════════════════
-  // Combine All Sections
-  // Total: ~131 URLs (well under 50,000 limit)
-  // ═══════════════════════════════════════════════════════════════════
   const allUrls = [
-    ...staticPages,          // 2 URLs
-    ...statePages,           // 4 URLs
-    ...cityPages,            // ~11 URLs
-    ...neighborhoodPages,    // ~24 URLs
-    ...providerPages,        // ~6 URLs
-    ...categoryPages,        // 6 URLs
-    ...dealPages,            // ~12 URLs
-    ...categoryStatePages,   // 24 URLs
-    ...cityDealsPages,       // 6 URLs
-    ...treatmentCityPages,   // 36 URLs
+    ...staticPages,
+    ...statePages,
+    ...cityPages,
+    ...providerPages,
+    ...categoryPages,
+    ...dealPages,
+    ...cityDealsPages,
+    ...treatmentCityPages,
   ]
 
-  // Log URL count in development for monitoring
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[Sitemap] Total URLs: ${allUrls.length}`)
-  }
-
-  return allUrls
+  return allUrls.slice(0, SITEMAP_CONFIG.URL_LIMIT)
 }

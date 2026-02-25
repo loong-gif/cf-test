@@ -9,27 +9,31 @@ import { FilterPanel } from '@/components/features/filterPanel'
 import { CategoryFilter } from '@/components/patterns/categoryFilter'
 import { Card } from '@/components/ui/card'
 import { Faq } from '@/components/ui/faq'
-import {
-  getDealsForCitySlug,
-  getDealsForTreatmentAndCity,
-  getDealCountForCitySlug,
-  getBusinessCountForCitySlug,
-  getCategories,
-  getAllActiveCitySlugs,
-  getCityBySlug,
-  type DealFilters,
-  type SortOption,
-  sortDeals,
-} from '@/lib/mock-data'
+import type { CategoryInfo, CityInfo } from '@/lib/supabase/offers'
+import type { DealFilters, SortOption } from '@/types/deals'
+import { sortDeals } from '@/types/deals'
 import { getCityDealsFaqs } from '@/lib/seo/faq-content'
-import type { TreatmentCategory } from '@/types'
+import type { AnonymousDeal, TreatmentCategory } from '@/types'
 
 interface CityDealsPageProps {
   citySlug: string
   cityName: string
+  deals: AnonymousDeal[]
+  dealCount: number
+  businessCount: number
+  categories: CategoryInfo[]
+  otherCities: CityInfo[]
 }
 
-export function CityDealsPage({ citySlug, cityName }: CityDealsPageProps) {
+export function CityDealsPage({
+  citySlug,
+  cityName,
+  deals,
+  dealCount,
+  businessCount,
+  categories,
+  otherCities,
+}: CityDealsPageProps) {
   const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState<
     TreatmentCategory | 'all'
@@ -37,18 +41,6 @@ export function CityDealsPage({ citySlug, cityName }: CityDealsPageProps) {
   const [filters, setFilters] = useState<DealFilters>({})
   const [sortBy, setSortBy] = useState<SortOption>('popular')
 
-  // Get data
-  const dealCount = getDealCountForCitySlug(citySlug)
-  const businessCount = getBusinessCountForCitySlug(citySlug)
-  const categories = getCategories().filter((c) => c.isActive)
-  const otherCities = getAllActiveCitySlugs()
-    .filter((slug) => slug !== citySlug)
-    .slice(0, 4)
-    .map((slug) => {
-      const city = getCityBySlug(slug)
-      return city ? { slug, name: city.name } : null
-    })
-    .filter(Boolean) as Array<{ slug: string; name: string }>
   const faqs = getCityDealsFaqs(cityName)
 
   // Calculate active filter count
@@ -61,22 +53,23 @@ export function CityDealsPage({ citySlug, cityName }: CityDealsPageProps) {
 
   // Filter and sort deals
   const filteredDeals = useMemo(() => {
-    let deals =
-      selectedCategory !== 'all'
-        ? getDealsForTreatmentAndCity(selectedCategory, citySlug)
-        : getDealsForCitySlug(citySlug)
+    let filtered = deals
+
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter((deal) => deal.category === selectedCategory)
+    }
 
     // Apply price filters
     if (filters.minPrice !== undefined) {
-      deals = deals.filter((d) => d.dealPrice >= filters.minPrice!)
+      filtered = filtered.filter((d) => d.dealPrice >= filters.minPrice!)
     }
     if (filters.maxPrice !== undefined) {
-      deals = deals.filter((d) => d.dealPrice <= filters.maxPrice!)
+      filtered = filtered.filter((d) => d.dealPrice <= filters.maxPrice!)
     }
 
     // Apply sorting
-    return sortDeals(deals, sortBy)
-  }, [citySlug, selectedCategory, filters, sortBy])
+    return sortDeals(filtered, sortBy)
+  }, [deals, selectedCategory, filters, sortBy])
 
   const handleDealClick = (dealId: string) => {
     router.push(`/deals/${dealId}`)

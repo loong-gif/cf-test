@@ -1,16 +1,16 @@
 'use client'
 
 import { useAuth } from '@/lib/context/authContext'
-import { getBusinessForDeal } from '@/lib/mock-data'
 import { ClaimCTA } from '@/components/features/claimCTA'
 import { BusinessInfo } from '@/components/features/businessInfo'
-import type { Deal } from '@/types'
+import type { Business, Deal } from '@/types'
 
 interface DealSidebarProps {
   deal: Deal
+  business: Business | null
 }
 
-export function DealSidebar({ deal }: DealSidebarProps) {
+export function DealSidebar({ deal, business }: DealSidebarProps) {
   const { state } = useAuth()
   const { isAuthenticated, user, isLoading } = state
 
@@ -35,8 +35,6 @@ export function DealSidebar({ deal }: DealSidebarProps) {
 
   // Show BusinessInfo for authenticated + verified users
   if (isAuthenticated && isVerified) {
-    const business = getBusinessForDeal(deal.id)
-
     if (business) {
       return <BusinessInfo business={business} deal={deal} />
     }

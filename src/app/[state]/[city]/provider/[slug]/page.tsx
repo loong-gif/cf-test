@@ -14,21 +14,23 @@ import { BreadcrumbSchema } from '@/components/seo'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DealCard } from '@/components/features/dealCard'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
-import { getStateBySlug, slugifyCity } from '@/lib/mock-data/states'
-import { getCityBySlug } from '@/lib/mock-data/cities'
 import {
-  getProviderBySlug,
-  getDealsForProvider,
-  getAllProvidersWithCityAndState,
-  getProviderStats,
-} from '@/lib/mock-data/providers'
+  getBusinessBySlug,
+  getOffersForBusiness,
+  listBusinesses,
+} from '@/lib/supabase/offers'
 
 // Generate static params for all supported providers
 export async function generateStaticParams() {
-  const providersWithContext = getAllProvidersWithCityAndState()
-  return providersWithContext.map(({ business, stateSlug, citySlug }) => ({
-    state: stateSlug,
-    city: citySlug,
+  const businesses = await listBusinesses()
+  const slugify = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+  return businesses.map((business) => ({
+    state: 'all',
+    city: slugify(business.city || 'city'),
     slug: business.slug,
   }))
 }
@@ -42,25 +44,28 @@ export async function generateMetadata({
   params,
 }: MetadataProps): Promise<Metadata> {
   const { state: stateSlug, city: citySlug, slug: providerSlug } = await params
-  const state = getStateBySlug(stateSlug)
-  const city = getCityBySlug(stateSlug, citySlug)
-  const provider = getProviderBySlug(stateSlug, citySlug, providerSlug)
+  const provider = await getBusinessBySlug(providerSlug)
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
-  if (!state || !city || !provider) {
+  if (!provider) {
     return {
       title: 'Provider Not Found | CostFinders',
       description: 'The requested provider page could not be found.',
     }
   }
 
-  const stats = getProviderStats(provider.id)
+  const deals = await getOffersForBusiness(provider.id)
+  const stats = { activeDealCount: deals.length }
 
   return {
-    title: `${provider.name} - Medspa Deals in ${city.name}, ${state.name} | CostFinders`,
-    description: `Compare ${stats.activeDealCount} medspa deals from ${provider.name} in ${city.name}, ${state.name}. Find exclusive prices on Botox, fillers, facials, and laser treatments.`,
+    title: `${provider.name} - Medspa Deals in ${provider.city}, ${stateName} | CostFinders`,
+    description: `Compare ${stats.activeDealCount} medspa deals from ${provider.name} in ${provider.city}, ${stateName}. Find exclusive prices on Botox, fillers, facials, and laser treatments.`,
     openGraph: {
       title: `${provider.name} - Medspa Deals | CostFinders`,
-      description: `Compare ${stats.activeDealCount} medspa deals from ${provider.name} in ${city.name}.`,
+      description: `Compare ${stats.activeDealCount} medspa deals from ${provider.name} in ${provider.city}.`,
       type: 'website',
     },
   }
@@ -73,26 +78,28 @@ interface ProviderPageProps {
 
 export default async function ProviderPage({ params }: ProviderPageProps) {
   const { state: stateSlug, city: citySlug, slug: providerSlug } = await params
-  const state = getStateBySlug(stateSlug)
-  const city = getCityBySlug(stateSlug, citySlug)
-  const provider = getProviderBySlug(stateSlug, citySlug, providerSlug)
+  const provider = await getBusinessBySlug(providerSlug)
+  const stateName =
+    stateSlug === 'all'
+      ? 'All Locations'
+      : stateSlug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
-  if (!state || !city || !provider) {
+  if (!provider) {
     notFound()
   }
 
-  const stats = getProviderStats(provider.id)
-  const deals = getDealsForProvider(provider.id)
+  const deals = await getOffersForBusiness(provider.id)
+  const stats = { activeDealCount: deals.length }
 
   // Build breadcrumb items
   const breadcrumbItems = [
     { name: 'Home', url: SITE_CONFIG.url },
-    { name: state.name, url: buildCanonicalUrl(`/${state.slug}`) },
-    { name: city.name, url: buildCanonicalUrl(`/${state.slug}/${citySlug}`) },
+    { name: stateName, url: buildCanonicalUrl(`/${stateSlug}`) },
+    { name: provider.city, url: buildCanonicalUrl(`/${stateSlug}/${citySlug}`) },
     {
       name: provider.name,
       url: buildCanonicalUrl(
-        `/${state.slug}/${citySlug}/provider/${provider.slug}`
+        `/${stateSlug}/${citySlug}/provider/${provider.slug}`
       ),
     },
   ]
@@ -110,8 +117,8 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
             <Breadcrumb
               items={[
                 { label: 'Home', href: '/' },
-                { label: state.name, href: `/${state.slug}` },
-                { label: city.name, href: `/${state.slug}/${citySlug}` },
+                { label: stateName, href: `/${stateSlug}` },
+                { label: provider.city, href: `/${stateSlug}/${citySlug}` },
                 { label: provider.name },
               ]}
             />
@@ -155,7 +162,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                 <div className="flex items-center gap-2">
                   <MapPin size={20} weight="light" className="text-brand-primary" />
                   <span className="text-text-secondary">
-                    {city.name}, {state.name}
+                    {provider.city}, {stateName}
                   </span>
                 </div>
               </div>
@@ -219,11 +226,11 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                   {provider.name}. Check back soon for new offers.
                 </p>
                 <Link
-                  href={`/${state.slug}/${citySlug}`}
+                  href={`/${stateSlug}/${citySlug}`}
                   className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-primary/80 transition-colors font-medium"
                 >
                   <MapPin size={18} weight="light" />
-                  Browse other providers in {city.name}
+                  Browse other providers in {provider.city}
                 </Link>
               </div>
             )}
@@ -232,11 +239,11 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
           {/* Back Navigation */}
           <div className="mt-8 pt-6 border-t border-glass-border">
             <Link
-              href={`/${state.slug}/${citySlug}`}
+              href={`/${stateSlug}/${citySlug}`}
               className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors"
             >
               <MapPin size={18} weight="light" />
-              Back to {city.name} providers
+              Back to {provider.city} providers
             </Link>
           </div>
         </div>
