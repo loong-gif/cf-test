@@ -207,6 +207,10 @@ function mapOfferToDeal(
     sourceName: offer.source_name ?? undefined,
     templateType: offer.template_type ?? undefined,
     serviceName: offer.service_name ?? undefined,
+    serviceCategoryRaw: offer.service_category ?? undefined,
+    serviceCategorySlug: offer.service_category
+      ? slugify(offer.service_category)
+      : undefined,
     offerRawText: offer.offer_raw_text ?? undefined,
     eligibility: offer.eligibility ?? undefined,
     originalUnitPrice: offer.original_unit_price ?? undefined,

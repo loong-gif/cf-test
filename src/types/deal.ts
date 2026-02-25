@@ -42,6 +42,8 @@ export interface Deal {
   sourceName?: string
   templateType?: string
   serviceName?: string
+  serviceCategoryRaw?: string
+  serviceCategorySlug?: string
   offerRawText?: string
   eligibility?: string
   originalUnitPrice?: string

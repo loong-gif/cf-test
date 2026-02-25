@@ -28,17 +28,41 @@ export function DealsRedirect() {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
+  const mapCategory = (value: string) => {
+    const normalized = value.toLowerCase()
+    if (normalized.includes('botox') || normalized.includes('tox'))
+      return 'botox'
+    if (normalized.includes('filler')) return 'fillers'
+    if (normalized.includes('facial') || normalized.includes('hydrafacial'))
+      return 'facials'
+    if (normalized.includes('laser') || normalized.includes('ipl'))
+      return 'laser'
+    if (normalized.includes('body')) return 'body'
+    if (normalized.includes('skin')) return 'skincare'
+    return 'botox'
+  }
+
   useEffect(() => {
     async function handleRedirect() {
       try {
         // If user already has a city (from previous session or manual selection)
+        const searchParams =
+          typeof window !== 'undefined'
+            ? new URLSearchParams(window.location.search)
+            : null
+        const categoryParam = searchParams?.get('category') ?? ''
+
         if (
           locationState.current.city &&
           locationState.current.type !== 'default'
         ) {
           setStatus('redirecting')
           const citySlug = slugifyCity(locationState.current.city.name)
-          router.replace(`/deals/${citySlug}`)
+          if (categoryParam) {
+            router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
+          } else {
+            router.replace(`/deals/${citySlug}`)
+          }
           return
         }
 
@@ -50,18 +74,35 @@ export function DealsRedirect() {
         if (locationState.current.city) {
           setStatus('redirecting')
           const citySlug = slugifyCity(locationState.current.city.name)
-          router.replace(`/deals/${citySlug}`)
+          if (categoryParam) {
+            router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
+          } else {
+            router.replace(`/deals/${citySlug}`)
+          }
         } else {
           // Fallback to default city
           setStatus('redirecting')
           const citySlug = slugifyCity(fallbackCityName)
-          router.replace(`/deals/${citySlug}`)
+          if (categoryParam) {
+            router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
+          } else {
+            router.replace(`/deals/${citySlug}`)
+          }
         }
       } catch {
         // On error, redirect to default city
         setStatus('redirecting')
+        const searchParams =
+          typeof window !== 'undefined'
+            ? new URLSearchParams(window.location.search)
+            : null
+        const categoryParam = searchParams?.get('category') ?? ''
         const citySlug = slugifyCity(fallbackCityName)
-        router.replace(`/deals/${citySlug}`)
+        if (categoryParam) {
+          router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
+        } else {
+          router.replace(`/deals/${citySlug}`)
+        }
       }
     }
 
@@ -75,9 +116,18 @@ export function DealsRedirect() {
       locationState.current.city &&
       locationState.current.type === 'detected'
     ) {
+      const searchParams =
+        typeof window !== 'undefined'
+          ? new URLSearchParams(window.location.search)
+          : null
+      const categoryParam = searchParams?.get('category') ?? ''
       setStatus('redirecting')
       const citySlug = slugifyCity(locationState.current.city.name)
-      router.replace(`/deals/${citySlug}`)
+      if (categoryParam) {
+        router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
+      } else {
+        router.replace(`/deals/${citySlug}`)
+      }
     }
   }, [locationState.current.city, locationState.current.type, status, router])
 
