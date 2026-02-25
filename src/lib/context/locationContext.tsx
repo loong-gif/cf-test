@@ -31,7 +31,7 @@ const getAreasForCity = (_cityId: string) => [] as LocationArea[]
 const getCityById = (cityId: string) =>
   cities.find((city) => city.id === cityId) ?? null
 
-const findNearestCity = () => FALLBACK_CITY
+const findNearestCity = (_lat: number, _lng: number) => FALLBACK_CITY
 
 interface StoredLocation {
   cityId: string
