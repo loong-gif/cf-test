@@ -1,21 +1,8 @@
-import { getCategories } from '@/lib/mock-data/categories'
-import { getDealsByCategory } from '@/lib/mock-data'
 import { CategoryPreviewCard } from './categoryPreviewCard'
+import { getHomepageCategoryPreviews } from '@/lib/supabase/homepage'
 
-// Show only the main 4 categories
-const FEATURED_CATEGORY_SLUGS = ['botox', 'fillers', 'facials', 'laser'] as const
-
-export function CategoryPreviewSection() {
-  const allCategories = getCategories()
-  const featuredCategories = allCategories.filter((cat) =>
-    FEATURED_CATEGORY_SLUGS.includes(cat.slug as typeof FEATURED_CATEGORY_SLUGS[number])
-  )
-
-  // Get top 3 deals for each category
-  const categoriesWithDeals = featuredCategories.map((category) => ({
-    category,
-    deals: getDealsByCategory(category.slug).slice(0, 3),
-  }))
+export async function CategoryPreviewSection() {
+  const categoriesWithDeals = await getHomepageCategoryPreviews()
 
   return (
     <section className="py-8">

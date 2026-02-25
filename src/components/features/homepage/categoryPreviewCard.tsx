@@ -8,8 +8,7 @@ import {
   Sparkle,
   Syringe,
 } from '@phosphor-icons/react'
-import type { AnonymousDeal } from '@/types'
-import type { Category } from '@/lib/mock-data/categories'
+import type { HomepageCategory, HomepageDealPreview } from '@/types/homepage'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 
@@ -22,8 +21,8 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; weight?: 'lig
 }
 
 interface CategoryPreviewCardProps {
-  category: Category
-  deals: AnonymousDeal[]
+  category: HomepageCategory
+  deals: HomepageDealPreview[]
 }
 
 export function CategoryPreviewCard({ category, deals }: CategoryPreviewCardProps) {
@@ -39,11 +38,13 @@ export function CategoryPreviewCard({ category, deals }: CategoryPreviewCardProp
           </div>
           <div>
             <h3 className="font-semibold text-text-primary">{category.name}</h3>
-            <p className="text-xs text-text-tertiary">{category.dealCount} deals</p>
+            <p className="text-xs text-text-tertiary">
+              {category.dealCount} offers
+            </p>
           </div>
         </div>
         <Link
-          href={`/deals?category=${category.slug}`}
+          href={`/deals?category=${encodeURIComponent(category.slug)}`}
           className="flex items-center gap-1 text-sm text-brand-primary hover:text-brand-secondary transition-colors"
         >
           See all
@@ -68,12 +69,20 @@ export function CategoryPreviewCard({ category, deals }: CategoryPreviewCardProp
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <span className="font-bold text-brand-primary">
-                ${deal.dealPrice}
-              </span>
-              <Badge variant="brand" size="sm">
-                {deal.discountPercent}% off
-              </Badge>
+              {deal.dealPrice > 0 ? (
+                <span className="font-bold text-brand-primary">
+                  ${deal.dealPrice}
+                </span>
+              ) : (
+                <span className="text-xs text-text-tertiary">
+                  Contact for price
+                </span>
+              )}
+              {deal.discountPercent > 0 && (
+                <Badge variant="brand" size="sm">
+                  {deal.discountPercent}% off
+                </Badge>
+              )}
             </div>
           </Link>
         ))}
