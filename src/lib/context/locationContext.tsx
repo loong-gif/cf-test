@@ -26,7 +26,7 @@ const FALLBACK_CITY: City = {
 
 const cities: City[] = [FALLBACK_CITY]
 
-const getAreasForCity = () => [] as LocationArea[]
+const getAreasForCity = (_cityId: string) => [] as LocationArea[]
 
 const getCityById = (cityId: string) =>
   cities.find((city) => city.id === cityId) ?? null
