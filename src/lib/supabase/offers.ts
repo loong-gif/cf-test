@@ -169,16 +169,14 @@ function mapOfferToDeal(
   business?: BusinessRow | null,
 ): { deal: Deal; anonymous: AnonymousDeal; business: Business | null } {
   const category = mapCategory(offer.service_category)
-  const originalPrice =
-    parsePrice(offer.original_price) ??
-    parsePrice(offer.discount_price) ??
-    0
+  const originalPrice = parsePrice(offer.original_price) ?? 0
   const dealPrice =
-    parsePrice(offer.discount_price) ??
-    toNumber(offer.delivered_unit, 0)
+    parsePrice(offer.discount_price) ?? (originalPrice > 0 ? originalPrice : 0)
   const discountPercent =
     toNumber(offer.discount_percent, 0) ||
-    (originalPrice > 0 ? Math.round(((originalPrice - dealPrice) / originalPrice) * 100) : 0)
+    (originalPrice > 0 && dealPrice > 0 && originalPrice !== dealPrice
+      ? Math.round(((originalPrice - dealPrice) / originalPrice) * 100)
+      : 0)
   const businessInfo = mapBusiness(business)
   const locationArea = businessInfo?.city ?? 'Local area'
   const createdAt = offer.created_at ?? new Date().toISOString()
