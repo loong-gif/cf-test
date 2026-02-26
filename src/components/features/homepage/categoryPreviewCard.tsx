@@ -103,6 +103,17 @@ export function CategoryPreviewCard({ category, deals }: CategoryPreviewCardProp
                     {deal.discountPercent}% off
                   </Badge>
                 )}
+              {deal.originalPrice > 0 &&
+                deal.discountPrice > 0 &&
+                deal.originalPrice !== deal.discountPrice && (
+                  <Badge
+                    variant="default"
+                    size="sm"
+                    className="bg-black/30 text-white border-white/20"
+                  >
+                    ${formatMoney(deal.originalPrice - deal.discountPrice)} off
+                  </Badge>
+                )}
             </div>
           </Link>
         ))}

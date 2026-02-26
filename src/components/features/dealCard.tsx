@@ -27,6 +27,9 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
   const isGrid = variant === 'grid'
   const showDiscount =
     deal.originalPrice > 0 && deal.originalPrice !== deal.dealPrice
+  const discountAmount = showDiscount
+    ? Math.max(0, deal.originalPrice - deal.dealPrice)
+    : 0
 
   return (
     <Card
@@ -69,6 +72,15 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
               className="bg-black/40 text-white border-white/20"
             >
               {deal.discountPercent}% OFF
+            </Badge>
+          )}
+          {showDiscount && discountAmount > 0 && (
+            <Badge
+              variant="default"
+              size="sm"
+              className="bg-black/40 text-white border-white/20"
+            >
+              ${formatMoney(discountAmount)} OFF
             </Badge>
           )}
         </div>
