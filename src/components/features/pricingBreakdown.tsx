@@ -9,10 +9,11 @@ interface PricingBreakdownProps {
 }
 
 export function PricingBreakdown({ deal }: PricingBreakdownProps) {
+  const hasPrice = deal.dealPrice > 0
   const savings = deal.originalPrice - deal.dealPrice
   const hasUnitRange = deal.minUnits || deal.maxUnits
   const showDiscount =
-    deal.originalPrice > 0 && deal.originalPrice !== deal.dealPrice
+    hasPrice && deal.originalPrice > 0 && deal.originalPrice !== deal.dealPrice
   const exampleUnits = deal.minUnits ?? 20
   const exampleTotal = deal.dealPrice * exampleUnits
   const exampleSavings = savings * exampleUnits
@@ -22,10 +23,18 @@ export function PricingBreakdown({ deal }: PricingBreakdownProps) {
       {/* Main Pricing */}
       <div className="space-y-3">
         <div className="flex items-baseline gap-3">
-          <span className="text-3xl sm:text-4xl font-bold text-brand-primary">
-            ${formatMoney(deal.dealPrice)}
-          </span>
-          <span className="text-text-secondary">{deal.unit}</span>
+          {hasPrice ? (
+            <>
+              <span className="text-3xl sm:text-4xl font-bold text-brand-primary">
+                ${formatMoney(deal.dealPrice)}
+              </span>
+              <span className="text-text-secondary">{deal.unit}</span>
+            </>
+          ) : (
+            <span className="text-lg text-text-secondary">
+              Contact for price
+            </span>
+          )}
         </div>
 
         {showDiscount && (
@@ -73,7 +82,7 @@ export function PricingBreakdown({ deal }: PricingBreakdownProps) {
       )}
 
       {/* Example Calculation */}
-      {hasUnitRange && showDiscount && (
+      {hasUnitRange && showDiscount && hasPrice && (
         <div className="border-t border-glass-border pt-4 mt-4 space-y-2">
           <p className="text-sm font-medium text-text-secondary">
             Example: {exampleUnits} units
