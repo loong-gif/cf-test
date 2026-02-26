@@ -701,7 +701,7 @@ export async function getOffersForBusiness(businessId: string) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_price,original_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .eq('business_id', Number(businessId))
     .order('discount_percent', { ascending: false })
