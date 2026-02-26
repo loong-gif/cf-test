@@ -47,8 +47,8 @@ export function GlobalHeader() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <MagnifyingGlass
-              size={24}
-              weight="bold"
+              size={26}
+              weight="fill"
               className="text-brand-primary"
             />
             <span className="font-semibold text-text-primary">CostFinders</span>

@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 import { BlurredImage } from '@/components/patterns/blurredImage'
 import { SaveButton } from '@/components/patterns/saveButton'
 import type { AnonymousDeal, TreatmentCategory } from '@/types'
+import { formatMoney } from '@/lib/format'
 
 interface DealCardProps {
   deal: AnonymousDeal
@@ -24,6 +25,8 @@ const categoryLabels: Record<TreatmentCategory, string> = {
 
 export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
   const isGrid = variant === 'grid'
+  const showDiscount =
+    deal.originalPrice > 0 && deal.originalPrice !== deal.dealPrice
 
   return (
     <Card
@@ -59,14 +62,20 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
         {/* Save Button & Discount Badge - Top Right (above blur) */}
         <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
           <SaveButton dealId={deal.id} size="sm" />
-          <Badge variant="brand" size="sm">
-            {deal.discountPercent}% OFF
-          </Badge>
+          {showDiscount && deal.discountPercent > 0 && (
+            <Badge
+              variant="default"
+              size="sm"
+              className="bg-black/40 text-white border-white/20"
+            >
+              {deal.discountPercent}% OFF
+            </Badge>
+          )}
         </div>
 
         {/* Sponsored Indicator - Bottom Left (above blur) */}
         {deal.isSponsored && (
-          <span className="absolute bottom-3 left-3 z-10 text-xs text-text-tertiary bg-bg-tertiary/80 backdrop-blur-sm px-2 py-1 rounded">
+          <span className="absolute bottom-3 left-3 z-10 text-xs text-white/80 bg-black/40 backdrop-blur-sm px-2 py-1 rounded">
             Sponsored
           </span>
         )}
@@ -87,20 +96,22 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
         )}
 
         {/* Pricing */}
-        <div className="mt-2 flex items-baseline gap-2">
+        <div className="mt-2 flex items-baseline gap-2 flex-wrap">
           <span className="text-xl font-bold text-brand-primary">
-            ${deal.dealPrice}
+            ${formatMoney(deal.dealPrice)}
           </span>
-          <span className="text-sm text-text-tertiary line-through">
-            ${deal.originalPrice}
-          </span>
+          {deal.unit && (
+            <span className="text-xs text-text-secondary">/ {deal.unit}</span>
+          )}
+          {showDiscount && (
+            <span className="text-xs text-text-tertiary line-through">
+              ${formatMoney(deal.originalPrice)}
+            </span>
+          )}
         </div>
 
-        {/* Unit Info */}
-        <p className="mt-1 text-xs text-text-tertiary">{deal.unit}</p>
-
         {/* Location & Rating */}
-        <div className="mt-3 flex items-center gap-4 text-sm text-text-secondary">
+        <div className="mt-2 flex items-center gap-4 text-sm text-text-secondary">
           <span className="flex items-center gap-1">
             <MapPin size={16} weight="light" className="text-text-tertiary" />
             {deal.locationArea}
@@ -114,11 +125,22 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
           </span>
         </div>
 
-        {/* Business Hidden Section */}
+        {/* Business/Source Section */}
         <div className="mt-3 pt-3 border-t border-glass-border flex items-center justify-between">
-          <div className="flex items-center gap-2 text-text-tertiary">
-            <Lock size={16} weight="light" />
-            <span className="text-sm">Business details hidden</span>
+          <div className="flex items-center gap-2 text-text-secondary">
+            <ShieldCheck size={16} weight="light" />
+            {deal.sourceUrl ? (
+              <a
+                href={deal.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-text-primary hover:text-text-secondary transition-colors truncate max-w-[180px]"
+              >
+                {deal.sourceName || 'View source'}
+              </a>
+            ) : (
+              <span className="text-sm">{deal.sourceName || 'Source'}</span>
+            )}
           </div>
 
           {/* Verified Badge for Paid Tier */}

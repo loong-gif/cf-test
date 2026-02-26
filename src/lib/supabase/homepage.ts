@@ -3,11 +3,12 @@ import { createSupabaseServerClient } from './server'
 
 type DealRow = {
   id: number
+  business_id: number | null
   service_name: string | null
   service_category: string | null
   discount_percent: number | null
-  discount_unit_price: string | null
-  original_unit_price: string | null
+  discount_price: string | null
+  original_price: string | null
   delivered_unit: number | null
   unit_type: string | null
   service_area: string | null
@@ -22,17 +23,30 @@ type CategoryBucket = {
   dealCount: number
 }
 
-function toNumber(value: number | null | undefined, fallback = 0): number {
-  return typeof value === 'number' && !Number.isNaN(value) ? value : fallback
+function toNumber(
+  value: number | string | null | undefined,
+  fallback = 0,
+): number {
+  if (typeof value === 'number') {
+    return Number.isNaN(value) ? fallback : value
+  }
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value.replace(/[^0-9.]/g, ''))
+    return Number.isNaN(parsed) ? fallback : parsed
+  }
+  return fallback
 }
 
 function toText(value: string | null | undefined, fallback: string): string {
   return value && value.length > 0 ? value : fallback
 }
 
-function parsePrice(text: string | null | undefined): number | null {
+function parsePrice(text: string | number | null | undefined): number | null {
+  if (typeof text === 'number') {
+    return Number.isNaN(text) ? null : text
+  }
   if (!text) return null
-  const cleaned = text.replace(/[^0-9.]/g, '')
+  const cleaned = String(text).replace(/[^0-9.]/g, '')
   const parsed = Number.parseFloat(cleaned)
   return Number.isNaN(parsed) ? null : parsed
 }
@@ -100,7 +114,7 @@ export async function getHomepageCategoryPreviews(): Promise<
       const { data: deals, error: dealError } = await supabase
         .from('promo_offer_master')
         .select(
-          'id,service_name,service_category,discount_percent,discount_unit_price,original_unit_price,delivered_unit,unit_type,service_area,source_name,template_type',
+          'id,business_id,service_name,service_category,discount_percent,discount_price,original_price,delivered_unit,unit_type,source_name,template_type',
         )
         .eq('service_category', category.name)
         .order('discount_percent', { ascending: false })
@@ -112,11 +126,37 @@ export async function getHomepageCategoryPreviews(): Promise<
         )
       }
 
-      const dealPreviews = (deals ?? []).map((deal: DealRow) => {
+      const dealRows = (deals ?? []) as DealRow[]
+      const businessIds = dealRows
+        .map((deal) => deal.business_id)
+        .filter((id): id is number => typeof id === 'number')
+      const businessMap =
+        businessIds.length > 0
+          ? await supabase
+              .from('master_business_info')
+              .select('business_id,city')
+              .in('business_id', businessIds)
+          : { data: [], error: null }
+
+      if (businessMap.error) {
+        throw new Error(
+          `Failed to load businesses for ${category.slug}: ${businessMap.error.message}`,
+        )
+      }
+
+      const cityByBusinessId = new Map<number, string>()
+      for (const row of businessMap.data ?? []) {
+        const entry = row as { business_id: number; city: string | null }
+        if (entry.business_id && entry.city) {
+          cityByBusinessId.set(entry.business_id, entry.city)
+        }
+      }
+
+      const dealPreviews = dealRows.map((deal: DealRow) => {
         const discountPercent = toNumber(deal.discount_percent, 0)
-        const originalPrice = parsePrice(deal.original_unit_price) ?? 0
+        const originalPrice = parsePrice(deal.original_price) ?? 0
         const discountPrice =
-          parsePrice(deal.discount_unit_price) ??
+          parsePrice(deal.discount_price) ??
           (originalPrice > 0 ? originalPrice : null)
         const deliveredUnit = toNumber(deal.delivered_unit, 0)
         const resolvedDiscountPrice =
@@ -138,7 +178,10 @@ export async function getHomepageCategoryPreviews(): Promise<
             deal.service_name ?? deal.service_category,
             category.name,
           ),
-          locationArea: toText(deal.service_area, 'Local area'),
+          locationArea: toText(
+            deal.business_id ? cityByBusinessId.get(deal.business_id) : null,
+            'Local area',
+          ),
           originalPrice,
           discountPrice: resolvedDiscountPrice,
           discountPercent,

@@ -29,11 +29,7 @@ export function CityPicker({
 
   const filteredCities = cities.filter((city) => {
     const query = searchQuery.toLowerCase()
-    return (
-      city.name.toLowerCase().includes(query) ||
-      city.state.toLowerCase().includes(query) ||
-      city.stateCode.toLowerCase().includes(query)
-    )
+    return city.name.toLowerCase().includes(query)
   })
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
@@ -85,11 +81,11 @@ export function CityPicker({
           <MapPin
             size={18}
             weight={selectedCity ? 'fill' : 'regular'}
-            className="text-brand-primary flex-shrink-0"
+            className="text-text-secondary flex-shrink-0"
           />
           {selectedCity ? (
             <span className="text-text-primary truncate">
-              {selectedCity.name}, {selectedCity.stateCode}
+              {selectedCity.name}
             </span>
           ) : (
             <span className="text-text-muted">{placeholder}</span>
@@ -159,14 +155,12 @@ export function CityPicker({
                     transition-colors duration-150
                     ${
                       selectedCity?.id === city.id
-                        ? 'bg-brand-primary/10 text-brand-primary'
+                        ? 'bg-white/10 text-text-primary'
                         : 'text-text-primary hover:bg-glass-bg'
                     }
                   `}
                 >
-                  <span>
-                    {city.name}, {city.stateCode}
-                  </span>
+                  <span>{city.name}</span>
                   {selectedCity?.id === city.id && (
                     <Check size={16} weight="bold" className="flex-shrink-0" />
                   )}

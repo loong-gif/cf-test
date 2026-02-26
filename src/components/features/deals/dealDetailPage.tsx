@@ -121,6 +121,23 @@ export function DealDetailPage({
                 <h2 className="text-lg font-semibold text-text-primary mb-3">
                   Offer Details
                 </h2>
+                {(fullDeal.sourceName || fullDeal.sourceUrl) && (
+                  <p className="text-sm text-text-tertiary mb-4">
+                    Source:{' '}
+                    {fullDeal.sourceUrl ? (
+                      <a
+                        href={fullDeal.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-brand-primary hover:text-brand-secondary transition-colors"
+                      >
+                        {fullDeal.sourceName || 'View source'}
+                      </a>
+                    ) : (
+                      <span>{fullDeal.sourceName}</span>
+                    )}
+                  </p>
+                )}
                 {fullDeal.offerRawText && (
                   <p className="text-text-secondary whitespace-pre-line mb-4">
                     {fullDeal.offerRawText}

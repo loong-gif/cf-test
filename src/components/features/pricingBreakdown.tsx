@@ -2,6 +2,7 @@ import { Calculator } from '@phosphor-icons/react/dist/ssr'
 import type { AnonymousDeal } from '@/types'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { formatMoney } from '@/lib/format'
 
 interface PricingBreakdownProps {
   deal: AnonymousDeal
@@ -10,6 +11,8 @@ interface PricingBreakdownProps {
 export function PricingBreakdown({ deal }: PricingBreakdownProps) {
   const savings = deal.originalPrice - deal.dealPrice
   const hasUnitRange = deal.minUnits || deal.maxUnits
+  const showDiscount =
+    deal.originalPrice > 0 && deal.originalPrice !== deal.dealPrice
   const exampleUnits = deal.minUnits ?? 20
   const exampleTotal = deal.dealPrice * exampleUnits
   const exampleSavings = savings * exampleUnits
@@ -20,20 +23,24 @@ export function PricingBreakdown({ deal }: PricingBreakdownProps) {
       <div className="space-y-3">
         <div className="flex items-baseline gap-3">
           <span className="text-3xl sm:text-4xl font-bold text-brand-primary">
-            ${deal.dealPrice}
+            ${formatMoney(deal.dealPrice)}
           </span>
           <span className="text-text-secondary">{deal.unit}</span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Badge variant="brand" size="md">
-            {deal.discountPercent}% OFF
-          </Badge>
-          <span className="text-text-muted line-through">
-            ${deal.originalPrice}
-          </span>
-          <span className="text-success-text">Save ${savings}</span>
-        </div>
+        {showDiscount && (
+          <div className="flex items-center gap-3">
+            <Badge variant="brand" size="md">
+              {deal.discountPercent}% OFF
+            </Badge>
+            <span className="text-text-muted line-through">
+              ${formatMoney(deal.originalPrice)}
+            </span>
+            <span className="text-success-text">
+              Save ${formatMoney(savings)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Unit Range */}
@@ -66,7 +73,7 @@ export function PricingBreakdown({ deal }: PricingBreakdownProps) {
       )}
 
       {/* Example Calculation */}
-      {hasUnitRange && (
+      {hasUnitRange && showDiscount && (
         <div className="border-t border-glass-border pt-4 mt-4 space-y-2">
           <p className="text-sm font-medium text-text-secondary">
             Example: {exampleUnits} units
@@ -75,19 +82,19 @@ export function PricingBreakdown({ deal }: PricingBreakdownProps) {
             <div className="flex justify-between text-sm">
               <span className="text-text-muted">Regular price</span>
               <span className="text-text-muted line-through">
-                ${(deal.originalPrice * exampleUnits).toLocaleString()}
+                ${formatMoney(deal.originalPrice * exampleUnits)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-text-secondary">Deal price</span>
               <span className="text-text-primary font-medium">
-                ${exampleTotal.toLocaleString()}
+                ${formatMoney(exampleTotal)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-success-text">You save</span>
               <span className="text-success-text font-medium">
-                ${exampleSavings.toLocaleString()}
+                ${formatMoney(exampleSavings)}
               </span>
             </div>
           </div>

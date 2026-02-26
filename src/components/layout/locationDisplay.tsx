@@ -22,7 +22,7 @@ export function LocationDisplay() {
       return `${current.area.name}, ${current.city.name}`
     }
 
-    return `${current.city.name}, ${current.city.stateCode}`
+    return `${current.city.name}`
   }
 
   const handleLocationChange = useCallback(() => {
@@ -39,7 +39,7 @@ export function LocationDisplay() {
         className={`
           inline-flex items-center gap-1.5
           px-3 py-1.5
-          bg-glass-bg hover:bg-glass-bg-hover
+          bg-white/10 hover:bg-white/15
           border border-glass-border rounded-full
           text-sm
           transition-all duration-200

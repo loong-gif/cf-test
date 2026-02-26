@@ -13,26 +13,6 @@ import type { City, LocationArea, LocationState } from '@/types'
 
 const STORAGE_KEY = 'costfinders_location'
 
-const FALLBACK_CITY: City = {
-  id: 'austin',
-  name: 'Austin',
-  state: '',
-  stateCode: '',
-  latitude: 0,
-  longitude: 0,
-  timezone: 'UTC',
-  isActive: true,
-}
-
-const cities: City[] = [FALLBACK_CITY]
-
-const getAreasForCity = (_cityId: string) => [] as LocationArea[]
-
-const getCityById = (cityId: string) =>
-  cities.find((city) => city.id === cityId) ?? null
-
-const findNearestCity = (_lat: number, _lng: number) => FALLBACK_CITY
-
 interface StoredLocation {
   cityId: string
   areaId: string | null
@@ -51,11 +31,11 @@ interface LocationContextValue {
 
 const LocationContext = createContext<LocationContextValue | null>(null)
 
-function getInitialState(): LocationState {
+function getInitialState(defaultCity: City | null): LocationState {
   return {
     current: {
       type: 'default',
-      city: FALLBACK_CITY,
+      city: defaultCity,
       area: null,
       coordinates: null,
       accuracy: null,
@@ -94,9 +74,82 @@ function clearStoredLocation() {
   localStorage.removeItem(STORAGE_KEY)
 }
 
-export function LocationProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<LocationState>(getInitialState)
+interface LocationProviderProps {
+  children: React.ReactNode
+  defaultCity?: City | null
+}
+
+export function LocationProvider({
+  children,
+  defaultCity = null,
+}: LocationProviderProps) {
+  const [state, setState] = useState<LocationState>(
+    getInitialState(defaultCity),
+  )
+  const [cities, setCities] = useState<City[]>(
+    defaultCity ? [defaultCity] : [],
+  )
   const geolocation = useGeolocation()
+
+  const getAreasForCity = useCallback(
+    (_cityId: string) => [] as LocationArea[],
+    [],
+  )
+
+  const getCityById = useCallback(
+    (cityId: string) =>
+      cities.find((city) => city.id === cityId) ?? null,
+    [cities],
+  )
+
+  const findNearestCity = useCallback(
+    (_lat: number, _lng: number) =>
+      cities.length > 0 ? cities[0] : null,
+    [cities],
+  )
+
+  // Load cities on mount
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadCities() {
+      try {
+        const response = await fetch('/api/cities')
+        if (!response.ok) return
+        const data = (await response.json()) as { cities?: Array<{ name: string; slug: string }> }
+        const loadedCities: City[] = (data.cities ?? []).map((city) => ({
+          id: city.slug,
+          name: city.name,
+          state: '',
+          stateCode: '',
+          latitude: 0,
+          longitude: 0,
+          timezone: 'UTC',
+          isActive: true,
+        }))
+
+        if (!isMounted) return
+        if (loadedCities.length > 0) {
+          setCities(loadedCities)
+          setState((prev) => ({
+            ...prev,
+            current: {
+              ...prev.current,
+              city: prev.current.city ?? loadedCities[0],
+              type: prev.current.city ? prev.current.type : 'default',
+            },
+          }))
+        }
+      } catch {
+        // ignore fetch errors
+      }
+    }
+
+    loadCities()
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   // Load stored location on mount
   useEffect(() => {
@@ -121,7 +174,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
         }))
       }
     }
-  }, [])
+  }, [getAreasForCity, getCityById])
 
   const detectLocation = useCallback(async () => {
     setState((prev) => ({
@@ -134,6 +187,16 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       const position = await geolocation.requestLocation()
       const { latitude, longitude } = position.coords
       const nearestCity = findNearestCity(latitude, longitude)
+
+      if (!nearestCity) {
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: 'No cities available for detection',
+          hasPermission: true,
+        }))
+        return
+      }
 
       setState((prev) => ({
         ...prev,
@@ -159,7 +222,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
         hasPermission: false,
       }))
     }
-  }, [geolocation])
+  }, [geolocation, findNearestCity])
 
   const selectCity = useCallback((city: City) => {
     setState((prev) => ({
@@ -198,7 +261,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     setState({
       current: {
         type: 'default',
-        city: FALLBACK_CITY,
+        city: null,
         area: null,
         coordinates: null,
         accuracy: null,
@@ -221,7 +284,15 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       selectArea,
       clearSelection,
     }),
-    [state, detectLocation, selectCity, selectArea, clearSelection],
+    [
+      state,
+      cities,
+      getAreasForCity,
+      detectLocation,
+      selectCity,
+      selectArea,
+      clearSelection,
+    ],
   )
 
   return (

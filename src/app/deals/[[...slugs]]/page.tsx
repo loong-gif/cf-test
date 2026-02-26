@@ -13,6 +13,7 @@ import {
   getOffersByCategoryAndCity,
   getOffersByCitySlug,
   listCategories,
+  listCities,
 } from '@/lib/supabase/offers'
 import {
   generateCityDealsMetadata,
@@ -180,7 +181,14 @@ export default async function DealsRoutingPage({ params }: DealsPageProps) {
 
   switch (route.type) {
     case 'redirect':
-      return <DealsRedirect />
+      const cities = await listCities()
+      const defaultCity = cities[0]
+      return (
+        <DealsRedirect
+          defaultCitySlug={defaultCity?.slug}
+          defaultCityName={defaultCity?.name}
+        />
+      )
 
     case 'city':
       const cityDeals = await getOffersByCitySlug(route.citySlug)

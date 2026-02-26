@@ -12,8 +12,8 @@ type OfferRow = {
   end_date: string | null
   eligibility: string | null
   discount_percent: number | null
-  discount_unit_price: string | null
-  original_unit_price: string | null
+  discount_price: string | null
+  original_price: string | null
   delivered_unit: number | null
   min_unit: string | null
   unit_type: string | null
@@ -56,15 +56,28 @@ function slugify(value: string): string {
     .replace(/(^-|-$)/g, '')
 }
 
-function parsePrice(text: string | null | undefined): number | null {
+function parsePrice(text: string | number | null | undefined): number | null {
+  if (typeof text === 'number') {
+    return Number.isNaN(text) ? null : text
+  }
   if (!text) return null
-  const cleaned = text.replace(/[^0-9.]/g, '')
+  const cleaned = String(text).replace(/[^0-9.]/g, '')
   const parsed = Number.parseFloat(cleaned)
   return Number.isNaN(parsed) ? null : parsed
 }
 
-function toNumber(value: number | null | undefined, fallback = 0): number {
-  return typeof value === 'number' && !Number.isNaN(value) ? value : fallback
+function toNumber(
+  value: number | string | null | undefined,
+  fallback = 0,
+): number {
+  if (typeof value === 'number') {
+    return Number.isNaN(value) ? fallback : value
+  }
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value.replace(/[^0-9.]/g, ''))
+    return Number.isNaN(parsed) ? fallback : parsed
+  }
+  return fallback
 }
 
 export function mapCategory(value?: string | null): TreatmentCategory {
@@ -157,17 +170,17 @@ function mapOfferToDeal(
 ): { deal: Deal; anonymous: AnonymousDeal; business: Business | null } {
   const category = mapCategory(offer.service_category)
   const originalPrice =
-    parsePrice(offer.original_unit_price) ??
-    parsePrice(offer.discount_unit_price) ??
+    parsePrice(offer.original_price) ??
+    parsePrice(offer.discount_price) ??
     0
   const dealPrice =
-    parsePrice(offer.discount_unit_price) ??
+    parsePrice(offer.discount_price) ??
     toNumber(offer.delivered_unit, 0)
   const discountPercent =
     toNumber(offer.discount_percent, 0) ||
     (originalPrice > 0 ? Math.round(((originalPrice - dealPrice) / originalPrice) * 100) : 0)
   const businessInfo = mapBusiness(business)
-  const locationArea = offer.service_area ?? businessInfo?.city ?? 'Local area'
+  const locationArea = businessInfo?.city ?? 'Local area'
   const createdAt = offer.created_at ?? new Date().toISOString()
 
   const deal: Deal = {
@@ -205,6 +218,7 @@ function mapOfferToDeal(
     moderationStatus: undefined,
     moderationNotes: undefined,
     sourceName: offer.source_name ?? undefined,
+    sourceUrl: offer.source_url ?? undefined,
     templateType: offer.template_type ?? undefined,
     serviceName: offer.service_name ?? undefined,
     serviceCategoryRaw: offer.service_category ?? undefined,
@@ -213,8 +227,8 @@ function mapOfferToDeal(
       : undefined,
     offerRawText: offer.offer_raw_text ?? undefined,
     eligibility: offer.eligibility ?? undefined,
-    originalUnitPrice: offer.original_unit_price ?? undefined,
-    discountUnitPrice: offer.discount_unit_price ?? undefined,
+    originalUnitPrice: offer.original_price ?? undefined,
+    discountUnitPrice: offer.discount_price ?? undefined,
   }
 
   const anonymous: AnonymousDeal = {
@@ -253,7 +267,7 @@ export async function getOfferById(id: string) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_price,original_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .eq('id', Number(id))
     .limit(1)
@@ -276,27 +290,34 @@ export async function getOfferById(id: string) {
 export async function getOffersByCitySlug(citySlug: string) {
   const city = await getCityBySlug(citySlug)
   if (!city) return []
-  const supabase = createSupabaseServerClient()
-  const { data, error } = await supabase
-    .from('promo_offer_master')
-    .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
-    )
-    .eq('service_area', city.name)
-    .order('discount_percent', { ascending: false })
-    .limit(200)
 
-  if (error) {
-    throw new Error(`Failed to load offers: ${error.message}`)
+  const supabase = createSupabaseServerClient()
+  const businessIds = await getBusinessIdsForCity(supabase, city.name)
+
+  const offerSelect =
+    'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_price,original_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at'
+
+  let offers: OfferRow[] = []
+  if (businessIds.length > 0) {
+    const { data, error } = await supabase
+      .from('promo_offer_master')
+      .select(offerSelect)
+      .in('business_id', businessIds)
+      .order('discount_percent', { ascending: false })
+      .limit(200)
+
+    if (error) {
+      throw new Error(`Failed to load offers: ${error.message}`)
+    }
+    offers = (data ?? []) as OfferRow[]
   }
 
-  const offers = (data ?? []) as OfferRow[]
-  const businessIds = offers
-    .map((offer) => offer.business_id)
-    .filter((id): id is number => typeof id === 'number')
   const businessMap = await fetchBusinessesByIds(businessIds)
   return offers.map((offer) =>
-    mapOfferToDeal(offer, offer.business_id ? businessMap.get(offer.business_id) : null).anonymous,
+    mapOfferToDeal(
+      offer,
+      offer.business_id ? businessMap.get(offer.business_id) : null,
+    ).anonymous,
   )
 }
 
@@ -306,30 +327,37 @@ export async function getOffersByCategoryAndCity(
 ) {
   const city = await getCityBySlug(citySlug)
   if (!city) return []
-  const supabase = createSupabaseServerClient()
-  const { data, error } = await supabase
-    .from('promo_offer_master')
-    .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
-    )
-    .eq('service_area', city.name)
-    .order('discount_percent', { ascending: false })
-    .limit(200)
 
-  if (error) {
-    throw new Error(`Failed to load offers: ${error.message}`)
+  const supabase = createSupabaseServerClient()
+  const businessIds = await getBusinessIdsForCity(supabase, city.name)
+
+  const offerSelect =
+    'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_price,original_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at'
+
+  let offers: OfferRow[] = []
+  if (businessIds.length > 0) {
+    const { data, error } = await supabase
+      .from('promo_offer_master')
+      .select(offerSelect)
+      .in('business_id', businessIds)
+      .order('discount_percent', { ascending: false })
+      .limit(200)
+
+    if (error) {
+      throw new Error(`Failed to load offers: ${error.message}`)
+    }
+    offers = (data ?? []) as OfferRow[]
   }
 
-  const offers = (data ?? []) as OfferRow[]
   const filtered = offers.filter(
     (offer) => mapCategory(offer.service_category) === category,
   )
-  const businessIds = filtered
-    .map((offer) => offer.business_id)
-    .filter((id): id is number => typeof id === 'number')
   const businessMap = await fetchBusinessesByIds(businessIds)
   return filtered.map((offer) =>
-    mapOfferToDeal(offer, offer.business_id ? businessMap.get(offer.business_id) : null).anonymous,
+    mapOfferToDeal(
+      offer,
+      offer.business_id ? businessMap.get(offer.business_id) : null,
+    ).anonymous,
   )
 }
 
@@ -343,7 +371,7 @@ export async function getDealsByCategory(category: TreatmentCategory) {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_price,original_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .order('discount_percent', { ascending: false })
     .limit(500)
@@ -388,6 +416,52 @@ export async function listCities(): Promise<CityInfo[]> {
     .map((name) => ({ name, slug: slugify(name) }))
 }
 
+export async function listCitiesWithOffers(): Promise<CityInfo[]> {
+  const supabase = createSupabaseServerClient()
+  const { data, error } = await supabase
+    .from('master_business_info')
+    .select('city,business_id')
+    .not('city', 'is', null)
+    .limit(10000)
+
+  if (error) {
+    throw new Error(`Failed to load cities: ${error.message}`)
+  }
+
+  const rows = data ?? []
+  const ids = rows
+    .map((row) => (row as { business_id: number }).business_id)
+    .filter((id) => typeof id === 'number')
+
+  if (ids.length === 0) return []
+
+  const { data: offerRows, error: offerError } = await supabase
+    .from('promo_offer_master')
+    .select('business_id')
+    .in('business_id', ids)
+
+  if (offerError) {
+    throw new Error(`Failed to load offers: ${offerError.message}`)
+  }
+
+  const hasOffer = new Set(
+    (offerRows ?? []).map((row) => (row as { business_id: number }).business_id),
+  )
+
+  const names = new Set<string>()
+  for (const row of rows) {
+    const city = (row as { city: string | null }).city
+    const businessId = (row as { business_id: number }).business_id
+    if (!city || !hasOffer.has(businessId)) continue
+    const name = city.trim()
+    if (name) names.add(name)
+  }
+
+  return Array.from(names)
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => ({ name, slug: slugify(name) }))
+}
+
 export async function getCityBySlug(slug: string): Promise<CityInfo | null> {
   const cities = await listCities()
   return cities.find((city) => city.slug === slug) ?? null
@@ -424,11 +498,47 @@ export async function getDealCountForCitySlug(citySlug: string) {
   const city = await getCityBySlug(citySlug)
   if (!city) return 0
   const supabase = createSupabaseServerClient()
+  const businessIds = await getBusinessIdsForCity(supabase, city.name)
+
+  if (businessIds.length === 0) return 0
+
   const { count } = await supabase
     .from('promo_offer_master')
     .select('id', { count: 'exact', head: true })
-    .eq('service_area', city.name)
+    .in('business_id', businessIds)
   return toNumber(count ?? 0, 0)
+}
+
+async function getBusinessIdsForCity(
+  supabase: ReturnType<typeof createSupabaseServerClient>,
+  cityName: string,
+): Promise<number[]> {
+  const trimmed = cityName.trim()
+  const { data: exact, error: exactError } = await supabase
+    .from('master_business_info')
+    .select('business_id,city')
+    .eq('city', trimmed)
+
+  if (exactError) {
+    throw new Error(`Failed to load businesses: ${exactError.message}`)
+  }
+
+  let rows = exact ?? []
+
+  if (rows.length === 0) {
+    const { data: ilike, error: ilikeError } = await supabase
+      .from('master_business_info')
+      .select('business_id,city')
+      .ilike('city', `${trimmed}%`)
+    if (ilikeError) {
+      throw new Error(`Failed to load businesses: ${ilikeError.message}`)
+    }
+    rows = ilike ?? []
+  }
+
+  return rows
+    .map((row) => (row as { business_id: number }).business_id)
+    .filter((id) => typeof id === 'number')
 }
 
 export async function getDealCountForTreatmentAndCity(
@@ -503,7 +613,7 @@ export async function getAllActiveOffers() {
   const { data, error } = await supabase
     .from('promo_offer_master')
     .select(
-      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_unit_price,original_unit_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
+      'id,business_id,service_name,service_category,offer_raw_text,start_date,end_date,eligibility,discount_percent,discount_price,original_price,delivered_unit,min_unit,unit_type,service_area,source_name,source_url,template_type,created_at',
     )
     .order('created_at', { ascending: false })
     .limit(500)

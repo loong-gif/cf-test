@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { MapPin, Spinner } from '@phosphor-icons/react'
 import { useLocation } from '@/lib/context/locationContext'
 import { Card } from '@/components/ui/card'
@@ -14,13 +14,20 @@ import { Card } from '@/components/ui/card'
  * 2. Attempt geolocation detection
  * 3. Redirect to detected city or fallback to default
  */
-export function DealsRedirect() {
+interface DealsRedirectProps {
+  defaultCitySlug?: string
+  defaultCityName?: string
+}
+
+export function DealsRedirect({
+  defaultCitySlug,
+  defaultCityName,
+}: DealsRedirectProps) {
   const router = useRouter()
-  const { state: locationState, detectLocation } = useLocation()
-  const [status, setStatus] = useState<'detecting' | 'redirecting' | 'error'>(
-    'detecting'
-  )
-  const fallbackCityName = 'Austin'
+  const { state: locationState } = useLocation()
+  const hasRedirected = useRef(false)
+  const fallbackCityName = defaultCityName
+  const fallbackCitySlug = defaultCitySlug
 
   const slugifyCity = (value: string) =>
     value
@@ -43,93 +50,44 @@ export function DealsRedirect() {
   }
 
   useEffect(() => {
-    async function handleRedirect() {
-      try {
-        // If user already has a city (from previous session or manual selection)
-        const searchParams =
-          typeof window !== 'undefined'
-            ? new URLSearchParams(window.location.search)
-            : null
-        const categoryParam = searchParams?.get('category') ?? ''
+    if (hasRedirected.current) return
 
-        if (
-          locationState.current.city &&
-          locationState.current.type !== 'default'
-        ) {
-          setStatus('redirecting')
-          const citySlug = slugifyCity(locationState.current.city.name)
-          if (categoryParam) {
-            router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
-          } else {
-            router.replace(`/deals/${citySlug}`)
-          }
-          return
-        }
+    const searchParams =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search)
+        : null
+    const categoryParam = searchParams?.get('category') ?? ''
 
-        // Attempt to detect location
-        setStatus('detecting')
-        await detectLocation()
-
-        // After detection, check again
-        if (locationState.current.city) {
-          setStatus('redirecting')
-          const citySlug = slugifyCity(locationState.current.city.name)
-          if (categoryParam) {
-            router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
-          } else {
-            router.replace(`/deals/${citySlug}`)
-          }
-        } else {
-          // Fallback to default city
-          setStatus('redirecting')
-          const citySlug = slugifyCity(fallbackCityName)
-          if (categoryParam) {
-            router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
-          } else {
-            router.replace(`/deals/${citySlug}`)
-          }
-        }
-      } catch {
-        // On error, redirect to default city
-        setStatus('redirecting')
-        const searchParams =
-          typeof window !== 'undefined'
-            ? new URLSearchParams(window.location.search)
-            : null
-        const categoryParam = searchParams?.get('category') ?? ''
-        const citySlug = slugifyCity(fallbackCityName)
-        if (categoryParam) {
-          router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
-        } else {
-          router.replace(`/deals/${citySlug}`)
-        }
-      }
-    }
-
-    handleRedirect()
-  }, [locationState.current.city, locationState.current.type, detectLocation, router])
-
-  // Watch for location changes after detection
-  useEffect(() => {
     if (
-      status === 'detecting' &&
       locationState.current.city &&
-      locationState.current.type === 'detected'
+      locationState.current.type !== 'default'
     ) {
-      const searchParams =
-        typeof window !== 'undefined'
-          ? new URLSearchParams(window.location.search)
-          : null
-      const categoryParam = searchParams?.get('category') ?? ''
-      setStatus('redirecting')
       const citySlug = slugifyCity(locationState.current.city.name)
       if (categoryParam) {
         router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
       } else {
         router.replace(`/deals/${citySlug}`)
       }
+      hasRedirected.current = true
+      return
     }
-  }, [locationState.current.city, locationState.current.type, status, router])
+
+    if (fallbackCitySlug && fallbackCityName) {
+      const citySlug = fallbackCitySlug || slugifyCity(fallbackCityName)
+      if (categoryParam) {
+        router.replace(`/deals/${mapCategory(categoryParam)}/${citySlug}`)
+      } else {
+        router.replace(`/deals/${citySlug}`)
+      }
+      hasRedirected.current = true
+    }
+  }, [
+    locationState.current.city,
+    locationState.current.type,
+    fallbackCitySlug,
+    fallbackCityName,
+    router,
+  ])
 
   return (
     <main className="pt-20 pb-20 md:pb-8 px-4 sm:px-6 lg:px-8">
@@ -137,32 +95,19 @@ export function DealsRedirect() {
         <Card variant="glass" padding="lg" className="text-center">
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 rounded-full bg-brand-primary/10 flex items-center justify-center">
-              {status === 'detecting' ? (
-                <MapPin
-                  size={32}
-                  weight="duotone"
-                  className="text-brand-primary animate-pulse"
-                />
-              ) : (
-                <Spinner
-                  size={32}
-                  weight="bold"
-                  className="text-brand-primary animate-spin"
-                />
-              )}
+              <Spinner
+                size={32}
+                weight="bold"
+                className="text-brand-primary animate-spin"
+              />
             </div>
           </div>
 
           <h1 className="text-xl font-semibold text-text-primary mb-2">
-            {status === 'detecting'
-              ? 'Finding Deals Near You'
-              : 'Redirecting...'}
+            Redirecting...
           </h1>
-
           <p className="text-text-secondary">
-            {status === 'detecting'
-              ? 'Detecting your location to show nearby medspa deals'
-              : `Taking you to deals in ${locationState.current.city?.name || fallbackCityName}`}
+            Taking you to available deals.
           </p>
         </Card>
       </div>

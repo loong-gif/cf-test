@@ -40,6 +40,7 @@ export interface Deal {
   moderationNotes?: string
   // Source metadata (optional for Supabase-backed offers)
   sourceName?: string
+  sourceUrl?: string
   templateType?: string
   serviceName?: string
   serviceCategoryRaw?: string

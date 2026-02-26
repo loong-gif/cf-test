@@ -14,6 +14,7 @@ import { getBusinessById } from '@/lib/mock-data/businesses'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { formatMoney } from '@/lib/format'
 
 interface DealModerationCardProps {
   deal: Deal
@@ -55,12 +56,7 @@ function formatDate(dateString: string): string {
 }
 
 function formatPrice(deal: Deal): string {
-  const price = deal.dealPrice.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: deal.dealPrice < 10 ? 2 : 0,
-  })
-  return `${price} ${deal.unit}`
+  return `$${formatMoney(deal.dealPrice)} ${deal.unit}`
 }
 
 export function DealModerationCard({
@@ -143,7 +139,7 @@ export function DealModerationCard({
             <span className="text-text-tertiary">Price: </span>
             <span className="text-text-primary font-medium">{formatPrice(deal)}</span>
             <span className="text-text-tertiary ml-2 line-through">
-              ${deal.originalPrice.toLocaleString()}
+              ${formatMoney(deal.originalPrice)}
             </span>
           </div>
         </div>

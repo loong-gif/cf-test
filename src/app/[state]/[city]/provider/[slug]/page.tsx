@@ -17,22 +17,14 @@ import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
 import {
   getBusinessBySlug,
   getOffersForBusiness,
-  listBusinesses,
 } from '@/lib/supabase/offers'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 // Generate static params for all supported providers
 export async function generateStaticParams() {
-  const businesses = await listBusinesses()
-  const slugify = (value: string) =>
-    value
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
-  return businesses.map((business) => ({
-    state: 'all',
-    city: slugify(business.city || 'city'),
-    slug: business.slug,
-  }))
+  return []
 }
 
 // Generate metadata for SEO

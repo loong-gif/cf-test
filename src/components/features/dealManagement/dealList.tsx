@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge'
 import { Modal } from '@/components/ui/modal'
 import { SponsoredDealConfig } from '@/components/features/sponsoredDealConfig'
 import { getDealsForBusiness, toggleDealStatus, deleteDeal } from '@/lib/mock-data/deals'
+import { formatMoney } from '@/lib/format'
 import {
   getActiveBoosts,
   isDealEligibleForSponsorship,
@@ -130,7 +131,7 @@ export function DealList({ businessId }: DealListProps) {
   }
 
   const formatPrice = (price: number, unit: string) => {
-    return `$${price.toFixed(price % 1 === 0 ? 0 : 2)} ${unit}`
+    return `$${formatMoney(price)} ${unit}`
   }
 
   return (

@@ -38,14 +38,14 @@ export function BlurredImage({
       )}
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-bg-primary/60" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/50 to-black/65" />
 
       {/* Lock Icon + Message */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-        <div className="w-16 h-16 rounded-full bg-glass-bg backdrop-blur-md border border-glass-border flex items-center justify-center">
-          <Lock size={32} weight="light" className="text-text-secondary" />
+        <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 flex items-center justify-center shadow-lg">
+          <Lock size={30} weight="regular" className="text-white/90" />
         </div>
-        <span className="text-xs text-text-tertiary font-medium">
+        <span className="text-xs text-white/80 font-medium tracking-wide">
           Unlock with account
         </span>
       </div>

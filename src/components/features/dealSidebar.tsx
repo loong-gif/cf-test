@@ -11,36 +11,35 @@ interface DealSidebarProps {
 }
 
 export function DealSidebar({ deal, business }: DealSidebarProps) {
-  const { state } = useAuth()
-  const { isAuthenticated, user, isLoading } = state
+  // NOTE: Login gating is disabled for now.
+  // const { state } = useAuth()
+  // const { isAuthenticated, user, isLoading } = state
+  //
+  // const isVerified =
+  //   user?.verificationStatus === 'email_verified' ||
+  //   user?.verificationStatus === 'phone_verified' ||
+  //   user?.verificationStatus === 'fully_verified'
+  //
+  // if (isLoading) {
+  //   return (
+  //     <div className="rounded-2xl bg-glass-bg backdrop-blur-lg border border-glass-border shadow-glass p-6 animate-pulse">
+  //       <div className="space-y-4">
+  //         <div className="h-6 bg-bg-tertiary rounded w-3/4" />
+  //         <div className="h-4 bg-bg-tertiary rounded w-1/2" />
+  //         <div className="h-10 bg-bg-tertiary rounded w-full mt-4" />
+  //       </div>
+  //     </div>
+  //   )
+  // }
+  //
+  // if (isAuthenticated && isVerified && business) {
+  //   return <BusinessInfo business={business} deal={deal} />
+  // }
 
-  // Determine if user is verified (any verification level)
-  const isVerified =
-    user?.verificationStatus === 'email_verified' ||
-    user?.verificationStatus === 'phone_verified' ||
-    user?.verificationStatus === 'fully_verified'
-
-  // Show skeleton during loading
-  if (isLoading) {
-    return (
-      <div className="rounded-2xl bg-glass-bg backdrop-blur-lg border border-glass-border shadow-glass p-6 animate-pulse">
-        <div className="space-y-4">
-          <div className="h-6 bg-bg-tertiary rounded w-3/4" />
-          <div className="h-4 bg-bg-tertiary rounded w-1/2" />
-          <div className="h-10 bg-bg-tertiary rounded w-full mt-4" />
-        </div>
-      </div>
-    )
+  if (business) {
+    return <BusinessInfo business={business} deal={deal} />
   }
 
-  // Show BusinessInfo for authenticated + verified users
-  if (isAuthenticated && isVerified) {
-    if (business) {
-      return <BusinessInfo business={business} deal={deal} />
-    }
-  }
-
-  // Default: show auth wall for anonymous or unverified users
   return (
     <ClaimCTA
       dealId={deal.id}

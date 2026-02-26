@@ -14,6 +14,7 @@ import type { Deal } from '@/types'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { formatMoney } from '@/lib/format'
 import {
   getBoostOptions,
   calculateEstimatedReach,
@@ -80,7 +81,7 @@ export function SponsoredDealConfig({
               </p>
               <div className="flex items-center gap-4 mt-2 text-sm">
                 <span className="text-brand-primary font-medium">
-                  ${deal.dealPrice} {deal.unit}
+                  ${formatMoney(deal.dealPrice)} {deal.unit}
                 </span>
                 <span className="flex items-center gap-1 text-text-tertiary">
                   <Eye size={14} weight="fill" />

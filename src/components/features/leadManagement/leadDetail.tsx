@@ -27,6 +27,7 @@ import {
   addBusinessResponse,
 } from '@/lib/mock-data'
 import { MessageThread } from '@/components/features/messaging/messageThread'
+import { formatMoney } from '@/lib/format'
 
 interface LeadDetailProps {
   claim: Claim
@@ -178,7 +179,10 @@ export function LeadDetail({ claim: initialClaim, businessId, onClaimUpdate }: L
                           {deal.category.charAt(0).toUpperCase() + deal.category.slice(1)}
                         </Badge>
                         <span className="text-brand-primary font-semibold">
-                          ${deal.dealPrice} <span className="text-text-muted font-normal">{deal.unit}</span>
+                          ${formatMoney(deal.dealPrice)}{' '}
+                          <span className="text-text-muted font-normal">
+                            {deal.unit}
+                          </span>
                         </span>
                       </div>
                     </div>
