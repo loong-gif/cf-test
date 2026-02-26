@@ -158,13 +158,8 @@ export async function getHomepageCategoryPreviews(): Promise<
         const discountPrice =
           parsePrice(deal.discount_price) ??
           (originalPrice > 0 ? originalPrice : null)
-        const deliveredUnit = toNumber(deal.delivered_unit, 0)
         const resolvedDiscountPrice =
-          discountPrice !== null
-            ? discountPrice
-            : deliveredUnit > 0
-              ? deliveredUnit
-              : 0
+          discountPrice !== null ? discountPrice : 0
 
         return {
           id: String(deal.id),
