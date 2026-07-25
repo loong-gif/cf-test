@@ -14,6 +14,7 @@ interface FilterPanelProps {
   onSortChange: (sort: SortOption) => void
   onReset: () => void
   activeFilterCount: number
+  sortOptions?: SortOption[]
 }
 
 export function FilterPanel({
@@ -23,6 +24,7 @@ export function FilterPanel({
   onSortChange,
   onReset,
   activeFilterCount,
+  sortOptions,
 }: FilterPanelProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -93,7 +95,11 @@ export function FilterPanel({
               <span>Clear all</span>
             </button>
           )}
-          <SortSelector value={sortBy} onChange={onSortChange} />
+          <SortSelector
+            value={sortBy}
+            onChange={onSortChange}
+            options={sortOptions}
+          />
         </div>
       </div>
 

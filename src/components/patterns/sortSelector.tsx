@@ -12,18 +12,13 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import type { SortOption } from '@/lib/mock-data'
 
-interface SortSelectorProps {
-  value: SortOption
-  onChange: (value: SortOption) => void
-}
-
 interface SortOptionConfig {
   value: SortOption
   label: string
   icon: React.ComponentType<{ size?: number; weight?: 'regular' | 'fill' }>
 }
 
-const sortOptions: SortOptionConfig[] = [
+const ALL_SORT_OPTIONS: SortOptionConfig[] = [
   { value: 'popular', label: 'Most Popular', icon: Fire },
   { value: 'newest', label: 'Newest', icon: Clock },
   { value: 'discount', label: 'Biggest Discount', icon: Tag },
@@ -31,9 +26,20 @@ const sortOptions: SortOptionConfig[] = [
   { value: 'price-desc', label: 'Price: High to Low', icon: ArrowDown },
 ]
 
-export function SortSelector({ value, onChange }: SortSelectorProps) {
+interface SortSelectorProps {
+  value: SortOption
+  onChange: (value: SortOption) => void
+  /** Subset of sort keys to show; defaults to all. */
+  options?: SortOption[]
+}
+
+export function SortSelector({ value, onChange, options }: SortSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const sortOptions = options
+    ? ALL_SORT_OPTIONS.filter((opt) => options.includes(opt.value))
+    : ALL_SORT_OPTIONS
 
   const selectedOption =
     sortOptions.find((opt) => opt.value === value) ?? sortOptions[0]

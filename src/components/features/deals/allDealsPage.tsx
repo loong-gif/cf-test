@@ -17,6 +17,12 @@ interface AllDealsPageProps {
   initialDeals: AnonymousDeal[]
 }
 
+const ALL_DEALS_SORT_OPTIONS: SortOption[] = [
+  'discount',
+  'price-asc',
+  'price-desc',
+]
+
 export function filterAllDeals(
   deals: AnonymousDeal[],
   selectedCategory: TreatmentCategory | 'all',
@@ -47,7 +53,7 @@ export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
     TreatmentCategory | 'all'
   >('all')
   const [filters, setFilters] = useState<DealFilters>({})
-  const [sortBy, setSortBy] = useState<SortOption>('popular')
+  const [sortBy, setSortBy] = useState<SortOption>('discount')
 
   const activeFilterCount = useMemo(() => {
     let count = 0
@@ -96,9 +102,10 @@ export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
             onSortChange={setSortBy}
             onReset={() => {
               setFilters({})
-              setSortBy('popular')
+              setSortBy('discount')
             }}
             activeFilterCount={activeFilterCount}
+            sortOptions={ALL_DEALS_SORT_OPTIONS}
           />
         </div>
 

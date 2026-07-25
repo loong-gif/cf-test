@@ -58,16 +58,46 @@ const deals: AnonymousDeal[] = [
 
 test('filterAllDeals preserves offers from every city and without a price', () => {
   assert.deepEqual(
-    filterAllDeals(deals, 'all', {}, 'popular').map((deal) => deal.id),
+    filterAllDeals(deals, 'all', {}, 'discount').map((deal) => deal.id),
     ['1', '2'],
   )
 })
 
 test('filterAllDeals still supports category and price filters', () => {
   assert.deepEqual(
-    filterAllDeals(deals, 'botox', { maxPrice: 20 }, 'popular').map(
+    filterAllDeals(deals, 'botox', { maxPrice: 20 }, 'discount').map(
       (deal) => deal.id,
     ),
     ['1'],
+  )
+})
+
+test('filterAllDeals sorts by biggest discount percent by default option', () => {
+  assert.deepEqual(
+    filterAllDeals(
+      [
+        { ...deals[0], id: 'low', discountPercent: 10, dealPrice: 20 },
+        { ...deals[0], id: 'high', discountPercent: 50, dealPrice: 30 },
+      ],
+      'all',
+      {},
+      'discount',
+    ).map((deal) => deal.id),
+    ['high', 'low'],
+  )
+})
+
+test('filterAllDeals sorts by price ascending', () => {
+  assert.deepEqual(
+    filterAllDeals(
+      [
+        { ...deals[0], id: 'expensive', dealPrice: 40 },
+        { ...deals[0], id: 'cheap', dealPrice: 12 },
+      ],
+      'all',
+      {},
+      'price-asc',
+    ).map((deal) => deal.id),
+    ['cheap', 'expensive'],
   )
 })
