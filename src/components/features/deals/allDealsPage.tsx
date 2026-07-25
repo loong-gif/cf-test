@@ -5,16 +5,36 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { DealsGrid } from '@/components/features/dealsGrid'
 import { FilterPanel } from '@/components/features/filterPanel'
-import { CategoryFilter } from '@/components/patterns/categoryFilter'
 import {
   type DealFilters,
   type SortOption,
   sortDeals,
 } from '@/lib/utils/deal-sorting'
-import type { AnonymousDeal, TreatmentCategory } from '@/types/deal'
+import type { AnonymousDeal } from '@/types/deal'
 
 interface AllDealsPageProps {
   initialDeals: AnonymousDeal[]
+}
+
+export type DealsFilter =
+  | 'all'
+  | 'botox'
+  | 'fillers'
+  | 'dysport'
+  | 'dermal-filler'
+  | 'sculptra'
+
+const dealsFilters: { value: DealsFilter; label: string }[] = [
+  { value: 'all', label: 'All Deals' },
+  { value: 'botox', label: 'Botox' },
+  { value: 'fillers', label: 'Fillers' },
+  { value: 'dysport', label: 'Dysport' },
+  { value: 'dermal-filler', label: 'Dermal Filler' },
+  { value: 'sculptra', label: 'Sculptra' },
+]
+
+function matchesServiceName(deal: AnonymousDeal, serviceName: string): boolean {
+  return deal.title.toLocaleLowerCase().includes(serviceName)
 }
 
 const ALL_DEALS_SORT_OPTIONS: SortOption[] = [
@@ -25,14 +45,27 @@ const ALL_DEALS_SORT_OPTIONS: SortOption[] = [
 
 export function filterAllDeals(
   deals: AnonymousDeal[],
-  selectedCategory: TreatmentCategory | 'all',
+  selectedCategory: DealsFilter,
   filters: DealFilters,
   sortBy: SortOption,
 ): AnonymousDeal[] {
-  const categoryFilteredDeals =
-    selectedCategory === 'all'
-      ? deals
-      : deals.filter((deal) => deal.category === selectedCategory)
+  const categoryFilteredDeals = deals.filter((deal) => {
+    switch (selectedCategory) {
+      case 'all':
+        return true
+      case 'botox':
+      case 'fillers':
+        return deal.category === selectedCategory
+      case 'dysport':
+        return matchesServiceName(deal, 'dysport')
+      case 'dermal-filler':
+        return matchesServiceName(deal, 'dermal filler')
+      case 'sculptra':
+        return matchesServiceName(deal, 'sculptra')
+      default:
+        return false
+    }
+  })
 
   const priceFilteredDeals = categoryFilteredDeals.filter((deal) => {
     if (filters.minPrice !== undefined && deal.dealPrice < filters.minPrice) {
@@ -49,9 +82,7 @@ export function filterAllDeals(
 
 export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
   const router = useRouter()
-  const [selectedCategory, setSelectedCategory] = useState<
-    TreatmentCategory | 'all'
-  >('all')
+  const [selectedCategory, setSelectedCategory] = useState<DealsFilter>('all')
   const [filters, setFilters] = useState<DealFilters>({})
   const [sortBy, setSortBy] = useState<SortOption>('discount')
 
@@ -91,10 +122,27 @@ export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
         </div>
 
         <div className="sticky top-16 z-30 bg-[#e8ddd0] -mx-4 px-4 py-3 mb-3 border-b border-[#d4c4b0]/50 space-y-3">
-          <CategoryFilter
-            selected={selectedCategory}
-            onChange={setSelectedCategory}
-          />
+          <div className="flex flex-wrap gap-2">
+            {dealsFilters.map((filter) => {
+              const isSelected = selectedCategory === filter.value
+
+              return (
+                <button
+                  type="button"
+                  key={filter.value}
+                  onClick={() => setSelectedCategory(filter.value)}
+                  className={`inline-flex min-h-[44px] items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-95 ${
+                    isSelected
+                      ? 'bg-amber-800 text-white shadow-[0_0_16px_rgba(146,64,14,0.25)]'
+                      : 'border border-[#d4c4b0] bg-[#f2ebe2] text-[#78350f] hover:-translate-y-0.5 hover:border-[#c4b09a] hover:text-[#451a03]'
+                  }`}
+                  aria-pressed={isSelected}
+                >
+                  {filter.label}
+                </button>
+              )
+            })}
+          </div>
           <FilterPanel
             filters={filters}
             sortBy={sortBy}

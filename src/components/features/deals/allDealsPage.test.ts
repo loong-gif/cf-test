@@ -72,6 +72,39 @@ test('filterAllDeals still supports category and price filters', () => {
   )
 })
 
+test('filterAllDeals supports exact service-name filters', () => {
+  const serviceDeals = [
+    ...deals,
+    { ...deals[0], id: '3', title: 'Dysport' },
+    {
+      ...deals[0],
+      id: '4',
+      title: 'Dermal Filler',
+      category: 'fillers' as const,
+    },
+    { ...deals[0], id: '5', title: 'Sculptra', category: 'fillers' as const },
+  ]
+
+  assert.deepEqual(
+    filterAllDeals(serviceDeals, 'dysport', {}, 'popular').map(
+      (deal) => deal.id,
+    ),
+    ['3'],
+  )
+  assert.deepEqual(
+    filterAllDeals(serviceDeals, 'dermal-filler', {}, 'popular').map(
+      (deal) => deal.id,
+    ),
+    ['4'],
+  )
+  assert.deepEqual(
+    filterAllDeals(serviceDeals, 'sculptra', {}, 'popular').map(
+      (deal) => deal.id,
+    ),
+    ['5'],
+  )
+})
+
 test('filterAllDeals sorts by biggest discount percent by default option', () => {
   assert.deepEqual(
     filterAllDeals(

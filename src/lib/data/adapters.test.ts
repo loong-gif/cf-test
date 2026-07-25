@@ -81,6 +81,30 @@ test('offerToAnonymousDeal maps the live Neurotoxin category to Botox', () => {
   assert.equal(deal.category, 'botox')
 })
 
+test('offerToAnonymousDeal maps the live Filler category to Fillers', () => {
+  const deal = offerToAnonymousDeal(
+    offer({
+      service_category: 'Filler',
+      promo_offer_items: [
+        {
+          offer_item_id: 10,
+          offer_id: 1,
+          service_id: 100,
+          quantity: 1,
+          unit_price: 650,
+          clinic_services: {
+            service_name: 'Dermal Filler',
+            service_category: 'Filler',
+            unit_type: 'syringe',
+          },
+        },
+      ],
+    }),
+  )
+
+  assert.equal(deal.category, 'fillers')
+})
+
 test('offerToAnonymousDeal prefers the linked clinic service name for its title', () => {
   const deal = offerToAnonymousDeal(
     offer({
