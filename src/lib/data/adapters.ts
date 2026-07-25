@@ -8,6 +8,10 @@ import type {
   OfferWithBusiness,
   Business as SupaBusiness,
 } from '@/types/supabase'
+import {
+  offerItemQuantity,
+  offerItemUnitPrice,
+} from '@/types/supabase'
 import { getCategorySlug } from './categories'
 
 /**
@@ -140,6 +144,8 @@ export function offerToAnonymousDeal(offer: OfferWithBusiness): AnonymousDeal {
     businessRating: biz?.score ?? 0,
     businessReviewCount: biz?.review_count ?? 0,
     businessTier: 'unclaimed',
+    itemQuantity: offerItemQuantity(offer),
+    itemUnitPrice: offerItemUnitPrice(offer),
   }
 }
 

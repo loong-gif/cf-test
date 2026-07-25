@@ -159,3 +159,47 @@ export function offerUnitType(offer: Offer): string {
     ''
   )
 }
+
+export function offerItemQuantity(offer: Offer): number | null {
+  return firstItem(offer)?.quantity ?? null
+}
+
+export function offerItemUnitPrice(offer: Offer): number | null {
+  const price = firstItem(offer)?.unit_price
+  return price ?? null
+}
+
+/** e.g. "3 units · $100/unit" — null when nothing meaningful to show */
+export function formatItemDetailLine(
+  quantity: number | null | undefined,
+  unitPrice: number | null | undefined,
+  unitType: string,
+): string | null {
+  const hasQty = quantity != null
+  const hasUnitPrice = unitPrice != null && unitPrice > 0
+  if (!hasQty && !hasUnitPrice) return null
+
+  const unit = unitType.trim() || 'unit'
+  const perLabel = unit !== 'package' ? unit : 'unit'
+  const parts: string[] = []
+
+  if (hasQty) {
+    if (unit === 'unit') {
+      parts.push(quantity === 1 ? '1 unit' : `${quantity} units`)
+    } else {
+      parts.push(`${quantity} ${unit}`)
+    }
+  }
+  if (hasUnitPrice) {
+    parts.push(`$${unitPrice.toLocaleString()}/${perLabel}`)
+  }
+  return parts.join(' · ')
+}
+
+export function offerItemDetailLine(offer: Offer): string | null {
+  return formatItemDetailLine(
+    offerItemQuantity(offer),
+    offerItemUnitPrice(offer),
+    offerUnitType(offer),
+  )
+}

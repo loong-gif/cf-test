@@ -13,6 +13,7 @@ import { SaveButton } from '@/components/patterns/saveButton'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import type { AnonymousDeal, TreatmentCategory } from '@/types/deal'
+import { formatItemDetailLine } from '@/types/supabase'
 
 interface DealCardProps {
   deal: AnonymousDeal
@@ -56,6 +57,11 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
   const hasDealPrice = deal.dealPrice > 0
   const hasOriginalPrice = deal.originalPrice > 0
   const effectiveDiscount = getEffectiveDiscount(deal)
+  const itemDetailLine = formatItemDetailLine(
+    deal.itemQuantity,
+    deal.itemUnitPrice,
+    deal.unit,
+  )
   const CategoryIcon = categoryIcons[deal.category]
 
   return (
@@ -190,6 +196,9 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
         {/* Unit Info — hidden when already shown inline */}
         {!(deal.unit === 'unit' && deal.dealPrice < 50) && (
           <p className="mt-1 text-xs text-[#92400e]">{deal.unit}</p>
+        )}
+        {itemDetailLine && (
+          <p className="mt-1 text-xs text-[#92400e] font-mono">{itemDetailLine}</p>
         )}
 
         {/* Location & Rating */}

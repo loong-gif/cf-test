@@ -55,4 +55,6 @@ export interface AnonymousDeal extends Omit<Deal, 'businessId'> {
   businessReviewCount: number
   businessTier: 'unclaimed' | 'free' | 'paid'
   templateType: TemplateType
+  itemQuantity?: number | null
+  itemUnitPrice?: number | null
 }

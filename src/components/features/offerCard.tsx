@@ -1,6 +1,7 @@
 import { MapPin, Star, Syringe } from '@phosphor-icons/react/dist/ssr'
 import { getCategoryLabel } from '@/lib/data/categories'
 import type { OfferWithBusiness } from '@/types/supabase'
+import { offerItemDetailLine } from '@/types/supabase'
 
 interface OfferCardProps {
   offer: OfferWithBusiness
@@ -8,6 +9,7 @@ interface OfferCardProps {
 
 export function OfferCard({ offer }: OfferCardProps) {
   const business = offer.master_business_info
+  const itemDetailLine = offerItemDetailLine(offer)
   const hasSavings =
     offer.original_price != null &&
     offer.discount_price != null &&
@@ -62,7 +64,7 @@ export function OfferCard({ offer }: OfferCardProps) {
         )}
 
         {/* Pricing */}
-        <div className="flex items-baseline gap-3 mb-4">
+        <div className="flex items-baseline gap-3 mb-1">
           {offer.discount_price != null && (
             <span className="text-amber-800 group-hover:text-amber-700 font-bold text-2xl font-mono transition-colors duration-300">
               ${offer.discount_price.toLocaleString()}
@@ -77,6 +79,10 @@ export function OfferCard({ offer }: OfferCardProps) {
             <span className="text-[#92400e] text-sm">/{offer.unit_type}</span>
           )}
         </div>
+        {itemDetailLine && (
+          <p className="text-xs text-[#92400e] font-mono mb-4">{itemDetailLine}</p>
+        )}
+        {!itemDetailLine && <div className="mb-4" />}
 
         {/* Location + template type */}
         <div className="flex items-center justify-between text-xs text-[#92400e]">

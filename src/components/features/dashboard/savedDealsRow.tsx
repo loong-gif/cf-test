@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/card'
 import { useAuth } from '@/lib/context/authContext'
 import { getDealById } from '@/lib/data/unified'
 import type { AnonymousDeal } from '@/types/deal'
+import { formatItemDetailLine } from '@/types/supabase'
 
 export function SavedDealsRow() {
   const { savedDeals } = useAuth()
@@ -63,6 +64,11 @@ export function SavedDealsRow() {
 
 function MiniDealCard({ deal }: { deal: AnonymousDeal }) {
   const hasDealPrice = deal.dealPrice > 0
+  const itemDetailLine = formatItemDetailLine(
+    deal.itemQuantity,
+    deal.itemUnitPrice,
+    deal.unit,
+  )
 
   return (
     <Link href={`/deals/${deal.id}`} className="shrink-0 w-56">
@@ -104,6 +110,11 @@ function MiniDealCard({ deal }: { deal: AnonymousDeal }) {
                 </span>
               )}
           </div>
+          {itemDetailLine && (
+            <p className="text-[11px] text-[#92400e] font-mono leading-tight">
+              {itemDetailLine}
+            </p>
+          )}
 
           {/* Location */}
           <div className="flex items-center gap-1 text-xs text-[#78350f]">
