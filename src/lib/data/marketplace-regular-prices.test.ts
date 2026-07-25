@@ -20,6 +20,7 @@ function quote(
     city: 'Austin',
     serviceCategory: 'Neurotoxin',
     unitType: 'unit',
+    priceSource: 'promotional_unit_price',
     ...overrides,
   }
 }
@@ -59,6 +60,7 @@ function offer(overrides: Partial<OfferWithBusiness> = {}): OfferWithBusiness {
         service_id: 100,
         quantity: 1,
         unit_price: 12,
+        unit_type: 'unit',
         clinic_services: {
           service_name: 'Botox',
           service_category: 'Neurotoxin',
@@ -88,6 +90,7 @@ test('normalizeOfferItemsToQuotes falls back to clinic_services regular_price', 
           service_id: 100,
           quantity: 1,
           unit_price: null,
+          unit_type: 'unit',
           clinic_services: {
             service_name: 'Botox',
             service_category: 'Neurotoxin',

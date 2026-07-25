@@ -14,6 +14,9 @@ import type {
 
 const FRESHNESS_DAYS = 30
 const PAGE_SIZE = 1000
+const COMPARABLE_UNIT_TYPES = new Set(['unit', 'syringe', 'area', 'vial'])
+const MIN_COMPARABLE_PRICE = 1
+const MAX_COMPARABLE_PRICE = 1000
 
 export const MEMBERSHIP_BUSINESS_JOIN =
   'master_business_info!fk_membership_business(business_id, name, city)'
@@ -42,6 +45,7 @@ export interface PriceComparison {
     minimum: number
     maximum: number
     median: number | null
+    sources: Array<'promotional_unit_price' | 'catalog_regular_price'>
   }>
 }
 
@@ -53,6 +57,7 @@ export interface PriceQuote {
   serviceCategory: string
   unitType: string
   effectivePrice: number
+  priceSource: 'promotional_unit_price' | 'catalog_regular_price'
 }
 
 export interface ParsedPriceFilters {
@@ -209,36 +214,30 @@ export function normalizeOfferItemsToQuotes(
 ): PriceQuote[] {
   const businessId = offer.business_id
   if (businessId === null) return []
+  const city = offer.master_business_info?.city?.trim() || 'Location unavailable'
+  const priceModel = String((offer as { price_model?: string | null }).price_model ?? '').toLowerCase()
+  const isPackage = (offer as { is_package?: boolean | string | null }).is_package
+  if (priceModel === 'from' || isPackage === true || isPackage === 'true') return []
 
-  const city =
-    offer.master_business_info?.city?.trim() || 'Location unavailable'
   const quotes: PriceQuote[] = []
-
   for (const item of offerItems(offer)) {
     const service = quoteItemService(item)
+    const itemUnit = item.unit_type?.trim().toLowerCase() ?? ''
+    const catalogUnit = service?.unit_type?.trim().toLowerCase() ?? ''
+    if (!COMPARABLE_UNIT_TYPES.has(itemUnit)) continue
     const unitPrice = positive(item.unit_price)
     const catalogPrice = positive(service?.regular_price)
-    const effectivePrice = unitPrice > 0 ? unitPrice : catalogPrice
-    if (effectivePrice <= 0) continue
-
+    const hasUnitPrice = unitPrice >= MIN_COMPARABLE_PRICE && unitPrice <= MAX_COMPARABLE_PRICE
+    const hasCatalogPrice = catalogPrice >= MIN_COMPARABLE_PRICE && catalogPrice <= MAX_COMPARABLE_PRICE
+    if (!hasUnitPrice && (!hasCatalogPrice || itemUnit !== catalogUnit)) continue
     quotes.push({
-      offerItemId: item.offer_item_id,
-      offerId: offer.id,
-      businessId,
-      city,
-      serviceCategory:
-        service?.service_category?.trim() ||
-        offer.service_category?.trim() ||
-        'Other services',
-      unitType:
-        service?.unit_type?.trim() ||
-        item.unit_type?.trim() ||
-        offer.unit_type?.trim() ||
-        'service',
-      effectivePrice,
+      offerItemId: item.offer_item_id, offerId: offer.id, businessId, city,
+      serviceCategory: service?.service_category?.trim() || offer.service_category?.trim() || 'Other services',
+      unitType: itemUnit,
+      effectivePrice: hasUnitPrice ? unitPrice : catalogPrice,
+      priceSource: hasUnitPrice ? 'promotional_unit_price' : 'catalog_regular_price',
     })
   }
-
   return quotes
 }
 
