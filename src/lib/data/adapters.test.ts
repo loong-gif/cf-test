@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { offerToAnonymousDeal } from './adapters'
 import type { OfferWithBusiness } from '@/types/supabase'
+import { offerToAnonymousDeal } from './adapters'
 
-function offer(
-  overrides: Partial<OfferWithBusiness> = {},
-): OfferWithBusiness {
+function offer(overrides: Partial<OfferWithBusiness> = {}): OfferWithBusiness {
   return {
     id: 1,
     business_id: 1,
@@ -57,6 +55,30 @@ test('offerToAnonymousDeal maps first item quantity and unit_price', () => {
   const deal = offerToAnonymousDeal(offer())
   assert.equal(deal.itemQuantity, 3)
   assert.equal(deal.itemUnitPrice, 12)
+})
+
+test('offerToAnonymousDeal prefers the linked clinic service name for its title', () => {
+  const deal = offerToAnonymousDeal(
+    offer({
+      service_name: null,
+      offer_raw_text: '40 units of Botox for $400',
+      promo_offer_items: [
+        {
+          offer_item_id: 10,
+          offer_id: 1,
+          service_id: 100,
+          quantity: 40,
+          unit_price: 10,
+          clinic_services: {
+            service_name: 'Botox',
+            service_category: 'Neurotoxins',
+            unit_type: 'unit',
+          },
+        },
+      ],
+    }),
+  )
+  assert.equal(deal.title, 'Botox')
 })
 
 test('offerToAnonymousDeal when promo_offer_items missing', () => {

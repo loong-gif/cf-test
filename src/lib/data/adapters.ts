@@ -9,6 +9,7 @@ import type {
   Business as SupaBusiness,
 } from '@/types/supabase'
 import {
+  offerItemName,
   offerItemQuantity,
   offerItemUnitPrice,
 } from '@/types/supabase'
@@ -108,12 +109,11 @@ export function treatmentToDbCategories(
 export function offerToAnonymousDeal(offer: OfferWithBusiness): AnonymousDeal {
   const biz = offer.master_business_info
 
+  const serviceName = offerItemName(offer)
+
   return {
     id: String(offer.id),
-    title:
-      offer.service_name ??
-      offer.offer_raw_text?.slice(0, 60) ??
-      'Special Offer',
+    title: serviceName || offer.offer_raw_text?.slice(0, 60) || 'Special Offer',
     description:
       offer.offer_raw_text ??
       `${offer.service_name ?? 'Treatment'} — ${offer.template_type ?? 'deal'}`,
