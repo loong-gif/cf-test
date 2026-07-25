@@ -43,10 +43,10 @@ export function PublicHeader() {
             Compare prices
           </Link>
           <Link
-            href="/promotions"
+            href="/deals"
             className="transition-colors hover:text-[#451a03]"
           >
-            Promotions
+            Deals
           </Link>
           <Link
             href="/memberships"

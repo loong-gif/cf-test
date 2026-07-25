@@ -437,7 +437,7 @@ const getFreshOffers = cache(async function getFreshOffers() {
   return enrichOffers(rows)
 })
 
-export const getPublicPromotions = cache(async function getPublicPromotions() {
+export const getPublicDeals = cache(async function getPublicDeals() {
   return (await getFreshOffers())
     .map((offer) => ({ ...offer, discountSignal: promotionSignal(offer) }))
     .filter((offer): offer is PublicPromotion => offer.discountSignal !== null)

@@ -323,8 +323,8 @@ export function PricesClient({
           ) : (
             <>
               No active offer prices are available yet.{' '}
-              <Link href="/promotions" className="underline">
-                Browse promotions instead.
+              <Link href="/deals" className="underline">
+                Browse deals instead.
               </Link>
             </>
           )}

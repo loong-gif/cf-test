@@ -10,7 +10,7 @@
 |-------|------|---------|-------------|-----------|
 | `/` | `src/app/page.tsx` | Homepage — hero, trending deals, categories, cities, value props | Supabase (featured offers, categories, cities) | Dynamic |
 | `/prices` | `src/app/(public)/prices/page.tsx` | Active offer price comparisons by city and category | Supabase `promo_offer_master` + items | Dynamic |
-| `/promotions` | `src/app/(public)/promotions/page.tsx` | Recently verified promotions | Supabase `promo_offer_master` | Dynamic |
+| `/deals` | `src/app/(public)/deals/page.tsx` | Recently verified deals | Supabase `promo_offer_master` | Dynamic |
 | `/memberships` | `src/app/(public)/memberships/page.tsx` | Verified clinic membership plans listing | Supabase `clinic_memberships` | Dynamic |
 | `/businesses` | `src/app/(public)/businesses/page.tsx` | Browse local medspa providers | Supabase `master_business_info` | Dynamic |
 | `/businesses/[id]` | `src/app/(public)/businesses/[id]/page.tsx` | Provider profile with prices and promotions | Supabase marketplace joins | Dynamic |
