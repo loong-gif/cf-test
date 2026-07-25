@@ -54,6 +54,12 @@ export async function getActiveDeals(limit?: number) {
   return offers.map(offerToAnonymousDeal)
 }
 
+/** Return every active promo_offer_master row for the global deals page. */
+export const getAllDeals = cache(async function getAllDeals() {
+  const offers = await getOffersWithBusinesses({ includeUnpriced: true })
+  return offers.map(offerToAnonymousDeal)
+})
+
 export async function getDealsByCity(cityName: string) {
   const offers = await getOffersWithBusinesses({ city: cityName })
   return offers.map(offerToAnonymousDeal)

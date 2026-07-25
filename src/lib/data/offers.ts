@@ -16,6 +16,7 @@ export interface OfferFilters {
   minPrice?: number
   maxPrice?: number
   limit?: number
+  includeUnpriced?: boolean
 }
 
 export async function getOffers(filters?: OfferFilters): Promise<Offer[]> {
@@ -84,8 +85,10 @@ async function _getOffersWithBusinesses(
     .from(TABLE)
     .select(`*, ${OFFER_EMBED}, ${BUSINESS_JOIN}`)
     .eq('is_active', true)
-    .gt('discount_price', 0)
-    .gt('regular_price', 0)
+
+  if (!filters?.includeUnpriced) {
+    query = query.gt('discount_price', 0).gt('regular_price', 0)
+  }
 
   if (filters?.city) {
     const { data: cityBusinesses } = await supabase
