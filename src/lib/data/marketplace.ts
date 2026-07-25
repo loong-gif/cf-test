@@ -45,7 +45,6 @@ export interface PriceComparison {
     minimum: number
     maximum: number
     median: number | null
-    sources: Array<'promotional_unit_price' | 'catalog_regular_price'>
   }>
 }
 
