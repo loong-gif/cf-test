@@ -72,6 +72,7 @@ export function inferState(city: string | null): {
  * "laser", "body", "skincare" have no DB equivalent.
  */
 const DB_TO_TREATMENT: Record<string, TreatmentCategory> = {
+  Neurotoxin: 'botox',
   Neurotoxins: 'botox',
   'Fillers & Other Injectables': 'fillers',
   'Facials & Lasers Services': 'facials',
@@ -81,7 +82,7 @@ const DB_TO_TREATMENT: Record<string, TreatmentCategory> = {
 }
 
 const TREATMENT_TO_DB: Record<TreatmentCategory, string[]> = {
-  botox: ['Neurotoxins'],
+  botox: ['Neurotoxins', 'Neurotoxin'],
   fillers: ['Fillers & Other Injectables'],
   facials: ['Facials & Lasers Services'],
   laser: ['Facials & Lasers Services'],

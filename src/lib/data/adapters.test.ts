@@ -57,6 +57,30 @@ test('offerToAnonymousDeal maps first item quantity and unit_price', () => {
   assert.equal(deal.itemUnitPrice, 12)
 })
 
+test('offerToAnonymousDeal maps the live Neurotoxin category to Botox', () => {
+  const deal = offerToAnonymousDeal(
+    offer({
+      service_category: 'Neurotoxin',
+      promo_offer_items: [
+        {
+          offer_item_id: 10,
+          offer_id: 1,
+          service_id: 100,
+          quantity: 3,
+          unit_price: 12,
+          clinic_services: {
+            service_name: 'Botox',
+            service_category: 'Neurotoxin',
+            unit_type: 'unit',
+          },
+        },
+      ],
+    }),
+  )
+
+  assert.equal(deal.category, 'botox')
+})
+
 test('offerToAnonymousDeal prefers the linked clinic service name for its title', () => {
   const deal = offerToAnonymousDeal(
     offer({
