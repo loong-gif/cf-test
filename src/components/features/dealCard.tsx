@@ -1,13 +1,7 @@
 'use client'
 
-import {
-  Lock,
-  MapPin,
-  ShieldCheck,
-  Sparkle,
-  Star,
-  Syringe,
-} from '@phosphor-icons/react'
+import { Lock, MapPin, Sparkle, Star, Syringe } from '@phosphor-icons/react'
+import { ListedPriceBadge } from '@/components/features/verifiedPrice'
 import { BlurredImage } from '@/components/patterns/blurredImage'
 import { SaveButton } from '@/components/patterns/saveButton'
 import { Badge } from '@/components/ui/badge'
@@ -198,7 +192,9 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
           <p className="mt-1 text-xs text-[#92400e]">{deal.unit}</p>
         )}
         {itemDetailLine && (
-          <p className="mt-1 text-xs text-[#92400e] font-mono">{itemDetailLine}</p>
+          <p className="mt-1 text-xs text-[#92400e] font-mono">
+            {itemDetailLine}
+          </p>
         )}
 
         {/* Location & Rating */}
@@ -214,24 +210,12 @@ export function DealCard({ deal, onClick, variant = 'grid' }: DealCardProps) {
           </span>
         </div>
 
-        {/* Business Hidden Section */}
+        {/* Provider and price source */}
         <div className="mt-3 pt-3 border-t border-[#d4c4b0] flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[#92400e]">
-            <Lock size={16} weight="light" />
-            <span className="text-sm">Business details hidden</span>
-          </div>
-
-          {/* Verified Badge for Paid Tier */}
-          {deal.businessTier === 'paid' && (
-            <Badge
-              variant="brand"
-              size="sm"
-              className="flex items-center gap-1"
-            >
-              <ShieldCheck size={12} weight="fill" />
-              Verified
-            </Badge>
-          )}
+          <span className="min-w-0 truncate text-sm font-medium text-[#78350f]">
+            {deal.businessName ?? 'Local provider'}
+          </span>
+          <ListedPriceBadge className="shrink-0" />
         </div>
       </div>
     </Card>

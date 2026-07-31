@@ -49,6 +49,7 @@ interface AuthContextValue {
   signUp: (
     email: string,
     password: string,
+    locationCity: string,
     firstName?: string,
     lastName?: string,
   ) => Promise<void>
@@ -222,12 +223,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (
       email: string,
       password: string,
+      locationCity: string,
       firstName?: string,
       lastName?: string,
     ): Promise<void> => {
       setState((prev) => ({ ...prev, isLoading: true, error: null }))
 
-      const result = await signUpAction(email, password, firstName, lastName)
+      const result = await signUpAction(
+        email,
+        password,
+        locationCity,
+        firstName,
+        lastName,
+      )
 
       if (!result.success) {
         setState((prev) => ({

@@ -7,10 +7,12 @@ import {
   Check,
   Clock,
   Fire,
+  Scales,
+  Star,
   Tag,
 } from '@phosphor-icons/react'
 import { useEffect, useRef, useState } from 'react'
-import type { SortOption } from '@/lib/mock-data'
+import type { SortOption } from '@/lib/utils/deal-sorting'
 
 interface SortOptionConfig {
   value: SortOption
@@ -24,6 +26,8 @@ const ALL_SORT_OPTIONS: SortOptionConfig[] = [
   { value: 'discount', label: 'Biggest Discount', icon: Tag },
   { value: 'price-asc', label: 'Price: Low to High', icon: ArrowUp },
   { value: 'price-desc', label: 'Price: High to Low', icon: ArrowDown },
+  { value: 'unit-price', label: 'Lowest Unit Price', icon: Scales },
+  { value: 'rating', label: 'Highest Rated', icon: Star },
 ]
 
 interface SortSelectorProps {

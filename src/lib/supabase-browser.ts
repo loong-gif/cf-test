@@ -1,9 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr'
-import { supabasePublishableKey } from './supabase-config'
+import { supabasePublishableKey, supabaseUrl } from './supabase-config'
 
 export function createSupabaseBrowserClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    supabasePublishableKey,
-  )
+  return createBrowserClient(supabaseUrl, supabasePublishableKey)
 }

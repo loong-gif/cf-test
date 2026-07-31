@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { PriceRangeFilter } from '@/components/patterns/priceRangeFilter'
 import { SortSelector } from '@/components/patterns/sortSelector'
 import { trackEvent } from '@/lib/analytics'
-import type { DealFilters, SortOption } from '@/lib/mock-data'
+import type { DealFilters, SortOption } from '@/lib/utils/deal-sorting'
 
 interface FilterPanelProps {
   filters: DealFilters
@@ -111,6 +111,46 @@ export function FilterPanel({
             maxPrice={filters.maxPrice}
             onChange={handlePriceChange}
           />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="text-sm font-medium text-[#78350f]">
+              Minimum savings
+              <select
+                value={filters.minDiscount ?? ''}
+                onChange={(event) =>
+                  onFiltersChange({
+                    ...filters,
+                    minDiscount: event.target.value
+                      ? Number(event.target.value)
+                      : undefined,
+                  })
+                }
+                className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#d4c4b0] bg-[#faf5ee] px-3 text-[#451a03] focus:border-amber-800/40 focus:outline-none"
+              >
+                <option value="">Any discount</option>
+                <option value="20">20%+</option>
+                <option value="40">40%+</option>
+              </select>
+            </label>
+            <label className="text-sm font-medium text-[#78350f]">
+              Provider rating
+              <select
+                value={filters.minRating ?? ''}
+                onChange={(event) =>
+                  onFiltersChange({
+                    ...filters,
+                    minRating: event.target.value
+                      ? Number(event.target.value)
+                      : undefined,
+                  })
+                }
+                className="mt-1.5 min-h-[44px] w-full rounded-xl border border-[#d4c4b0] bg-[#faf5ee] px-3 text-[#451a03] focus:border-amber-800/40 focus:outline-none"
+              >
+                <option value="">Any rating</option>
+                <option value="4.5">4.5+</option>
+                <option value="4.8">4.8+</option>
+              </select>
+            </label>
+          </div>
         </div>
       )}
     </div>

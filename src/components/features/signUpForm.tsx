@@ -15,6 +15,7 @@ interface FormErrors {
   password?: string
   confirmPassword?: string
   firstName?: string
+  locationCity?: string
 }
 
 export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
@@ -25,6 +26,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  const [locationCity, setLocationCity] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -52,6 +54,10 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
       newErrors.confirmPassword = 'Passwords do not match'
     }
 
+    if (!locationCity.trim()) {
+      newErrors.locationCity = 'City is required'
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -67,6 +73,7 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
       await signUp(
         email,
         password,
+        locationCity,
         firstName || undefined,
         lastName || undefined,
       )
@@ -99,6 +106,17 @@ export function SignUpForm({ onSuccess, onSwitchToSignIn }: SignUpFormProps) {
           disabled={isSubmitting}
         />
       </div>
+
+      <Input
+        label="City"
+        type="text"
+        value={locationCity}
+        onChange={(e) => setLocationCity(e.target.value)}
+        placeholder="Irvine"
+        error={errors.locationCity}
+        disabled={isSubmitting}
+        required
+      />
 
       <Input
         label="Email"

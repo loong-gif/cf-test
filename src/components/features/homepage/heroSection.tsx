@@ -1,12 +1,24 @@
-import { MagnifyingGlass, TrendUp } from '@phosphor-icons/react/dist/ssr'
+import { TrendUp } from '@phosphor-icons/react/dist/ssr'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { HeroSearch } from '@/components/features/homepage/heroSearch'
 
 interface HeroSectionProps {
   categories: { slug: string; label: string; count: number }[]
   totalOffers: number
   totalBusinesses: number
+}
+
+function categorySearchTreatment(slug: string): string {
+  const treatmentByCategory: Record<string, string> = {
+    neurotoxins: 'botox',
+    fillers: 'fillers',
+    'facials-lasers': 'facials',
+    wellness: 'skincare',
+    consultations: 'body',
+    other: 'other',
+  }
+  return treatmentByCategory[slug] ?? ''
 }
 
 export function HeroSection({
@@ -46,27 +58,20 @@ export function HeroSection({
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight animate-hero-fade-in [animation-delay:200ms]">
-            Don&apos;t overpay for{' '}
-            <span className="text-amber-300">medspa treatments</span>
+            Don&apos;t overpay for medspa.{' '}
+            <span className="text-amber-300">Compare listed prices</span> from
+            local providers.
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg text-white/80 mb-10 max-w-xl mx-auto animate-hero-fade-in [animation-delay:400ms]">
-            Compare real prices from verified providers. Find the best deals on
-            Botox, fillers, facials, and more.
+            See listed prices, provider ratings, and clear savings with no
+            hidden platform fees.
           </p>
 
-          {/* CTA Button */}
+          {/* Primary task */}
           <div className="animate-hero-fade-in [animation-delay:500ms]">
-            <Link href="/deals">
-              <Button
-                size="lg"
-                className="text-base px-8 py-3.5 shadow-[0_0_30px_rgba(146,64,14,0.4)] hover:shadow-[0_0_40px_rgba(146,64,14,0.6)] transition-shadow duration-300"
-              >
-                <MagnifyingGlass size={20} weight="bold" />
-                Find deals near you
-              </Button>
-            </Link>
+            <HeroSearch />
           </div>
 
           {/* Category chips — frosted glass */}
@@ -76,7 +81,7 @@ export function HeroSection({
               .map((cat) => (
                 <Link
                   key={cat.slug}
-                  href={`/treatments/${cat.slug}`}
+                  href={`/deals?treatment=${categorySearchTreatment(cat.slug)}`}
                   className="bg-white/10 backdrop-blur-sm border border-white/15 text-white/90 hover:bg-white/20 hover:text-white hover:border-white/30 hover:-translate-y-0.5 rounded-full px-4 py-2 min-h-[44px] flex items-center text-sm transition-all duration-200 cursor-pointer"
                 >
                   {cat.label}

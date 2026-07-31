@@ -31,7 +31,7 @@ import {
 import { isSupabaseConfigured } from '@/lib/supabase-config'
 import type { TreatmentCategory } from '@/types/deal'
 
-export const revalidate = 3600 // ISR: regenerate every hour
+export const dynamic = 'force-dynamic'
 
 // Valid treatment slugs for route matching
 const VALID_TREATMENTS: Set<string> = new Set([

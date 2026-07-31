@@ -1,8 +1,16 @@
 'use client'
 
-import { Buildings, Tag } from '@phosphor-icons/react'
-import { useRouter } from 'next/navigation'
+import {
+  Buildings,
+  ListBullets,
+  MapPin,
+  Rows,
+  Tag,
+} from '@phosphor-icons/react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
+import { DealsCompareTable } from '@/components/features/deals/dealsCompareTable'
 import { DealsGrid } from '@/components/features/dealsGrid'
 import { FilterPanel } from '@/components/features/filterPanel'
 import {
@@ -14,12 +22,19 @@ import type { AnonymousDeal } from '@/types/deal'
 
 interface AllDealsPageProps {
   initialDeals: AnonymousDeal[]
+  viewerCity?: string
+  isSignedIn?: boolean
 }
 
 export type DealsFilter =
   | 'all'
   | 'botox'
   | 'fillers'
+  | 'facials'
+  | 'laser'
+  | 'body'
+  | 'skincare'
+  | 'other'
   | 'dysport'
   | 'dermal-filler'
   | 'sculptra'
@@ -28,10 +43,29 @@ const dealsFilters: { value: DealsFilter; label: string }[] = [
   { value: 'all', label: 'All Deals' },
   { value: 'botox', label: 'Botox' },
   { value: 'fillers', label: 'Fillers' },
+  { value: 'facials', label: 'Facials' },
+  { value: 'laser', label: 'Laser' },
+  { value: 'body', label: 'Body' },
+  { value: 'skincare', label: 'Skincare' },
+  { value: 'other', label: 'Other' },
   { value: 'dysport', label: 'Dysport' },
   { value: 'dermal-filler', label: 'Dermal Filler' },
   { value: 'sculptra', label: 'Sculptra' },
 ]
+
+export function resolveDealsFilter(value: string | null): DealsFilter {
+  return dealsFilters.find((filter) => filter.value === value)?.value ?? 'all'
+}
+
+export function countActiveDealFilters(filters: DealFilters): number {
+  return [
+    filters.city,
+    filters.minPrice,
+    filters.maxPrice,
+    filters.minDiscount,
+    filters.minRating,
+  ].filter((value) => value !== undefined && value !== '').length
+}
 
 function matchesServiceName(deal: AnonymousDeal, serviceName: string): boolean {
   return deal.title.toLocaleLowerCase().includes(serviceName)
@@ -41,6 +75,12 @@ const ALL_DEALS_SORT_OPTIONS: SortOption[] = [
   'discount',
   'price-asc',
   'price-desc',
+]
+
+const DEAL_COMPARE_SORT_OPTIONS: SortOption[] = [
+  ...ALL_DEALS_SORT_OPTIONS,
+  'unit-price',
+  'rating',
 ]
 
 export function filterAllDeals(
@@ -55,7 +95,13 @@ export function filterAllDeals(
         return true
       case 'botox':
       case 'fillers':
+      case 'facials':
+      case 'laser':
+      case 'body':
+      case 'skincare':
         return deal.category === selectedCategory
+      case 'other':
+        return ['body', 'skincare'].includes(deal.category)
       case 'dysport':
         return matchesServiceName(deal, 'dysport')
       case 'dermal-filler':
@@ -74,24 +120,52 @@ export function filterAllDeals(
     if (filters.maxPrice !== undefined && deal.dealPrice > filters.maxPrice) {
       return false
     }
+    if (
+      filters.city &&
+      !deal.locationArea
+        .toLocaleLowerCase()
+        .includes(filters.city.toLocaleLowerCase())
+    ) {
+      return false
+    }
+    if (
+      filters.minDiscount !== undefined &&
+      deal.discountPercent < filters.minDiscount
+    ) {
+      return false
+    }
+    if (
+      filters.minRating !== undefined &&
+      deal.businessRating < filters.minRating
+    ) {
+      return false
+    }
     return true
   })
 
   return sortDeals(priceFilteredDeals, sortBy)
 }
 
-export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
+export function AllDealsPage({
+  initialDeals,
+  viewerCity,
+  isSignedIn = false,
+}: AllDealsPageProps) {
   const router = useRouter()
-  const [selectedCategory, setSelectedCategory] = useState<DealsFilter>('all')
-  const [filters, setFilters] = useState<DealFilters>({})
+  const searchParams = useSearchParams()
+  const initialCategory = resolveDealsFilter(searchParams.get('treatment'))
+  const [selectedCategory, setSelectedCategory] =
+    useState<DealsFilter>(initialCategory)
+  const [filters, setFilters] = useState<DealFilters>({
+    city: viewerCity,
+  })
   const [sortBy, setSortBy] = useState<SortOption>('discount')
+  const [view, setView] = useState<'cards' | 'compare'>('cards')
 
-  const activeFilterCount = useMemo(() => {
-    let count = 0
-    if (filters.minPrice !== undefined) count++
-    if (filters.maxPrice !== undefined) count++
-    return count
-  }, [filters.minPrice, filters.maxPrice])
+  const activeFilterCount = useMemo(
+    () => countActiveDealFilters(filters),
+    [filters],
+  )
 
   const filteredDeals = useMemo(
     () => filterAllDeals(initialDeals, selectedCategory, filters, sortBy),
@@ -106,8 +180,8 @@ export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
             All Medspa Deals
           </h1>
           <p className="mt-2 text-[#78350f] max-w-2xl">
-            Browse every active promotion currently available from our
-            providers.
+            Compare listed prices, savings, and provider ratings before you
+            book. Confirm final pricing with the provider.
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-[#78350f]">
             <div className="flex items-center gap-1.5">
@@ -116,9 +190,29 @@ export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
             </div>
             <div className="flex items-center gap-1.5">
               <Buildings size={16} weight="fill" className="text-blue-600" />
-              <span>All locations</span>
+              <span>{viewerCity ? `Near ${viewerCity}` : 'All locations'}</span>
             </div>
+            {viewerCity && (
+              <Link
+                href="/dashboard/settings"
+                className="font-medium text-amber-800 underline underline-offset-4 hover:text-amber-700"
+              >
+                Change in settings
+              </Link>
+            )}
           </div>
+          {isSignedIn && !viewerCity && (
+            <div className="mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-amber-700/20 bg-amber-50 px-4 py-3 text-sm text-[#78350f]">
+              <MapPin size={18} weight="fill" className="text-amber-800" />
+              <span>Add your city to personalize local deals.</span>
+              <Link
+                href="/dashboard/settings"
+                className="font-semibold text-amber-800 underline underline-offset-4 hover:text-amber-700"
+              >
+                Add your city
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="sticky top-16 z-30 bg-[#e8ddd0] -mx-4 px-4 py-3 mb-3 border-b border-[#d4c4b0]/50 space-y-3">
@@ -149,18 +243,43 @@ export function AllDealsPage({ initialDeals }: AllDealsPageProps) {
             onFiltersChange={setFilters}
             onSortChange={setSortBy}
             onReset={() => {
-              setFilters({})
+              setFilters({ city: viewerCity })
               setSortBy('discount')
             }}
             activeFilterCount={activeFilterCount}
-            sortOptions={ALL_DEALS_SORT_OPTIONS}
+            sortOptions={DEAL_COMPARE_SORT_OPTIONS}
           />
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-[#78350f]">View</span>
+            <div className="inline-flex rounded-xl border border-[#d4c4b0] bg-[#f2ebe2] p-1">
+              <button
+                type="button"
+                onClick={() => setView('cards')}
+                className={`inline-flex min-h-[40px] items-center gap-1.5 rounded-lg px-3 text-sm font-medium ${view === 'cards' ? 'bg-[#faf5ee] text-amber-800 shadow-sm' : 'text-[#78350f]'}`}
+                aria-pressed={view === 'cards'}
+              >
+                <Rows size={16} /> Cards
+              </button>
+              <button
+                type="button"
+                onClick={() => setView('compare')}
+                className={`inline-flex min-h-[40px] items-center gap-1.5 rounded-lg px-3 text-sm font-medium ${view === 'compare' ? 'bg-[#faf5ee] text-amber-800 shadow-sm' : 'text-[#78350f]'}`}
+                aria-pressed={view === 'compare'}
+              >
+                <ListBullets size={16} /> Compare
+              </button>
+            </div>
+          </div>
         </div>
 
-        <DealsGrid
-          deals={filteredDeals}
-          onDealClick={(dealId) => router.push(`/deals/${dealId}`)}
-        />
+        {view === 'compare' ? (
+          <DealsCompareTable deals={filteredDeals} />
+        ) : (
+          <DealsGrid
+            deals={filteredDeals}
+            onDealClick={(dealId) => router.push(`/deals/${dealId}`)}
+          />
+        )}
       </div>
     </main>
   )

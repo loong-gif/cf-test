@@ -20,15 +20,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/((?!api|_next).*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, s-maxage=3600, stale-while-revalidate=86400',
-          },
-        ],
-      },
-      {
         source: '/api/:path*',
         headers: [
           { key: 'Cache-Control', value: 'no-store' },

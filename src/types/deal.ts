@@ -50,6 +50,8 @@ export type TemplateType =
   | 'COMPLIMENTARY'
 
 export interface AnonymousDeal extends Omit<Deal, 'businessId'> {
+  businessId?: string
+  businessName?: string
   locationArea: string // e.g., "Downtown Austin"
   businessRating: number
   businessReviewCount: number

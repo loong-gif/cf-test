@@ -9,6 +9,10 @@ import Link from 'next/link'
 import { DealHeroImage } from '@/components/features/dealHeroImage'
 import { DealSidebar } from '@/components/features/dealSidebar'
 import { PricingBreakdown } from '@/components/features/pricingBreakdown'
+import {
+  ListedPriceBadge,
+  PricingSourcePanel,
+} from '@/components/features/verifiedPrice'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import type { AnonymousDeal, Deal, TreatmentCategory } from '@/types/deal'
@@ -103,6 +107,7 @@ export function DealDetailPage({ deal, fullDeal }: DealDetailPageProps) {
                     <span>{deal.claimCount} claimed</span>
                   </div>
                 )}
+                <ListedPriceBadge />
               </div>
             </div>
 
@@ -142,6 +147,8 @@ export function DealDetailPage({ deal, fullDeal }: DealDetailPageProps) {
           <div className="space-y-6">
             {/* Pricing Breakdown */}
             <PricingBreakdown deal={deal} />
+
+            <PricingSourcePanel compact />
 
             {/* Business Info / Auth Wall */}
             <DealSidebar deal={fullDeal} />

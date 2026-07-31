@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import type { AnonymousDeal } from '@/types/deal'
-import { filterAllDeals } from './allDealsPage'
+import {
+  countActiveDealFilters,
+  filterAllDeals,
+  resolveDealsFilter,
+} from './allDealsPage'
 
 const deals: AnonymousDeal[] = [
   {
@@ -105,6 +109,41 @@ test('filterAllDeals supports exact service-name filters', () => {
   )
 })
 
+test('filterAllDeals groups non-injectable services under other treatments', () => {
+  assert.deepEqual(
+    filterAllDeals(
+      [
+        { ...deals[0], id: 'body', category: 'body' },
+        { ...deals[0], id: 'skin', category: 'skincare' },
+        { ...deals[0], id: 'botox', category: 'botox' },
+      ],
+      'other',
+      {},
+      'popular',
+    ).map((deal) => deal.id),
+    ['body', 'skin'],
+  )
+})
+
+test('resolveDealsFilter accepts every homepage treatment option', () => {
+  assert.equal(resolveDealsFilter('facials'), 'facials')
+  assert.equal(resolveDealsFilter('other'), 'other')
+  assert.equal(resolveDealsFilter('unknown'), 'all')
+  assert.equal(resolveDealsFilter(null), 'all')
+})
+
+test('countActiveDealFilters includes personalized city filtering', () => {
+  assert.equal(countActiveDealFilters({ city: 'Irvine' }), 1)
+  assert.equal(
+    countActiveDealFilters({
+      city: 'Irvine',
+      maxPrice: 200,
+      minDiscount: 20,
+    }),
+    3,
+  )
+})
+
 test('filterAllDeals sorts by biggest discount percent by default option', () => {
   assert.deepEqual(
     filterAllDeals(
@@ -132,5 +171,53 @@ test('filterAllDeals sorts by price ascending', () => {
       'price-asc',
     ).map((deal) => deal.id),
     ['cheap', 'expensive'],
+  )
+})
+
+test('filterAllDeals applies city, savings, and rating filters together', () => {
+  const comparisonDeals = [
+    { ...deals[0], id: 'matches', discountPercent: 45, businessRating: 4.8 },
+    {
+      ...deals[0],
+      id: 'low-rating',
+      discountPercent: 45,
+      businessRating: 4.2,
+    },
+    {
+      ...deals[0],
+      id: 'other-city',
+      locationArea: 'Tucson',
+      discountPercent: 45,
+      businessRating: 4.8,
+    },
+  ]
+
+  assert.deepEqual(
+    filterAllDeals(
+      comparisonDeals,
+      'all',
+      { city: 'irvine', minDiscount: 40, minRating: 4.5 },
+      'discount',
+    ).map((deal) => deal.id),
+    ['matches'],
+  )
+})
+
+test('filterAllDeals can sort comparable deals by unit price and rating', () => {
+  const comparisonDeals = [
+    { ...deals[0], id: 'higher-unit', itemUnitPrice: 12, businessRating: 4.6 },
+    { ...deals[0], id: 'lower-unit', itemUnitPrice: 9, businessRating: 4.7 },
+    { ...deals[0], id: 'no-unit', itemUnitPrice: null, businessRating: 4.9 },
+  ]
+
+  assert.deepEqual(
+    filterAllDeals(comparisonDeals, 'all', {}, 'unit-price').map(
+      (deal) => deal.id,
+    ),
+    ['lower-unit', 'higher-unit', 'no-unit'],
+  )
+  assert.deepEqual(
+    filterAllDeals(comparisonDeals, 'all', {}, 'rating').map((deal) => deal.id),
+    ['no-unit', 'lower-unit', 'higher-unit'],
   )
 })

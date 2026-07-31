@@ -16,10 +16,16 @@ interface AuthResult {
 export async function signUpAction(
   email: string,
   password: string,
+  locationCity: string,
   firstName?: string,
   lastName?: string,
 ): Promise<AuthResult> {
   try {
+    const normalizedLocationCity = locationCity.trim()
+    if (!normalizedLocationCity) {
+      return { success: false, error: 'City is required.' }
+    }
+
     const supabase = await createSupabaseServerClient()
 
     const { data, error } = await supabase.auth.signUp({
@@ -29,6 +35,7 @@ export async function signUpAction(
         data: {
           first_name: firstName?.trim() ?? '',
           last_name: lastName?.trim() ?? '',
+          location_city: normalizedLocationCity,
         },
       },
     })

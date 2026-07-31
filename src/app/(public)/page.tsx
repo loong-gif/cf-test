@@ -6,12 +6,13 @@ import { HeroSection } from '@/components/features/homepage/heroSection'
 import { SocialProofSection } from '@/components/features/homepage/socialProofSection'
 import { TrendingDealsSection } from '@/components/features/homepage/trendingDealsSection'
 import { ValuePropsSection } from '@/components/features/homepage/valuePropsSection'
+import { PricingSourcePanel } from '@/components/features/verifiedPrice'
 import { getCategoryLabel, getCategorySlug } from '@/lib/data/categories'
 import { getFeaturedOffers, getOfferCategories } from '@/lib/data/offers'
 import { getCityDealCounts } from '@/lib/data/unified'
 import { isSupabaseConfigured } from '@/lib/supabase-config'
 
-export const revalidate = 3600 // ISR: regenerate every hour
+export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   if (!isSupabaseConfigured) {
@@ -76,6 +77,11 @@ export default async function Home() {
       {/* Browse by City — contained, base background */}
       <div className="content-visibility-auto">
         <CityGrid cities={cityDealCounts} />
+      </div>
+
+      {/* Trust — one clear explanation of pricing provenance */}
+      <div className="content-visibility-auto mx-auto max-w-7xl px-4 pb-4 sm:px-6 lg:px-8">
+        <PricingSourcePanel />
       </div>
 
       {/* How It Works — full-bleed image background */}

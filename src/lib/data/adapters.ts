@@ -116,6 +116,8 @@ export function offerToAnonymousDeal(offer: OfferWithBusiness): AnonymousDeal {
 
   return {
     id: String(offer.id),
+    businessId: biz?.business_id ? String(biz.business_id) : undefined,
+    businessName: biz?.name ?? undefined,
     title: serviceName || offer.offer_raw_text?.slice(0, 60) || 'Special Offer',
     description:
       offer.offer_raw_text ??

@@ -9,22 +9,20 @@ const steps = [
     icon: MagnifyingGlass,
     step: '01',
     title: 'Browse',
-    description:
-      'Search by treatment or city. See real prices from real providers — no hidden fees.',
+    description: 'Browse real prices by treatment or city.',
   },
   {
     icon: Scales,
     step: '02',
     title: 'Compare',
-    description:
-      'Side-by-side pricing so you can spot the best value. Filter by category, location, or price.',
+    description: 'Compare price, savings, and provider rating side by side.',
   },
   {
     icon: PiggyBank,
     step: '03',
     title: 'Save',
     description:
-      'Claim deals directly. Save 20-60% compared to standard pricing at top medspas.',
+      'Claim a deal directly and save 20–60% compared to regular pricing.',
   },
 ]
 

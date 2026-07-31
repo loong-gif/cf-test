@@ -2,7 +2,11 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
 import { OrganizationSchema, WebsiteSchema } from '@/components/seo'
+import { getSupabaseOrigin } from '@/lib/public-runtime-config'
+import { publicSiteUrl, supabaseUrl } from '@/lib/supabase-config'
 import './globals.css'
+
+const supabaseOrigin = getSupabaseOrigin(supabaseUrl)
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -12,9 +16,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || 'https://www.costfinders.ai',
-  ),
+  metadataBase: new URL(publicSiteUrl),
   title: {
     default: 'CostFinders - Compare MedSpa Prices',
     template: '%s | CostFinders',
@@ -67,14 +69,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link
-          rel="preconnect"
-          href="https://kdlpkjzcnbkjcvwsvlwn.supabase.co"
-        />
-        <link
-          rel="dns-prefetch"
-          href="https://kdlpkjzcnbkjcvwsvlwn.supabase.co"
-        />
+        {supabaseOrigin ? (
+          <>
+            <link rel="preconnect" href={supabaseOrigin} />
+            <link rel="dns-prefetch" href={supabaseOrigin} />
+          </>
+        ) : null}
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>

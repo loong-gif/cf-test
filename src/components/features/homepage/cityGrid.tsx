@@ -32,10 +32,10 @@ export function CityGrid({ cities }: CityGridProps) {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-bold text-[#451a03]">
-              Browse by city
+              Popular cities
             </h2>
             <p className="text-sm text-[#78350f] mt-1">
-              Discover providers near you
+              Explore deal availability near you
             </p>
           </div>
         </div>

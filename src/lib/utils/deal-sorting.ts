@@ -6,6 +6,7 @@ export interface DealFilters {
   minPrice?: number
   maxPrice?: number
   minDiscount?: number
+  minRating?: number
 }
 
 export type SortOption =
@@ -14,6 +15,15 @@ export type SortOption =
   | 'discount'
   | 'popular'
   | 'newest'
+  | 'unit-price'
+  | 'rating'
+
+function comparableUnitPrice(deal: AnonymousDeal): number {
+  if (deal.itemUnitPrice != null && deal.itemUnitPrice > 0) {
+    return deal.itemUnitPrice
+  }
+  return Number.POSITIVE_INFINITY
+}
 
 export function sortDeals(
   dealsToSort: AnonymousDeal[],
@@ -35,6 +45,12 @@ export function sortDeals(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
+    case 'unit-price':
+      return sorted.sort(
+        (a, b) => comparableUnitPrice(a) - comparableUnitPrice(b),
+      )
+    case 'rating':
+      return sorted.sort((a, b) => b.businessRating - a.businessRating)
     default:
       return sorted
   }

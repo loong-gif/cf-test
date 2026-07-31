@@ -25,7 +25,7 @@ import { getCategoryFaqs } from '@/lib/seo/faq-content'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
 import { buildTreatmentServiceSchema } from '@/lib/seo/schemas'
 
-export const revalidate = 3600 // ISR: regenerate every hour
+export const dynamic = 'force-dynamic'
 
 // Icon mapping for categories
 const categoryIcons: Record<string, React.ReactNode> = {

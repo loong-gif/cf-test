@@ -1,4 +1,5 @@
 import { MapPin, Star, Syringe } from '@phosphor-icons/react/dist/ssr'
+import { ListedPriceBadge } from '@/components/features/verifiedPrice'
 import { getCategoryLabel } from '@/lib/data/categories'
 import type { OfferWithBusiness } from '@/types/supabase'
 import { offerItemDetailLine } from '@/types/supabase'
@@ -10,16 +11,12 @@ interface OfferCardProps {
 export function OfferCard({ offer }: OfferCardProps) {
   const business = offer.master_business_info
   const itemDetailLine = offerItemDetailLine(offer)
+  const originalPrice = offer.original_price ?? 0
+  const discountPrice = offer.discount_price ?? 0
   const hasSavings =
-    offer.original_price != null &&
-    offer.discount_price != null &&
-    offer.original_price > offer.discount_price
+    originalPrice > 0 && discountPrice > 0 && originalPrice > discountPrice
   const savingsPercent = hasSavings
-    ? Math.round(
-        ((offer.original_price! - offer.discount_price!) /
-          offer.original_price!) *
-          100,
-      )
+    ? Math.round(((originalPrice - discountPrice) / originalPrice) * 100)
     : null
 
   return (
@@ -80,7 +77,9 @@ export function OfferCard({ offer }: OfferCardProps) {
           )}
         </div>
         {itemDetailLine && (
-          <p className="text-xs text-[#92400e] font-mono mb-4">{itemDetailLine}</p>
+          <p className="text-xs text-[#92400e] font-mono mb-4">
+            {itemDetailLine}
+          </p>
         )}
         {!itemDetailLine && <div className="mb-4" />}
 
@@ -97,6 +96,9 @@ export function OfferCard({ offer }: OfferCardProps) {
               {offer.template_type.toLowerCase().replace('_', ' ')}
             </span>
           )}
+        </div>
+        <div className="mt-3 pt-3 border-t border-[#d4c4b0]">
+          <ListedPriceBadge />
         </div>
       </div>
     </div>

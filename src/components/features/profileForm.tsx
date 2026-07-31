@@ -18,6 +18,7 @@ export function ProfileForm() {
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
   const [phoneError, setPhoneError] = useState<string | null>(null)
+  const [cityError, setCityError] = useState<string | null>(null)
 
   const validatePhone = (value: string): boolean => {
     if (!value.trim()) {
@@ -38,6 +39,11 @@ export function ProfileForm() {
     e.preventDefault()
 
     if (!validatePhone(phone)) return
+    if (!city.trim()) {
+      setCityError('City is required')
+      return
+    }
+    setCityError(null)
 
     setIsSaving(true)
     setSaveMessage(null)
@@ -46,7 +52,7 @@ export function ProfileForm() {
       firstName: firstName.trim() || undefined,
       lastName: lastName.trim() || undefined,
       phone: phone.trim() || undefined,
-      locationCity: city.trim() || undefined,
+      locationCity: city.trim(),
       locationState: locationState.trim() || undefined,
     })
 
@@ -123,9 +129,14 @@ export function ProfileForm() {
           label="City"
           type="text"
           value={city}
-          onChange={(e) => setCity(e.target.value)}
+          onChange={(e) => {
+            setCity(e.target.value)
+            if (cityError) setCityError(null)
+          }}
           placeholder="Miami"
           disabled={isSaving}
+          error={cityError || undefined}
+          required
         />
         <Input
           label="State"

@@ -4,7 +4,7 @@ import { BreadcrumbSchema } from '@/components/seo'
 import { getUnifiedCategories } from '@/lib/data/unified'
 import { buildCanonicalUrl, SITE_CONFIG } from '@/lib/seo/metadata'
 
-export const revalidate = 86400 // ISR: regenerate every 24 hours
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Browse Aesthetic Treatments | CostFinders',
