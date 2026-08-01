@@ -14,7 +14,7 @@ const AuthModal = dynamic(
 
 import { NotificationBell } from '@/components/patterns/notificationBell'
 import { Button } from '@/components/ui/button'
-import { safeDashboardPath } from '@/lib/auth-redirect'
+import { replaceWithDashboard, safeDashboardPath } from '@/lib/auth-redirect'
 import { useAuth } from '@/lib/context/authContext'
 import { useScrolled } from '@/lib/hooks/useScrolled'
 
@@ -77,9 +77,10 @@ function GlobalHeaderInner() {
     const destination =
       pendingNext ?? safeDashboardPath(searchParams.get('next'))
     setPendingNext(null)
-    clearAuthQueryParams()
     if (destination) {
-      router.replace(destination)
+      replaceWithDashboard(router.replace, destination)
+    } else {
+      clearAuthQueryParams()
     }
   }
 

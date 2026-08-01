@@ -4,8 +4,10 @@ import { SignIn } from '@phosphor-icons/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import { buildSignInPath } from '@/lib/auth-redirect'
 import { useScrolled } from '@/lib/hooks/useScrolled'
+
+const consumerSignInHref = buildSignInPath('/dashboard')
 
 export function PublicHeader() {
   const pathname = usePathname()
@@ -64,16 +66,17 @@ export function PublicHeader() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/dashboard?signin=required"
+            href={consumerSignInHref}
             className="text-sm text-[#78350f] hover:text-[#451a03] transition-colors hidden sm:flex items-center justify-center min-h-[44px] px-3"
           >
             Sign in
           </Link>
-          <Link href="/dashboard?signin=required">
-            <Button variant="primary" size="sm">
-              <SignIn size={18} weight="bold" />
-              <span className="hidden sm:inline">Get Started</span>
-            </Button>
+          <Link
+            href={consumerSignInHref}
+            className="inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-md bg-amber-800 px-3 py-1.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-amber-700 hover:shadow-[0_0_16px_rgba(146,64,14,0.25)] focus:outline-none focus:ring-2 focus:ring-amber-800/40 focus:ring-offset-2 focus:ring-offset-[#e8ddd0]"
+          >
+            <SignIn size={18} weight="bold" />
+            <span className="hidden sm:inline">Get Started</span>
           </Link>
         </div>
       </div>

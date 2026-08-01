@@ -41,8 +41,11 @@ export function AuthModal({
     if (state.error) return
 
     if (state.user) {
-      onSuccess?.()
-      onClose()
+      if (onSuccess) {
+        onSuccess()
+      } else {
+        onClose()
+      }
     }
   }, [
     awaitingAuth,

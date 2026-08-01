@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { buildRequestSignInPath, legacySignInPath } from '@/lib/auth-redirect'
+import { redirectWithResponseCookies } from '@/lib/response-cookies'
 import { isSupabaseConfigured } from '@/lib/supabase-config'
 
 /** Routes requiring authentication (any role). */
@@ -13,6 +15,18 @@ const ROLE_ROUTES: { prefix: string; role: string; fallback: string }[] = [
 ]
 
 export default async function proxy(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl
+
+  // Preserve old dashboard bookmarks while moving auth to a dedicated route.
+  const legacySignIn = legacySignInPath(
+    pathname,
+    searchParams.get('signin'),
+    searchParams.get('next'),
+  )
+  if (legacySignIn) {
+    return NextResponse.redirect(new URL(legacySignIn, request.url))
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
@@ -46,8 +60,6 @@ export default async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const { pathname } = request.nextUrl
-
   // --- Role-gated routes (check before generic auth) ---
   for (const route of ROLE_ROUTES) {
     if (pathname.startsWith(route.prefix)) {
@@ -55,13 +67,13 @@ export default async function proxy(request: NextRequest) {
         const url = request.nextUrl.clone()
         url.pathname = route.fallback
         url.searchParams.set('signin', 'required')
-        return NextResponse.redirect(url)
+        return redirectWithResponseCookies(url, supabaseResponse)
       }
       const userRole = user.user_metadata?.role as string | undefined
       if (userRole !== route.role) {
         const url = request.nextUrl.clone()
         url.pathname = route.fallback
-        return NextResponse.redirect(url)
+        return redirectWithResponseCookies(url, supabaseResponse)
       }
       return supabaseResponse
     }
@@ -73,11 +85,13 @@ export default async function proxy(request: NextRequest) {
   )
 
   if (needsAuth && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    url.searchParams.set('signin', 'required')
-    url.searchParams.set('next', pathname)
-    return NextResponse.redirect(url)
+    return redirectWithResponseCookies(
+      new URL(
+        buildRequestSignInPath(pathname, request.nextUrl.search),
+        request.url,
+      ),
+      supabaseResponse,
+    )
   }
 
   return supabaseResponse
