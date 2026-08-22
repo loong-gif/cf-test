@@ -35,6 +35,16 @@ Backend: Supabase (Postgres + Auth + Realtime + Storage). Hosting: Vercel.
 - **Rendering**: most public pages are `force-dynamic` (ISR documented but currently disabled); guides use `revalidate = 86400`; [state]/[city] cluster uses `generateStaticParams`
 - **Design tokens**: CSS vars in `globals.css` `@theme` (bg-base #e8ddd0, accent #92400e, text #451a03); Phosphor icons only; Sora font referenced but NOT loaded (no next/font, no font files)
 
+## Data-Source Map (verified 2026-08-22)
+
+- **Consumer dashboard**: fully LIVE (favorites, claims, messages, notifications, settings)
+- **Business**: LIVE = deals CRUD, leads, profile, messages | MOCK = overview metrics, analytics, pricing, billing/checkout, sponsored
+- **Admin**: LIVE = businesses, deals, users, leads relay, content categories/locations | MOCK = monetization, reports, data tools, content treatments
+- **Public**: LIVE = /prices, /memberships, /businesses, /deals | MOCK = [state]/[city]/[neighborhood] + provider pages
+- `/compare_price` → permanent redirect to `/prices`
+- Analytics: `category_selected` event declared in `lib/analytics.ts` but never fired
+- No `middleware.ts` — all auth gates are client-side redirects
+
 ## Known Gaps (verified 2026-08-22)
 
 - Anonymity model drift: deal cards / compare table / `/businesses` directory expose business names publicly, while deal sidebar still says "Business Details Hidden"
