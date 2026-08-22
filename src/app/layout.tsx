@@ -1,10 +1,23 @@
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
+import { Manrope, Sora } from 'next/font/google'
 import { OrganizationSchema, WebsiteSchema } from '@/components/seo'
 import { getSupabaseOrigin } from '@/lib/public-runtime-config'
 import { publicSiteUrl, supabaseUrl } from '@/lib/supabase-config'
 import './globals.css'
+
+const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora-loaded',
+  display: 'swap',
+})
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope-loaded',
+  display: 'swap',
+})
 
 const supabaseOrigin = getSupabaseOrigin(supabaseUrl)
 
@@ -78,7 +91,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
-      <body className="font-sans antialiased">
+      <body
+        className={`${sora.variable} ${manrope.variable} font-sans antialiased`}
+      >
         <WebsiteSchema />
         <OrganizationSchema />
         {children}

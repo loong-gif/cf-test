@@ -617,7 +617,7 @@ export function BusinessesManagementClient({
   const [searchQuery, setSearchQuery] = useState('')
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null)
   const [pendingClaimCount, setPendingClaimCount] = useState(0)
-  const [isFilterPending, startFilterTransition] = useTransition()
+  const [, startFilterTransition] = useTransition()
 
   // Show feedback briefly then clear
   const showFeedback = useCallback((message: string) => {

@@ -29,11 +29,11 @@ Backend: Supabase (Postgres + Auth + Realtime + Storage). Hosting: Vercel.
 ## Key Patterns
 
 - **Data fetch**: server components query via `src/lib/data/*` with React `cache()` dedup; RPC-first with JS fallback (`get_city_deal_counts`, `get_business_count_for_city`)
-- **Missing credentials**: `src/lib/supabase.ts` falls back to a stub fetch returning `[]`; public data pages render `SupabaseSetupNotice` when `isSupabaseConfigured` is false; dashboards hard-error (browser client throws)
+- **Missing credentials**: `src/lib/supabase.ts` + `src/lib/supabase-browser.ts` use local-demo fallback URLs/keys so auth providers and `npm run build` work without env vars; public data pages still render `SupabaseSetupNotice` when `isSupabaseConfigured` is false
 - **Claim flow**: `claimCTA` (auth wall) → `claimDealModal` → `createClaimAction` (server derives business_id, max 3 active claims, dedupe) → reveal via `getBusinessRevealAction`; auto-creates messaging conversation + best-effort Resend emails
 - **Realtime**: messaging via Supabase channels + broadcast typing indicators; notifications use realtime + 60s polling fallback
 - **Rendering**: most public pages are `force-dynamic` (ISR documented but currently disabled); guides use `revalidate = 86400`; [state]/[city] cluster uses `generateStaticParams`
-- **Design tokens**: CSS vars in `globals.css` `@theme` (bg-base #e8ddd0, accent #92400e, text #451a03); Phosphor icons only; Sora font referenced but NOT loaded (no next/font, no font files)
+- **Design tokens**: CSS vars in `globals.css` `@theme`; Sora + Manrope via `next/font/google` in root layout; Phosphor icons only
 
 ## Data-Source Map (verified 2026-08-22)
 
@@ -42,26 +42,27 @@ Backend: Supabase (Postgres + Auth + Realtime + Storage). Hosting: Vercel.
 - **Admin**: LIVE = businesses, deals, users, leads relay, content categories/locations | MOCK = monetization, reports, data tools, content treatments
 - **Public**: LIVE = /prices, /memberships, /businesses, /deals | MOCK = [state]/[city]/[neighborhood] + provider pages
 - `/compare_price` → permanent redirect to `/prices`
-- Analytics: `category_selected` event declared in `lib/analytics.ts` but never fired
+- Analytics: `category_selected` fires on `/deals` category tabs and city deals filter
 - No `middleware.ts` — all auth gates are client-side redirects
 
 ## Known Gaps (verified 2026-08-22)
 
-- Anonymity model drift: deal cards / compare table / `/businesses` directory expose business names publicly, while deal sidebar still says "Business Details Hidden"
+- Anonymity model: open transparency — business names public on cards/compare/directory; claim CTA emphasizes lock-in price + connect with business (not "hidden details")
 - Neighborhood/provider SEO pages + sitemap sections run on mock-data, not live Supabase
-- No footer, no /privacy, no /terms anywhere
-- No mobile nav on public pages (header nav hidden on <md, no hamburger)
-- `BlurredImage` keeps blur even after claim (`unlocked` only hides lock icon); `alt` prop ignored (hardcoded `alt=""`)
+- `SiteFooter` on `(public)/layout`, consumer non-dashboard routes, and `/business` landing; `/privacy` + `/terms` static pages
+- Public mobile nav: hamburger menu in `publicHeader` + `globalHeader` via `PublicMobileMenu`
+- `BlurredImage`: clears blur/overlay when `unlocked`; uses passed `alt`
+- `createClaimAction` revalidates `/dashboard/claims` (was `/account/claims`)
+- `category_selected` analytics fires from `/deals` category tabs and city deals filter
 - Copy drift: Title Case headings/buttons widespread vs sentence-case messaging guide
 - Business/admin dashboard overview metrics are hardcoded mock numbers
 - Phone verification is a no-op (Twilio deferred); email via Resend is env-gated
-- `createClaimAction` revalidates `/account/claims` (actual route is `/dashboard/claims`)
-- Guide pages 404 when live deal count is 0 (fragile vs data pipeline hiccups)
-- `prefers-reduced-motion` does not cover `.animate-hero-fade-in`
+- Guide pages render when live deal count is 0 (empty-state CTA instead of 404)
+- `prefers-reduced-motion` disables hero entrance animation
 
 ## Testing
 
 - `npm run lint` (Biome; ~20 known issues, mostly a11y labels in admin content pages)
 - `npm run test:auth`, `npm run test:marketplace` (tsx unit tests, 18 passing)
 - k6 load scripts in `tests/load/`; Playwright available for visual checks
-- Local demo without credentials: `/` + `/deals` show setup notice; `/business` landing renders; dashboards error
+- Local demo without credentials: `/` + `/deals` show setup notice; `/business` landing renders; dashboards prerender (auth inactive until credentials configured)

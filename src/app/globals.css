@@ -8,9 +8,9 @@
 
 :root {
   /* Non-Tailwind tokens (used directly in CSS, not duplicated in @theme) */
-  /* Local-first font stack keeps the demo buildable without Google Fonts access. */
-  --font-sora: 'Sora';
-  --font-manrope: 'Manrope';
+  /* Loaded via next/font in src/app/layout.tsx */
+  --font-sora: var(--font-sora-loaded), 'Sora', system-ui, sans-serif;
+  --font-manrope: var(--font-manrope-loaded), 'Manrope', system-ui, sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', monospace;
   --color-bg-overlay: rgba(69, 26, 3, 0.4);
   --color-accent-text: #ffffff;
@@ -166,9 +166,11 @@ body {
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  [data-scroll-reveal] {
+  [data-scroll-reveal],
+  .animate-hero-fade-in {
     opacity: 1;
     animation: none !important;
+    transform: none !important;
   }
 
   html {

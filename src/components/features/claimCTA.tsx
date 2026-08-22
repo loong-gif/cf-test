@@ -1,6 +1,6 @@
 'use client'
 
-import { Lock, Sparkle, UserPlus } from '@phosphor-icons/react'
+import { Handshake, Sparkle, UserPlus } from '@phosphor-icons/react'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -79,12 +79,12 @@ export function ClaimCTA({
             </div>
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-[#451a03]">
-                Business Details Hidden
+                Ready to claim this deal?
               </h3>
               <p className="text-sm text-[#78350f]">
-                Claim this deal to reveal the business name, location, and
-                contact details. The business will contact you to schedule your
-                appointment.
+                Lock in this price and connect with the business. They'll reach
+                out to schedule your appointment, and you can track the status
+                in your dashboard.
               </p>
             </div>
             <Button
@@ -116,15 +116,15 @@ export function ClaimCTA({
       <Card variant="glass" padding="lg">
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-amber-800/8 flex items-center justify-center">
-            <Lock size={32} weight="fill" className="text-amber-800" />
+            <Handshake size={32} weight="fill" className="text-amber-800" />
           </div>
           <div className="space-y-2">
             <h3 className="text-lg font-semibold text-[#451a03]">
-              Business Details Hidden
+              Claim this deal
             </h3>
             <p className="text-sm text-[#78350f]">
-              Create a free account to reveal the business name, location, and
-              contact details — then claim this deal.
+              Create a free account to claim this deal and connect with the
+              business. They'll contact you to schedule your appointment.
             </p>
           </div>
           <div className="w-full space-y-3">

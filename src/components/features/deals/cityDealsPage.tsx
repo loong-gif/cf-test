@@ -10,6 +10,7 @@ import { CategoryFilter } from '@/components/patterns/categoryFilter'
 import { Card } from '@/components/ui/card'
 import { Faq } from '@/components/ui/faq'
 import { getCityDealsFaqs } from '@/lib/seo/faq-content'
+import { trackEvent } from '@/lib/analytics'
 import {
   type DealFilters,
   type SortOption,
@@ -77,7 +78,7 @@ export function CityDealsPage({
 
   const handleCategoryChange = (category: TreatmentCategory | 'all') => {
     if (category !== 'all') {
-      // Navigate to treatment+city page
+      trackEvent('category_selected', { category, city: citySlug })
       router.push(`/deals/${category}/${citySlug}`)
     } else {
       setSelectedCategory(category)
