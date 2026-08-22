@@ -132,7 +132,7 @@ export async function updateProfileAction(
       return { success: false, error: error.message }
     }
 
-    revalidatePath('/account')
+    revalidatePath('/dashboard/settings')
 
     return { success: true, profile: data as Profile }
   } catch (error) {
@@ -197,7 +197,7 @@ export async function updateAlertPrefsAction(
       return { success: false, error: error.message }
     }
 
-    revalidatePath('/account')
+    revalidatePath('/dashboard/settings')
 
     return { success: true, profile: data as Profile }
   } catch (error) {

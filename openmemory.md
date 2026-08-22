@@ -33,7 +33,7 @@ Backend: Supabase (Postgres + Auth + Realtime + Storage). Hosting: Vercel.
 - **Claim flow**: `claimCTA` (auth wall) → `claimDealModal` → `createClaimAction` (server derives business_id, max 3 active claims, dedupe) → reveal via `getBusinessRevealAction`; auto-creates messaging conversation + best-effort Resend emails
 - **Realtime**: messaging via Supabase channels + broadcast typing indicators; notifications use realtime + 60s polling fallback
 - **Rendering**: most public pages are `force-dynamic` (ISR documented but currently disabled); guides use `revalidate = 86400`; [state]/[city] cluster uses `generateStaticParams`
-- **Design tokens**: CSS vars in `globals.css` `@theme` (bg-base #e8ddd0, accent #92400e, text #451a03); Phosphor icons only; Sora font referenced but NOT loaded (no next/font, no font files)
+- **Design tokens**: CSS vars in `globals.css` `@theme`; Sora + Manrope via `next/font/google` in root layout; Phosphor icons only
 
 ## Data-Source Map (verified 2026-08-22)
 
@@ -49,16 +49,16 @@ Backend: Supabase (Postgres + Auth + Realtime + Storage). Hosting: Vercel.
 
 - Anonymity model: open transparency — business names public on cards/compare/directory; claim CTA emphasizes lock-in price + connect with business (not "hidden details")
 - Neighborhood/provider SEO pages + sitemap sections run on mock-data, not live Supabase
-- No footer, no /privacy, no /terms anywhere
-- No mobile nav on public pages (header nav hidden on <md, no hamburger)
+- `SiteFooter` on `(public)/layout`, consumer non-dashboard routes, and `/business` landing; `/privacy` + `/terms` static pages
+- Public mobile nav: hamburger menu in `publicHeader` + `globalHeader` via `PublicMobileMenu`
 - `BlurredImage`: clears blur/overlay when `unlocked`; uses passed `alt`
 - `createClaimAction` revalidates `/dashboard/claims` (was `/account/claims`)
 - `category_selected` analytics fires from `/deals` category tabs and city deals filter
 - Copy drift: Title Case headings/buttons widespread vs sentence-case messaging guide
 - Business/admin dashboard overview metrics are hardcoded mock numbers
 - Phone verification is a no-op (Twilio deferred); email via Resend is env-gated
-- Guide pages 404 when live deal count is 0 (fragile vs data pipeline hiccups)
-- `prefers-reduced-motion` does not cover `.animate-hero-fade-in`
+- Guide pages render when live deal count is 0 (empty-state CTA instead of 404)
+- `prefers-reduced-motion` disables hero entrance animation
 
 ## Testing
 

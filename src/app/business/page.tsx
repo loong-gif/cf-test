@@ -24,6 +24,7 @@ const BusinessSearchModal = dynamic(
 )
 
 import { AnimatedCounter } from '@/components/patterns/animatedCounter'
+import { SiteFooter } from '@/components/layout/siteFooter'
 import {
   ScrollReveal,
   ScrollRevealItem,
@@ -68,6 +69,7 @@ export default function BusinessPage() {
   }
 
   return (
+    <>
     <main className="min-h-screen pt-16 pb-0">
       {/* Hero — full-bleed with image background */}
       <section className="relative w-full min-h-[60vh] sm:min-h-[70vh] flex items-center overflow-hidden">
@@ -263,5 +265,7 @@ export default function BusinessPage() {
         onCreateNew={handleCreateNew}
       />
     </main>
+    <SiteFooter />
+  </>
   )
 }

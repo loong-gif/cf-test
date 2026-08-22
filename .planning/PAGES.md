@@ -27,6 +27,8 @@
 | `/deals/[city]` | City deals - all deals in city, category filters, SEO for "medspa deals [city]" |
 | `/deals/[treatment]/[city]` | Treatment+city - filtered deals, SEO for "botox [city]" keywords |
 | `/deals/[id]` | Deal detail - full deal info, pricing breakdown, booking sidebar |
+| `/privacy` | Privacy policy - data collection, use, and user choices |
+| `/terms` | Terms of service - platform usage and liability |
 
 ### Consumer Dashboard
 

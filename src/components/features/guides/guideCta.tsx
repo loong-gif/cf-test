@@ -35,11 +35,14 @@ export function GuideCta({
       {/* Primary CTA */}
       <div className="bg-amber-800 rounded-2xl p-8 text-center mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">
-          Compare {dealCount} {treatmentLabel} deal
-          {dealCount !== 1 ? 's' : ''} in {cityLabel}
+          {dealCount > 0
+            ? `Compare ${dealCount} ${treatmentLabel} deal${dealCount !== 1 ? 's' : ''} in ${cityLabel}`
+            : `Browse ${treatmentLabel} deals in ${cityLabel}`}
         </h2>
         <p className="text-amber-100/80 mb-6">
-          See real pricing from verified providers. Claim a deal to get started.
+          {dealCount > 0
+            ? 'See real pricing from verified providers. Claim a deal to get started.'
+            : 'New deals are added regularly. Check back soon or browse all deals in this city.'}
         </p>
         <Link
           href={dealsLink}

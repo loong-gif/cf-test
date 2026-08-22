@@ -83,8 +83,6 @@ export default async function GuidePage({ params }: GuidePageProps) {
     getGuideDealsPreview(treatment, parsed.city, 3),
   ])
 
-  if (stats.dealCount === 0) notFound()
-
   const relatedGuides = getAvailableGuides().filter((g) => g.slug !== slug)
   const dealsLink = `/deals/${content.treatment}/${content.city}`
 

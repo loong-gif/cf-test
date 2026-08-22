@@ -131,7 +131,7 @@ export async function saveDealAction(dealId: number): Promise<MutationResult> {
     }
 
     revalidatePath('/deals')
-    revalidatePath('/account/saved')
+    revalidatePath('/dashboard/favorites')
 
     return { success: true }
   } catch (error) {
@@ -170,7 +170,7 @@ export async function unsaveDealAction(
     }
 
     revalidatePath('/deals')
-    revalidatePath('/account/saved')
+    revalidatePath('/dashboard/favorites')
 
     return { success: true }
   } catch (error) {
@@ -229,7 +229,7 @@ export async function migrateLocalDealsAction(
     }
 
     revalidatePath('/deals')
-    revalidatePath('/account/saved')
+    revalidatePath('/dashboard/favorites')
 
     return { success: true }
   } catch (error) {

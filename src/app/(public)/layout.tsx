@@ -1,4 +1,5 @@
 import { PublicHeader } from '@/components/layout/publicHeader'
+import { SiteFooter } from '@/components/layout/siteFooter'
 
 export default function PublicLayout({
   children,
@@ -9,6 +10,7 @@ export default function PublicLayout({
     <>
       <PublicHeader />
       {children}
+      <SiteFooter />
     </>
   )
 }

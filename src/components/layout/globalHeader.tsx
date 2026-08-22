@@ -13,10 +13,12 @@ const AuthModal = dynamic(
 )
 
 import { NotificationBell } from '@/components/patterns/notificationBell'
+import { PublicMobileMenu } from '@/components/layout/publicMobileMenu'
 import { Button } from '@/components/ui/button'
 import { replaceWithDashboard, safeDashboardPath } from '@/lib/auth-redirect'
 import { useAuth } from '@/lib/context/authContext'
 import { useScrolled } from '@/lib/hooks/useScrolled'
+import { CONSUMER_NAV_LINKS } from '@/lib/public-nav-links'
 
 type AuthView = 'signUp' | 'signIn'
 
@@ -89,7 +91,7 @@ function GlobalHeaderInner() {
       <header
         className={`fixed top-0 left-0 right-0 z-40 bg-[#e8ddd0]/95 backdrop-blur-sm border-b border-[#d4c4b0] transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_20px_rgba(69,26,3,0.08)]' : ''}`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/icon.webp"
@@ -103,28 +105,22 @@ function GlobalHeaderInner() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-5 text-sm font-medium text-[#78350f] md:flex">
-            <Link
-              href="/prices"
-              className="transition-colors hover:text-[#451a03]"
-            >
-              Compare prices
-            </Link>
-            <Link
-              href="/deals"
-              className="transition-colors hover:text-[#451a03]"
-            >
-              Deals
-            </Link>
-            <Link
-              href="/businesses"
-              className="transition-colors hover:text-[#451a03]"
-            >
-              Businesses
-            </Link>
+          <nav
+            aria-label="Primary"
+            className="hidden items-center gap-5 text-sm font-medium text-[#78350f] md:flex"
+          >
+            {CONSUMER_NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="transition-colors hover:text-[#451a03]"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {state.isAuthenticated ? (
               <>
                 <NotificationBell />
@@ -136,11 +132,11 @@ function GlobalHeaderInner() {
                 </Link>
               </>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleSignIn}
-                  className="text-sm text-[#78350f] hover:text-[#451a03] transition-colors hidden sm:flex items-center justify-center min-h-[44px] px-3 cursor-pointer"
+                  className="text-sm text-[#78350f] hover:text-[#451a03] transition-colors flex items-center justify-center min-h-[44px] px-3 cursor-pointer"
                 >
                   Sign in
                 </button>
@@ -150,6 +146,40 @@ function GlobalHeaderInner() {
                 </Button>
               </div>
             )}
+            <PublicMobileMenu
+              links={CONSUMER_NAV_LINKS}
+              signInAction={
+                state.isAuthenticated ? (
+                  <Link
+                    href="/dashboard"
+                    className="flex-1 text-center text-sm font-medium text-amber-800 min-h-[44px] flex items-center justify-center"
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSignIn}
+                    className="flex-1 text-sm text-[#78350f] hover:text-[#451a03] min-h-[44px]"
+                  >
+                    Sign in
+                  </button>
+                )
+              }
+              primaryAction={
+                state.isAuthenticated ? undefined : (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="flex-1"
+                    onClick={handleSignUp}
+                  >
+                    <SignIn size={18} weight="bold" />
+                    Get Started
+                  </Button>
+                )
+              }
+            />
           </div>
         </div>
       </header>
