@@ -187,7 +187,7 @@ export async function createClaimAction(
       return { success: false, error: error.message }
     }
 
-    revalidatePath('/account/claims')
+    revalidatePath('/dashboard/claims')
     revalidatePath('/deals')
 
     // --- Best-effort notification (claim succeeds even if email fails) ---

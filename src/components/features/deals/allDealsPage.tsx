@@ -18,6 +18,7 @@ import {
   type SortOption,
   sortDeals,
 } from '@/lib/utils/deal-sorting'
+import { trackEvent } from '@/lib/analytics'
 import type { AnonymousDeal } from '@/types/deal'
 
 interface AllDealsPageProps {
@@ -162,6 +163,13 @@ export function AllDealsPage({
   const [sortBy, setSortBy] = useState<SortOption>('discount')
   const [view, setView] = useState<'cards' | 'compare'>('cards')
 
+  const handleCategorySelect = (filter: DealsFilter) => {
+    setSelectedCategory(filter)
+    if (filter !== 'all') {
+      trackEvent('category_selected', { category: filter })
+    }
+  }
+
   const activeFilterCount = useMemo(
     () => countActiveDealFilters(filters),
     [filters],
@@ -224,7 +232,7 @@ export function AllDealsPage({
                 <button
                   type="button"
                   key={filter.value}
-                  onClick={() => setSelectedCategory(filter.value)}
+                  onClick={() => handleCategorySelect(filter.value)}
                   className={`inline-flex min-h-[44px] items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-95 ${
                     isSelected
                       ? 'bg-amber-800 text-white shadow-[0_0_16px_rgba(146,64,14,0.25)]'
